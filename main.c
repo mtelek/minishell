@@ -6,11 +6,83 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 16:31:34 by mtelek            #+#    #+#             */
-/*   Updated: 2024/07/24 23:08:30 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/07/25 17:23:59 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void ok_free_function(t_operator *operators, t_lexer *lexer)
+{
+    t_operator *temp_op;
+    t_lexer *temp_lex;
+
+    while (lexer != NULL)
+    {
+        temp_lex = lexer;
+		free(temp_lex->str);
+        lexer = lexer->next;
+        free(temp_lex);
+    }
+    while (operators != NULL)
+    {
+        temp_op = operators;
+		free(temp_op->name);
+		free(temp_op->operator);
+        operators = operators->next;
+        free(temp_op);
+    }
+}
+
+void	error_function(int error_type, t_operator *operators, t_lexer *lexer)
+{
+	if (error_type == 1)
+	{
+		while (operators != NULL)
+		{
+			t_operator *temp_op = operators;
+			free(temp_op->operator);
+            free(temp_op->name);
+            free(temp_op);
+			operators = operators->next;
+		}
+		printf("Error, malloc for operators failed\n");
+		exit(1);
+	}
+	if (error_type == 2)
+	{
+		while (operators != NULL)
+		{
+			t_operator *temp_op = operators;
+			free(temp_op->operator);
+            free(temp_op->name);
+            free(temp_op);
+			operators = operators->next;
+		}
+		printf("Error, malloc for lexer failed\n");
+		exit(1);
+	}
+	if (error_type == 3)
+	{
+		while (operators != NULL)
+		{
+			t_operator *temp_op = operators;
+			free(temp_op->operator);
+            free(temp_op->name);
+            free(temp_op);
+			operators = operators->next;
+		}
+		while (lexer != NULL)
+		{
+			t_lexer *temp_lex = lexer;
+			free(temp_lex->str);
+            free(temp_lex);
+			lexer = lexer->next;
+		}
+		printf("Error, malloc for creting the word failed\n");
+		exit(1);
+	}
+}
 
 int	get_type(char *str)
 {
@@ -58,6 +130,8 @@ int is_operator(char c1,char c2, t_operator *operators)
 	if ((c1 == 124 && c2 == 124) || (c1 == 60 && c2 == 60) || (c1 == 62 && c2 == 62))
 	{
 		op = malloc(3);
+		if (!op)
+			error_function(2, operators, NULL);
 		op[0]= c1;
 		op[1] = c2;
 		op[2] = '\0';
@@ -65,15 +139,21 @@ int is_operator(char c1,char c2, t_operator *operators)
 	else
 	{
 		op = malloc(2);
+		if (!op)
+			error_function(2, operators, NULL);
 		op[0] = c1;
 		op[1] = '\0';
 	}
 	while (operators != NULL)
 	{
 		if (!ft_strncmp(op, operators->operator, 2))
+		{
+			free(op);
 			return (1);
+		}
 		operators = operators->next;
 	}
+	free(op);
 	return (0);
 }
 
@@ -125,7 +205,7 @@ int	number_of_words(char *input, t_operator *operators)
 	return (n_words);
 }
 
-char	*getting_word(char *input, t_operator *operators)
+char	*getting_word(char *input, t_operator *operators, t_lexer *lexer)
 {
 	static int	i;
 	int			temp_i;
@@ -141,8 +221,11 @@ char	*getting_word(char *input, t_operator *operators)
 	if (is_operator(input[i], input[i + 1], operators))
 	{
 		start = i;
-		if (input[i + 1] == '<' || input[i + 1] == '>' || input[i+1] == '|')
-			i++;
+		if (input[i+1])
+		{
+			if (input[i + 1] == '<' || input[i + 1] == '>' || input[i+1] == '|')
+				i++;
+		}
 		end = ++i;
 	}
 	else
@@ -168,7 +251,7 @@ char	*getting_word(char *input, t_operator *operators)
 	}
 	word = malloc((end - start) + 1);
 	if (!word)
-		exit(1); // exit correctly, frees missing, mayble error message
+		error_function(3, operators, lexer);
 	while (start < end)
 		word[k++] = input[start++];
 	word[k] = '\0';
@@ -191,8 +274,8 @@ void	get_tokens(char *input, t_operator *operators, t_lexer **lexer)
 	{
 		current = malloc(sizeof(t_lexer));
 		if (!lexer)
-			exit(1); // handle frees correctly, maybe error message;
-		current->str = getting_word(input, operators);
+			error_function(2, operators, *lexer);
+		current->str = getting_word(input, operators, current);
 		current->type = get_type(current->str);
 		current->next = NULL;
 		current->prev = prev_node;
@@ -213,8 +296,6 @@ bool checking_lex(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if ((str[i] == '<' || str[i] == '>' || str[i] == '|') && (str[i+1] != '<' && str[i+1] != '>' && str[i+1] != '|') && ft_strlen(str) != 2)
-			return (false);
 		if ((str[i] == '<' && str[i+1] == '>') || (str[i] == '>' && str[i+1] == '<'))
 			return (false);
 		if ((str[i] == '|' && str[i+1] == '>') || (str[i] == '|' && str[i+1] == '<'))
@@ -251,12 +332,21 @@ bool syntax_check(t_operator *operators, t_lexer *lexer)
 	temp_lex = lexer;
 	if (temp_lex->type == 1)
 		return (false);
+	if (lexer != NULL && lexer->next == NULL)
+	{
+		if (lexer->type < 6)
+			return (false);
+	}
 	while (lexer->next != NULL)
+	{
+		if (lexer->type < 6 && lexer->next->type < 6)
+			return (false);
 		lexer = lexer->next;
+	}
 	while (temp_op != NULL)
 	{
-		if (lexer->type == temp_op->type)
-			return (false);
+		if (lexer->type < 6 && lexer->type == temp_op->type)
+			return(false);
 		temp_op = temp_op->next;
 	}
 	while (temp_lex != NULL)
@@ -285,10 +375,7 @@ void	init_operators(t_operator **head)
 	{
 		current = malloc(sizeof(t_operator));
 		if (!current)
-		{
-			printf("Error, malloc for operators failed\n");
-			exit(1);
-		}
+			error_function(1, *head, NULL);
 		current->operator= ft_strdup(signs[i]);
 		current->name = ft_strdup(names[i]);
 		current->type = type[i];
@@ -313,16 +400,16 @@ int	minishell(char *input)
 	init_operators(&operators);
 	get_tokens(input, operators, &lexer);
 	if (syntax_check(operators, lexer) == false)
-	{
-		printf("Error, syntax_check failed\n");
-		exit (1);
+	{	
+		ok_free_function(operators, lexer);	
+		exit(1); //here syntax_check failed error function missing
 	}
-	//exit functions, create one till the point command table is created	
-	while(lexer!= NULL)
+	while(lexer != NULL)
 	{
 		printf("words:%s\n", lexer->str);
 		lexer = lexer->next;
 	}
+	ok_free_function(operators, lexer);
 	return (0);
 }
 
@@ -336,7 +423,7 @@ int	main(int argc, char **argv)
 	while (1)
 	{
 		input = readline("minishell> ");
-		if (*input)
+		if (input)
 		{
 			minishell(input);
 			free(input);
