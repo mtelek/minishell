@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 16:31:34 by mtelek            #+#    #+#             */
-/*   Updated: 2024/07/26 21:01:32 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/07/27 00:35:05 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ void	error_function(int error_type, t_operator *operators, t_lexer *lexer)
         }
     }
     if (error_type == 1)
-        printf("Error, malloc for operators failed\n");
+        ft_putstr_fd("Error, malloc for operators failed\n", 2);
     else if (error_type == 2)
-        printf("Error, malloc for lexer failed\n");
+        ft_putstr_fd("Error, malloc for lexer failed\n", 2);
     else if (error_type == 3)
-        printf("Error, malloc for creating the word failed\n");
+        ft_putstr_fd("Error, malloc for creating the word failed\n", 2);
     exit(1);
 }
 
@@ -184,7 +184,7 @@ int	number_of_words(char *input, t_operator *operators)
 			}
 		}
 	}
-	printf("N_word:%d\n", n_words);
+	//printf("N_word:%d\n", n_words);
 	return (n_words);
 }
 
@@ -281,12 +281,12 @@ bool checking_lex(char *str)
 	{
 		if ((str[i] == '<' && str[i+1] == '>') || (str[i] == '|' && str[i+1] == '>'))
 		{
-			printf("bash: syntax error near unexpected token `>'\n");
+			ft_putstr_fd("bash: syntax error near unexpected token `>'\n", 2);
 			return (false);
 		}
 		if ((str[i] == '>' && str[i+1] == '<') || (str[i] == '|' && str[i+1] == '<'))
 		{
-			printf("bash: syntax error near unexpected token `<'\n");
+			ft_putstr_fd("bash: syntax error near unexpected token `<'\n", 2);
 			return (false);
 		}
 		if (str[i] == '>' && str[i+1] == '|')
@@ -296,7 +296,7 @@ bool checking_lex(char *str)
 		}
 		if (str[i] == '<' && str[i+1] == '|')
 		{
-			printf("bash: syntax error near unexpected token `|'\n");
+			ft_putstr_fd("bash: syntax error near unexpected token `|'\n", 2);
 			return (false);
 		}
 		if (str[i] == 34)
@@ -306,7 +306,7 @@ bool checking_lex(char *str)
 				i = temp_i;
 			if (temp_i == 0)
 			{
-				printf("bash: syntax error, unclosed double qoute occured\n");
+				ft_putstr_fd("bash: syntax error, unclosed double qoute occured\n", 2);
 				return (false);
 			}
 		}
@@ -317,7 +317,7 @@ bool checking_lex(char *str)
 				i = temp_i;
 			if (temp_i == 0)
 			{
-				printf("bash: syntax error, unclosed single qoute occured\n");
+				ft_putstr_fd("bash: syntax error, unclosed single qoute occured\n", 2);
 				return (false);
 			}
 		}
@@ -348,16 +348,24 @@ bool syntax_check(t_operator *operators, t_lexer *lexer)
 	{
 		if (lexer->type < 6 && lexer->next->type < 6)
 		{
-			 if (lexer->next->type == 1)
-				printf("bash: syntax error near unexpected token `|'\n");
+			if ((lexer->type == 1 && lexer->next->type == 3) || (lexer->type == 3 && lexer->next->type == 1))
+				ft_putstr_fd("bash: syntax error near unexpected token `newline'\n", 2);
+			else if (lexer->type == 1 && lexer->next->type == 2)
+				ft_putstr_fd("bash: syntax error near unexpected token `newline'\n", 2);
+			else if ((lexer->type == 1 && lexer->next->type == 4) || (lexer->type == 1 && lexer->next->type == 5))
+				ft_putstr_fd("bash: syntax error near unexpected token `newline'\n", 2);
+			else if (lexer->type == 2 && lexer->next->type == 3)
+				ft_putstr_fd("bash: syntax error near unexpected token `newline'\n", 2);
+			else if (lexer->next->type == 1)
+				ft_putstr_fd("bash: syntax error near unexpected token `|'\n", 2);
 			else if (lexer->next->type == 2)
-				printf("bash: syntax error near unexpected token `<'\n");
+				ft_putstr_fd("bash: syntax error near unexpected token `<'\n", 2);
 			else if (lexer->next->type == 3)
-				printf("bash: syntax error near unexpected token `>'\n");
+				ft_putstr_fd("bash: syntax error near unexpected token `>'\n", 2);
 			else if (lexer->next->type == 4)
-				printf("bash: syntax error near unexpected token `<<'\n");
+				ft_putstr_fd("bash: syntax error near unexpected token `<<'\n", 2);
 			else if (lexer->next->type == 5)
-				printf("bash: syntax error near unexpected token `>>'\n");
+				ft_putstr_fd("bash: syntax error near unexpected token `>>'\n", 2);
 			return (false);
 		}
 		lexer = lexer->next;
@@ -366,7 +374,7 @@ bool syntax_check(t_operator *operators, t_lexer *lexer)
 	{
 		if (lexer->type < 6 && lexer->type == temp_op->type)
 		{
-			printf("bash: syntax error near unexpected token `newline'\n");
+			ft_putstr_fd("bash: syntax error near unexpected token `newline'\n", 2);
 			return(false);
 		}
 		temp_op = temp_op->next;
@@ -375,7 +383,7 @@ bool syntax_check(t_operator *operators, t_lexer *lexer)
 	{
 		if (temp_lex->type == 7)
 		{
-			printf("bash: syntax error near unexpected token `|'\n");
+			ft_putstr_fd("bash: syntax error near unexpected token `|'\n", 2);
 			return (false);
 		}
 		if (checking_lex(temp_lex->str) == false)
@@ -395,7 +403,7 @@ void	init_operators(t_operator **head)
 	int			i;
 
 	prev_node = NULL;
-	i = -1; // here did changes
+	i = -1;
 	while (++i < 6)
 	{
 		current = malloc(sizeof(t_operator));
@@ -428,7 +436,7 @@ int	minishell(char *input)
 	if (syntax_check(operators, lexer) == false)
 	{	
 		ok_free_function(operators, lexer);	
-		exit(1); //here syntax_check failed error function missing, should specify the error message
+		exit(1);
 	}
 	while(temp_lex != NULL)
 	{
