@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 16:11:46 by mtelek            #+#    #+#             */
-/*   Updated: 2024/07/23 14:00:30 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/07/26 12:49:53 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <readline/readline.h>
-#include  <stdlib.h>
-#include <stdbool.h>
+# include <readline/history.h>
+# include  <stdlib.h>
+# include <stdbool.h>
 
 typedef struct s_operator
 {

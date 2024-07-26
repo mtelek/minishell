@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 16:31:34 by mtelek            #+#    #+#             */
-/*   Updated: 2024/07/25 17:27:39 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/07/26 13:14:34 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,68 +20,47 @@ void ok_free_function(t_operator *operators, t_lexer *lexer)
     while (lexer != NULL)
     {
         temp_lex = lexer;
-		free(temp_lex->str);
         lexer = lexer->next;
+		free(temp_lex->str);
         free(temp_lex);
     }
     while (operators != NULL)
     {
         temp_op = operators;
+        operators = operators->next;
 		free(temp_op->name);
 		free(temp_op->operator);
-        operators = operators->next;
         free(temp_op);
     }
 }
 
 void	error_function(int error_type, t_operator *operators, t_lexer *lexer)
 {
-	if (error_type == 1)
-	{
-		while (operators != NULL)
-		{
-			t_operator *temp_op = operators;
-			free(temp_op->operator);
-            free(temp_op->name);
-            free(temp_op);
-			operators = operators->next;
-		}
-		printf("Error, malloc for operators failed\n");
-		exit(1);
-	}
-	if (error_type == 2)
-	{
-		while (operators != NULL)
-		{
-			t_operator *temp_op = operators;
-			free(temp_op->operator);
-            free(temp_op->name);
-            free(temp_op);
-			operators = operators->next;
-		}
-		printf("Error, malloc for lexer failed\n");
-		exit(1);
-	}
-	if (error_type == 3)
-	{
-		while (operators != NULL)
-		{
-			t_operator *temp_op = operators;
-			free(temp_op->operator);
-            free(temp_op->name);
-            free(temp_op);
-			operators = operators->next;
-		}
-		while (lexer != NULL)
-		{
-			t_lexer *temp_lex = lexer;
-			free(temp_lex->str);
+    while (operators != NULL)
+    {
+        t_operator *temp_op = operators;
+        operators = operators->next;
+        free(temp_op->operator);
+        free(temp_op->name);
+        free(temp_op);
+    }
+    if (error_type == 2 || error_type == 3)
+    {
+        while (lexer != NULL)
+        {
+            t_lexer *temp_lex = lexer;
+            lexer = lexer->next;
+            free(temp_lex->str);
             free(temp_lex);
-			lexer = lexer->next;
-		}
-		printf("Error, malloc for creting the word failed\n");
-		exit(1);
-	}
+        }
+    }
+    if (error_type == 1)
+        printf("Error, malloc for operators failed\n");
+    else if (error_type == 2)
+        printf("Error, malloc for lexer failed\n");
+    else if (error_type == 3)
+        printf("Error, malloc for creating the word failed\n");
+    exit(1);
 }
 
 int	get_type(char *str)
@@ -273,8 +252,8 @@ void	get_tokens(char *input, t_operator *operators, t_lexer **lexer)
 	while (i < n_words)
 	{
 		current = malloc(sizeof(t_lexer));
-		if (!lexer)
-			error_function(2, operators, *lexer);
+		if (!current)
+			error_function(2, operators, current);
 		current->str = getting_word(input, operators, current);
 		current->type = get_type(current->str);
 		current->next = NULL;
@@ -370,8 +349,8 @@ void	init_operators(t_operator **head)
 	int			i;
 
 	prev_node = NULL;
-	i = 0;
-	while (i < 6)
+	i = -1; // here did changes
+	while (++i < 6)
 	{
 		current = malloc(sizeof(t_operator));
 		if (!current)
@@ -386,7 +365,6 @@ void	init_operators(t_operator **head)
 		else
 			*head = current;
 		prev_node = current;
-		i++;
 	}
 }
 
@@ -394,20 +372,23 @@ int	minishell(char *input)
 {
 	t_operator	*operators;
 	t_lexer		*lexer;
+	t_lexer	*temp_lex;
 
 	operators = NULL;
 	lexer = NULL;
 	init_operators(&operators);
 	get_tokens(input, operators, &lexer);
+	temp_lex = lexer;
 	if (syntax_check(operators, lexer) == false)
 	{	
 		ok_free_function(operators, lexer);	
-		exit(1); //here syntax_check failed error function missing
+		printf("Error\n");
+		exit(1); //here syntax_check failed error function missing, should specify the error message
 	}
-	while(lexer != NULL)
+	while(temp_lex != NULL)
 	{
-		printf("words:%s\n", lexer->str);
-		lexer = lexer->next;
+		printf("words:%s\n", temp_lex->str);
+		temp_lex = temp_lex->next;
 	}
 	ok_free_function(operators, lexer);
 	return (0);
