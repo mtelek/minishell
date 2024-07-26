@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 16:31:34 by mtelek            #+#    #+#             */
-/*   Updated: 2024/07/26 13:14:34 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/07/26 21:01:32 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,8 +174,12 @@ int	number_of_words(char *input, t_operator *operators)
 			while (is_operator(input[i], input[i+1], operators) && input[i] != '\0')
 			{
 				n_words++;
-				if (ft_strncmp(&input[i+1], "<", 1) || ft_strncmp(&input[i+1], ">", 1) || ft_strncmp(&input[i+1], "|", 1))
-					i++;
+				if (input[i+1])
+				{
+					if ((!ft_strncmp(&input[i+1], "<", 1) && !ft_strncmp(&input[i], "<", 1)) 
+						|| (!ft_strncmp(&input[i+1], ">", 1) && !ft_strncmp(&input[i], ">", 1)) || (!ft_strncmp(&input[i+1], "|", 1) && !ft_strncmp(&input[i], "|", 1)))
+						i++;
+				}
 				i++;
 			}
 		}
@@ -202,7 +206,7 @@ char	*getting_word(char *input, t_operator *operators, t_lexer *lexer)
 		start = i;
 		if (input[i+1])
 		{
-			if (input[i + 1] == '<' || input[i + 1] == '>' || input[i+1] == '|')
+			if (((input[i + 1] == '<' && input[i] == '<') || (input[i + 1] == '>' && input[i] == '>') || (input[i+1] == '|' && input[i] == '|')))
 				i++;
 		}
 		end = ++i;
@@ -275,19 +279,36 @@ bool checking_lex(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if ((str[i] == '<' && str[i+1] == '>') || (str[i] == '>' && str[i+1] == '<'))
+		if ((str[i] == '<' && str[i+1] == '>') || (str[i] == '|' && str[i+1] == '>'))
+		{
+			printf("bash: syntax error near unexpected token `>'\n");
 			return (false);
-		if ((str[i] == '|' && str[i+1] == '>') || (str[i] == '|' && str[i+1] == '<'))
+		}
+		if ((str[i] == '>' && str[i+1] == '<') || (str[i] == '|' && str[i+1] == '<'))
+		{
+			printf("bash: syntax error near unexpected token `<'\n");
 			return (false);
-		if ((str[i] == '<' && str[i+1] == '|') || (str[i] == '>' && str[i+1] == '|'))
+		}
+		if (str[i] == '>' && str[i+1] == '|')
+		{
+			ft_putstr_fd("bash: syntax error near unexpected token `newline'\n", 2);
 			return (false);
+		}
+		if (str[i] == '<' && str[i+1] == '|')
+		{
+			printf("bash: syntax error near unexpected token `|'\n");
+			return (false);
+		}
 		if (str[i] == 34)
 		{
 			temp_i = qoutes_checker(str, 34, i);
 			if (temp_i != 0)
 				i = temp_i;
 			if (temp_i == 0)
+			{
+				printf("bash: syntax error, unclosed double qoute occured\n");
 				return (false);
+			}
 		}
 		else if (str[i] == 39)
 		{
@@ -295,7 +316,10 @@ bool checking_lex(char *str)
 			if (temp_i != 0)
 				i = temp_i;
 			if (temp_i == 0)
+			{
+				printf("bash: syntax error, unclosed single qoute occured\n");
 				return (false);
+			}
 		}
 		i++;
 	}
@@ -310,28 +334,50 @@ bool syntax_check(t_operator *operators, t_lexer *lexer)
 	temp_op = operators;
 	temp_lex = lexer;
 	if (temp_lex->type == 1)
+	{
+		ft_putstr_fd("bash: syntax error near unexpected token `|'\n", 2);
 		return (false);
+	}
 	if (lexer != NULL && lexer->next == NULL)
 	{
+		ft_putstr_fd("bash: syntax error near unexpected token `newline'\n", 2);
 		if (lexer->type < 6)
 			return (false);
 	}
 	while (lexer->next != NULL)
 	{
 		if (lexer->type < 6 && lexer->next->type < 6)
+		{
+			 if (lexer->next->type == 1)
+				printf("bash: syntax error near unexpected token `|'\n");
+			else if (lexer->next->type == 2)
+				printf("bash: syntax error near unexpected token `<'\n");
+			else if (lexer->next->type == 3)
+				printf("bash: syntax error near unexpected token `>'\n");
+			else if (lexer->next->type == 4)
+				printf("bash: syntax error near unexpected token `<<'\n");
+			else if (lexer->next->type == 5)
+				printf("bash: syntax error near unexpected token `>>'\n");
 			return (false);
+		}
 		lexer = lexer->next;
 	}
 	while (temp_op != NULL)
 	{
 		if (lexer->type < 6 && lexer->type == temp_op->type)
+		{
+			printf("bash: syntax error near unexpected token `newline'\n");
 			return(false);
+		}
 		temp_op = temp_op->next;
 	}
 	while (temp_lex != NULL)
 	{
 		if (temp_lex->type == 7)
+		{
+			printf("bash: syntax error near unexpected token `|'\n");
 			return (false);
+		}
 		if (checking_lex(temp_lex->str) == false)
 			return (false);
 		temp_lex = temp_lex->next;
@@ -382,7 +428,6 @@ int	minishell(char *input)
 	if (syntax_check(operators, lexer) == false)
 	{	
 		ok_free_function(operators, lexer);	
-		printf("Error\n");
 		exit(1); //here syntax_check failed error function missing, should specify the error message
 	}
 	while(temp_lex != NULL)

@@ -6,11 +6,31 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 17:37:30 by mtelek            #+#    #+#             */
-/*   Updated: 2024/07/22 22:52:57 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/07/26 19:56:45 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_putchar_fd(char c, int fd)
+{
+	write(fd, &c, 1);
+}
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	int	i;
+
+	i = 0;
+	if (s[i] != '\0')
+	{
+		while (s[i] != '\0')
+		{
+			ft_putchar_fd(s[i], fd);
+			i++;
+		}
+	}
+}
 
 int	ft_strncmp(const char *str1, const char *str2, size_t n)
 {
