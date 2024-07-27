@@ -6,11 +6,11 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:37:43 by mtelek            #+#    #+#             */
-/*   Updated: 2024/07/22 19:25:14 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/07/27 23:25:24 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../Headers/minishell.h"
 
 void	argc_checker(int argc, char **argv)
 {

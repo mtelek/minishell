@@ -1,52 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft_utils.c                                      :+:      :+:    :+:   */
+/*   libft_utils1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 17:37:30 by mtelek            #+#    #+#             */
-/*   Updated: 2024/07/26 19:56:45 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/07/28 00:08:43 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-void	ft_putchar_fd(char c, int fd)
-{
-	write(fd, &c, 1);
-}
-
-void	ft_putstr_fd(char *s, int fd)
-{
-	int	i;
-
-	i = 0;
-	if (s[i] != '\0')
-	{
-		while (s[i] != '\0')
-		{
-			ft_putchar_fd(s[i], fd);
-			i++;
-		}
-	}
-}
-
-int	ft_strncmp(const char *str1, const char *str2, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	if (n == 0)
-		return (0);
-	while (i < n && (str1[i] != '\0' || str2[i] != '\0'))
-	{
-		if (str1[i] != str2[i])
-			return ((unsigned char)str1[i] - (unsigned char)str2[i]);
-		i++;
-	}
-	return (0);
-}
+#include "../Headers/minishell.h"
 
 size_t	ft_strlen(const char *str)
 {
@@ -57,7 +21,6 @@ size_t	ft_strlen(const char *str)
 		i++;
 	return (i);
 }
-
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
@@ -78,14 +41,14 @@ char	*ft_strdup(const char *s1)
 {
 	char	*s2;
 
-	s2 = (char *)malloc(ft_strlen(s1) + 1);
+	s2 = malloc(ft_strlen(s1) + 1);
 	if (!s2)
 		return (0);
 	ft_memcpy(s2, s1, ft_strlen(s1) + 1);
 	return (s2);
 }
 
-int		ft_isspace(int c)
+int	ft_isspace(int c)
 {
 	c = (unsigned char)c;
 	if (c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r'
