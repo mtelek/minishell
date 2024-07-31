@@ -58,9 +58,11 @@ int	minishell(char *input)
 	t_operator	*operators;
 	t_lexer		*lexer;
 	t_lexer		*temp_lex;
+	t_cmd		*cmd;
 
 	operators = NULL;
 	lexer = NULL;
+	cmd = NULL;
 	init_operators(&operators);
 	get_tokens(input, operators, &lexer);
 	temp_lex = lexer;
@@ -70,11 +72,18 @@ int	minishell(char *input)
 		exit(2);
 	}
 	delete_qoutes(lexer);
-	while (temp_lex != NULL)
-	{
-		printf("words:%s\n", temp_lex->str);
-		temp_lex = temp_lex->next;
-	}
+	creating_cmd_table(lexer, &cmd);
+	while (cmd != NULL)
+    {
+        int m = 0;
+        while (cmd->args[m])
+        {
+            printf("ARGS: %s\n", cmd->args[m]);
+            m++;
+        }
+        printf("Next table:\n");
+        cmd = cmd->next;
+    }
 	ok_free_function(operators, lexer);
 	return (0);
 }

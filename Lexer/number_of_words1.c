@@ -49,10 +49,7 @@ int	checking_for_doubles(char *input, int i)
 {
 	if (input[i + 1] && input[i])
 	{
-		if ((!ft_strncmp(&input[i + 1], "<", 1) && !ft_strncmp(&input[i], "<",
-					1)) || (!ft_strncmp(&input[i + 1], ">", 1)
-				&& !ft_strncmp(&input[i], ">", 1)) || (!ft_strncmp(&input[i
-						+ 1], "|", 1) && !ft_strncmp(&input[i], "|", 1)))
+		if ((input[i + 1] == '<' && input[i] == '<') || (input[i + 1] == '>' && input[i] ==  '>') || (input[i + 1] == '|' && input[i] == '|'))
 		{
 			i++;
 		}
@@ -80,11 +77,12 @@ int	number_of_words(char *input, t_operator *operators)
 		while (input[i] != '\0' && ft_isspace(input[i])
 			&& !is_operator(input[i], input[i + 1], operators))
 			i++;
-		while (input[i] && is_operator(input[i], input[i + 1], operators))
+		if (input[i] && is_operator(input[i], input[i + 1], operators))
 		{
 			n_words++;
 			i = checking_for_doubles(input, i);
 		}
+		i++;
 	}
 	return (n_words);
 }

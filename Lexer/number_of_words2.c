@@ -14,9 +14,12 @@
 
 int	op_check(char *op, t_operator *operators)
 {
-	while (operators != NULL)
+	int op_len;
+	
+	op_len = ft_strlen(op);
+	while (operators != NULL && op)
 	{
-		if (!ft_strncmp(op, operators->operator, 2))
+		if (!ft_strncmp(op, operators->operator, op_len))
 		{
 			free(op);
 			return (1);
@@ -30,7 +33,7 @@ char	setting_c2(char c2)
 {
 	if (!c2)
 	{
-		c2 = 0;
+		c2 = '0';
 		return (c2);
 	}
 	return (c2);
@@ -40,7 +43,7 @@ int	is_operator(char c1, char c2, t_operator *operators)
 {
 	char	*op;
 
-	setting_c2(c2);
+	c2 = setting_c2(c2);
 	if ((c1 == 124 && c2 == 124) || (c1 == 60 && c2 == 60) || (c1 == 62
 			&& c2 == 62))
 	{

@@ -22,6 +22,16 @@
 # include <unistd.h>
 # include "error_messages.h"
 
+typedef struct s_cmd
+{
+	char 			*cmd;
+	char			**args;
+	int				op_next;
+	int				op_bef;
+	struct s_cmd	*next;
+	struct s_cmd	*prev;
+}					t_cmd;
+
 typedef struct s_operator
 {
 	char				*operator;
@@ -71,6 +81,12 @@ bool					syntax_doubles_same(t_operator *temp_op, t_lexer *lexer,
 bool					syntax_doubles_diff(t_lexer *lexer);
 bool					checking_combinaton(t_lexer *lexer);
 bool					checking_lex(char *str);
+
+//PARSER/CMD_TABLE
+void    				init_cmd(t_cmd **cmd, t_lexer *lexer);
+int     				count_cmds(t_lexer *lexer);
+void    				args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds);
+void 					creating_cmd_table(t_lexer *lexer, t_cmd **cmd);
 
 // ERRORS
 void					error_function(int error_type, t_operator *operators,
