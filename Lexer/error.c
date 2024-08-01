@@ -12,26 +12,56 @@
 
 #include "../Headers/minishell.h"
 
-void	ok_free_function(t_operator *operators, t_lexer *lexer)
+void ok_free_function(t_operator *operators, t_lexer *lexer, t_cmd *cmd)
 {
-	t_operator	*temp_op;
-	t_lexer		*temp_lex;
+    int i;
+	t_lexer *temp_lexer;
+	t_operator *temp_operator;
+	t_cmd *temp_cmd;
 
-	while (lexer != NULL)
-	{
-		temp_lex = lexer;
-		lexer = lexer->next;
-		free(temp_lex->str);
-		free(temp_lex);
-	}
-	while (operators != NULL)
-	{
-		temp_op = operators;
-		operators = operators->next;
-		free(temp_op->operator);
-		free(temp_op);
-	}
+    while (lexer != NULL && lexer->prev != NULL) 
+        lexer = lexer->prev;
+    while (lexer != NULL)
+    {
+        temp_lexer = lexer;
+        lexer = lexer->next;
+        temp_lexer->str = NULL;
+        free(temp_lexer->str);
+        free(temp_lexer);
+        temp_lexer = NULL;
+    }
+    while (operators != NULL && operators->prev != NULL)
+        operators = operators->prev;
+    while (operators != NULL)
+    {
+        temp_operator = operators;
+        operators = operators->next;
+        free(temp_operator->operator);
+        temp_operator->operator = NULL;
+        free(temp_operator);
+        temp_operator = NULL;
+    }
+    while (cmd != NULL && cmd->prev != NULL)
+        cmd = cmd->prev;
+    while (cmd != NULL)
+    {
+        temp_cmd = cmd;
+        cmd = cmd->next;
+        i = 0;
+        while (temp_cmd->args[i])
+        {
+            free(temp_cmd->args[i]);
+            temp_cmd->args[i] = NULL;
+            i++;
+        }
+		free(temp_cmd->args[i]);
+        free(temp_cmd->args);
+        temp_cmd->args = NULL;
+        free(temp_cmd);
+        temp_cmd = NULL;
+    }
 }
+
 
 void	error_function(int error_type, t_operator *operators, t_lexer *lexer)
 {

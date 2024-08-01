@@ -61,7 +61,6 @@ int						qoutes_handler(char *input, int i);
 int						qoutes_checker(char *input, char check, int i);
 int						is_operator(char c1, char c2, t_operator *operators);
 int						op_check(char *op, t_operator *operators);
-char					setting_c2(char c2);
 
 // CREATING_WORDS
 char					*getting_word(char *input, t_operator *operators,
@@ -85,13 +84,13 @@ bool					checking_lex(char *str);
 //PARSER/CMD_TABLE
 void    				init_cmd(t_cmd **cmd, t_lexer *lexer);
 int     				count_cmds(t_lexer *lexer);
-void    				args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds);
+void    				args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds, int n_args);
 void 					creating_cmd_table(t_lexer *lexer, t_cmd **cmd);
 
 // ERRORS
 void					error_function(int error_type, t_operator *operators,
 							t_lexer *lexer);
-void					ok_free_function(t_operator *operators, t_lexer *lexer);
+void					ok_free_function(t_operator *operators, t_lexer *lexer, t_cmd *cmd);
 
 // CHECKERS
 void					argc_checker(int argc, char **argv);

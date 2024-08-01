@@ -26,26 +26,16 @@ int	op_check(char *op, t_operator *operators)
 		}
 		operators = operators->next;
 	}
+	free(op);
 	return (0);
-}
-
-char	setting_c2(char c2)
-{
-	if (!c2)
-	{
-		c2 = '0';
-		return (c2);
-	}
-	return (c2);
 }
 
 int	is_operator(char c1, char c2, t_operator *operators)
 {
 	char	*op;
 
-	c2 = setting_c2(c2);
-	if ((c1 == 124 && c2 == 124) || (c1 == 60 && c2 == 60) || (c1 == 62
-			&& c2 == 62))
+	if (((c1 == 124 && c2 == 124) || (c1 == 60 && c2 == 60) || (c1 == 62
+			&& c2 == 62)))
 	{
 		op = malloc(3);
 		if (!op)
@@ -64,6 +54,5 @@ int	is_operator(char c1, char c2, t_operator *operators)
 	}
 	if (op_check(op, operators))
 		return (1);
-	free(op);
 	return (0);
 }
