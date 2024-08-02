@@ -5,86 +5,76 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/27 22:40:25 by mtelek            #+#    #+#             */
-/*   Updated: 2024/07/27 23:25:47 by mtelek           ###   ########.fr       */
+/*   Created: 2024/08/02 19:52:41 by mtelek            #+#    #+#             */
+/*   Updated: 2024/08/02 19:52:41 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-void ok_free_function(t_operator *operators, t_lexer *lexer, t_cmd *cmd)
+void	error_operators(t_operator *operators)
 {
-    int i;
-	t_lexer *temp_lexer;
-	t_operator *temp_operator;
-	t_cmd *temp_cmd;
+	t_operator	*tmp_op;
 
-    while (lexer != NULL && lexer->prev != NULL) 
-        lexer = lexer->prev;
-    while (lexer != NULL)
-    {
-        temp_lexer = lexer;
-        lexer = lexer->next;
-        temp_lexer->str = NULL;
-        free(temp_lexer->str);
-        free(temp_lexer);
-        temp_lexer = NULL;
-    }
-    while (operators != NULL && operators->prev != NULL)
-        operators = operators->prev;
-    while (operators != NULL)
-    {
-        temp_operator = operators;
-        operators = operators->next;
-        free(temp_operator->operator);
-        temp_operator->operator = NULL;
-        free(temp_operator);
-        temp_operator = NULL;
-    }
-    while (cmd != NULL && cmd->prev != NULL)
-        cmd = cmd->prev;
-    while (cmd != NULL)
-    {
-        temp_cmd = cmd;
-        cmd = cmd->next;
-        i = 0;
-        while (temp_cmd->args[i])
-        {
-            free(temp_cmd->args[i]);
-            temp_cmd->args[i] = NULL;
-            i++;
-        }
-		free(temp_cmd->args[i]);
-        free(temp_cmd->args);
-        temp_cmd->args = NULL;
-        free(temp_cmd);
-        temp_cmd = NULL;
-    }
-}
-
-
-void	error_function(int error_type, t_operator *operators, t_lexer *lexer)
-{
 	while (operators != NULL)
 	{
-		free(operators->operator);
-		free(operators);
+		tmp_op = operators;
 		operators = operators->next;
+		free(tmp_op->operator);
+		free(tmp_op);
 	}
-	if (error_type == 2 || error_type == 3)
+}
+
+void	error_lexer(int error_type, t_lexer *lexer)
+{
+	t_lexer		*tmp_lex;
+
+	if (error_type > 1)
 	{
 		while (lexer != NULL)
 		{
-			free(lexer->str);
-			free(lexer);
+			tmp_lex = lexer;
 			lexer = lexer->next;
+			free(tmp_lex->str);
+			free(tmp_lex);
 		}
 	}
+}
+
+void	error_cmd(int error_type, t_cmd *cmd)
+{
+	t_cmd		*tmp_cmd;
+
+	if (error_type > 3)
+	{
+		while (cmd != NULL)
+		{
+			tmp_cmd = cmd;
+			cmd = cmd->next;
+			free(tmp_cmd->args);
+			free(tmp_cmd->cmd);
+			free(tmp_cmd);
+		}
+	}
+}
+
+void	error_function(int error_type, t_operator *operators, t_lexer *lexer,
+		t_cmd *cmd)
+{
+	error_operators(operators);
+	error_lexer(error_type, lexer);
+	error_cmd(error_type, cmd);
 	if (error_type == 1)
-		ft_putstr_fd("Error, malloc for operators failed\n", 2);
+		ft_putstr_fd(MF_OPERATOR, 2);
 	else if (error_type == 2)
-		ft_putstr_fd("Error, malloc for lexer failed\n", 2);
+		ft_putstr_fd(MF_LEXER, 2);
 	else if (error_type == 3)
-		ft_putstr_fd("Error, malloc for creating the word failed\n", 2);
+		ft_putstr_fd(MF_WORD, 2);
+	else if (error_type == 4)
+		ft_putstr_fd(MF_CMD_TABLE, 2);
+	else if (error_type == 5)
+		ft_putstr_fd(MF_CMD_ARGS, 2);
+	else if (error_type == 6)
+		ft_putstr_fd(MF_CMD_CMD, 2);
 	exit(2);
 }

@@ -45,16 +45,25 @@ int	qoutes_handler(char *input, int i)
 	return (i);
 }
 
-int	checking_for_doubles(char *input, int i)
+int	calculating_n_words(t_operator *operators, char *input, int i, int n_words)
 {
-	if (input[i] && input[i + 1])
-	{
-		if ((input[i + 1] == '<' && input[i] == '<') || (input[i + 1] == '>' && input[i] ==  '>') || (input[i + 1] == '|' && input[i] == '|'))
-		{
-			i++;
-		}
+	if (input[i] && input[i + 1]
+		&& !is_operator(input[i], input[i + 1], operators))
+		n_words++;
+	else if (input[i] && !input[i + 1] && !(input[i] == '|'
+			|| input[i] == '<' || input[i] == '>') && !ft_isspace(input[i]))
+		n_words++;
+	return (n_words);
+}
+
+int	calculating_i(t_operator *operators, char *input, int i)
+{
+	while (input[i] && input[i + 1] && !ft_isspace(input[i])
+		&& !is_operator(input[i], input[i + 1], operators))
+		i = qoutes_handler(input, i);
+	while (input[i] && input[i + 1] && ft_isspace(input[i])
+		&& !is_operator(input[i], input[i + 1], operators))
 		i++;
-	}
 	return (i);
 }
 
@@ -69,17 +78,10 @@ int	number_of_words(char *input, t_operator *operators)
 	{
 		while (input[i] && ft_isspace(input[i]))
 			i++;
-		if (input[i] && input[i+1] && !is_operator(input[i], input[i + 1], operators))
-			n_words++;
-		else if (input[i] && !input[i+1] && !(input[i] == '|' || input[i] == '<' || input[i] == '>') && !ft_isspace(input[i]))
-			n_words++;
-		while (input[i] && input[i+1] && !ft_isspace(input[i])
-			&& !is_operator(input[i], input[i + 1], operators))
-			i = qoutes_handler(input, i);
-		while (input[i] && input[i+1] && ft_isspace(input[i])
-			&& !is_operator(input[i], input[i + 1], operators))
-			i++;
-		if (input[i] && input[i+1] && is_operator(input[i], input[i + 1], operators))
+		n_words = calculating_n_words(operators, input, i, n_words);
+		i = calculating_i(operators, input, i);
+		if (input[i] && input[i + 1]
+			&& is_operator(input[i], input[i + 1], operators))
 		{
 			n_words++;
 			i = checking_for_doubles(input, i);

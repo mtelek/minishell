@@ -6,8 +6,8 @@ SRCDIR = .
 OBJDIR = .objs
 SRCS = main.c Utils/checker.c Utils/libft_utils1.c Utils/libft_utils2.c \
 		Lexer/creating_word1.c Lexer/creating_word2.c Lexer/error.c \
-		Lexer/init.c Lexer/number_of_words1.c Lexer/number_of_words2.c Lexer/syntax_check.c \
-		Parser/parser.c Parser/creating_cmd_table.c
+		Lexer/free.c Lexer/init.c Lexer/number_of_words1.c Lexer/number_of_words2.c Lexer/syntax_check.c \
+		Parser/creating_cmd_table1.c Parser/creating_cmd_table2.c
 
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 

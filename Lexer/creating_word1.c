@@ -58,13 +58,14 @@ char	*creating_word_wout_o(char *input, int i, t_operator *operators,
 	char	*word;
 
 	start = i;
+	(void)lexer;
 	end = calculating_end(input, i, operators);
 	i = end;
 	if (start == end)
 		return (NULL);
 	word = creating_string(start, end, input);
 	if (!word)
-		error_function(3, operators, lexer);
+		error_function(3, operators, NULL, NULL);
 	return (word);
 }
 
@@ -86,7 +87,7 @@ char	*getting_word(char *input, t_operator *operators, t_lexer *lexer)
 		end = ++i;
 		word = creating_string(start, end, input);
 		if (!word)
-			error_function(3, operators, lexer);
+			error_function(3, operators, NULL, NULL);
 	}
 	else
 	{

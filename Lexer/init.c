@@ -51,7 +51,7 @@ void	get_tokens(char *input, t_operator *operators, t_lexer **lexer)
 	{
 		current = malloc(sizeof(t_lexer));
 		if (!current)
-			error_function(2, operators, current);
+			error_function(2, operators, current, NULL);
 		current->str = getting_word(input, operators, current);
 		current->type = get_type(current->str);
 		current->next = NULL;
@@ -90,10 +90,10 @@ void	init_operators(t_operator **head)
 	{
 		current = malloc(sizeof(t_operator));
 		if (!current)
-			error_function(1, *head, NULL);
+			error_function(1, *head, NULL, NULL);
 		current->operator = ft_strdup(signs[i]);
 		if (!current->operator)
-			error_function(1, *head, NULL);
+			error_function(1, *head, NULL, NULL);
 		current->type = i + 1;
 		if (i == 5)
 			current->type = 7;

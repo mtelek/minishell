@@ -12,10 +12,25 @@
 
 #include "../Headers/minishell.h"
 
+int	checking_for_doubles(char *input, int i)
+{
+	if (input[i] && input[i + 1])
+	{
+		if ((input[i + 1] == '<' && input[i] == '<')
+			|| (input[i + 1] == '>' && input[i] == '>')
+			|| (input[i + 1] == '|' && input[i] == '|'))
+		{
+			i++;
+		}
+		i++;
+	}
+	return (i);
+}
+
 int	op_check(char *op, t_operator *operators)
 {
-	int op_len;
-	
+	int	op_len;
+
 	op_len = ft_strlen(op);
 	while (operators != NULL && op)
 	{
@@ -35,11 +50,11 @@ int	is_operator(char c1, char c2, t_operator *operators)
 	char	*op;
 
 	if (((c1 == 124 && c2 == 124) || (c1 == 60 && c2 == 60) || (c1 == 62
-			&& c2 == 62)))
+				&& c2 == 62)))
 	{
 		op = malloc(3);
 		if (!op)
-			error_function(2, operators, NULL);
+			error_function(2, operators, NULL, NULL);
 		op[0] = c1;
 		op[1] = c2;
 		op[2] = '\0';
@@ -48,7 +63,7 @@ int	is_operator(char c1, char c2, t_operator *operators)
 	{
 		op = malloc(2);
 		if (!op)
-			error_function(2, operators, NULL);
+			error_function(2, operators, NULL, NULL);
 		op[0] = c1;
 		op[1] = '\0';
 	}

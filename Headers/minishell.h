@@ -24,7 +24,7 @@
 
 typedef struct s_cmd
 {
-	char 			*cmd;
+	char			*cmd;
 	char			**args;
 	int				op_next;
 	int				op_bef;
@@ -48,6 +48,13 @@ typedef struct s_lexer
 	struct s_lexer		*prev;
 }						t_lexer;
 
+typedef struct s_main
+{
+	t_lexer			*lexer;
+	t_operator		*operators;
+	t_cmd			*cmd;
+}					t_main;
+
 // INIT
 void					init_operators(t_operator **head);
 void					get_tokens(char *input, t_operator *operators,
@@ -56,6 +63,8 @@ int						get_type(char *str);
 
 // NUMBER_OF_WORDS
 int						number_of_words(char *input, t_operator *operators);
+int						calculating_n_words(t_operator *operators, char *input,
+							int i, int n_words);
 int						checking_for_doubles(char *input, int i);
 int						qoutes_handler(char *input, int i);
 int						qoutes_checker(char *input, char check, int i);
@@ -81,16 +90,32 @@ bool					syntax_doubles_diff(t_lexer *lexer);
 bool					checking_combinaton(t_lexer *lexer);
 bool					checking_lex(char *str);
 
-//PARSER/CMD_TABLE
-void    				init_cmd(t_cmd **cmd, t_lexer *lexer);
-int     				count_cmds(t_lexer *lexer);
-void    				args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds, int n_args);
-void 					creating_cmd_table(t_lexer *lexer, t_cmd **cmd);
+// PARSER/CMD_TABLE
+int						count_cmds(t_lexer *lexer);
+int						number_of_args(t_lexer *lexer);
+void					args_maker(t_lexer *lexer, t_cmd *cmd,
+							int n_cmds, int n_args);
+void					creating_cmd_table(t_operator *operators,
+							t_lexer *lexer, t_cmd **cmd);
+
+// DELETE_QUOTES
+void					delete_qoutes(t_lexer *lexer);
+void					remove_quotes(char *str, int start, int end);
 
 // ERRORS
 void					error_function(int error_type, t_operator *operators,
-							t_lexer *lexer);
-void					ok_free_function(t_operator *operators, t_lexer *lexer, t_cmd *cmd);
+							t_lexer *lexer, t_cmd *cmd);
+void					error_operators(t_operator *operators);
+void					error_lexer(int error_type, t_lexer *lexer);
+void					error_cmd(int error_type, t_cmd *cmd);
+
+// FREE
+
+void					ok_free_function(t_operator *operators,
+							t_lexer *lexer, t_cmd *cmd);
+void					free_lexer(t_lexer *lexer);
+void					free_operator(t_operator *operators);
+void					free_cmd(t_cmd *cmd);
 
 // CHECKERS
 void					argc_checker(int argc, char **argv);
