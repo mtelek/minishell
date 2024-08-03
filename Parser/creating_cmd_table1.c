@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/03 01:12:11 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/03 15:20:25 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,28 +62,27 @@ void	args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds, int n_args)
 	}
 }
 
-void	init_node(t_lexer *lexer, t_cmd **cmd,
-		t_cmd **prev_node, t_operator *operators, int n_cmds)
+void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)
 {
 	t_cmd	*temp;
 	int		j;
 	int		n_args;
 
 	j = 0;
-	n_args = number_of_args(lexer);
+	n_args = number_of_args(main->lexer);
 	temp = malloc(sizeof(t_cmd));
 	if (!temp)
-		error_function(4, operators, lexer, *cmd);
+		error_function(4, main->operators, main->lexer, *cmd);
 	temp->args = malloc(sizeof(char *) * (n_args + 1));
 	if (!temp->args)
-		error_function(5, operators, lexer, *cmd);
+		error_function(5, main->operators, main->lexer, *cmd);
 	while (j < n_args)
 		temp->args[j++] = NULL;
 	temp->next = NULL;
-	args_maker(lexer, temp, n_cmds, n_args);
+	args_maker(main->lexer, temp, n_cmds, n_args);
 	temp->cmd = ft_strdup(temp->args[0]);
 	if (!temp->cmd)
-		error_function(6, operators, lexer, *cmd);
+		error_function(6, main->operators, main->lexer, *cmd);
 	temp->prev = *prev_node;
 	if (*prev_node)
 		(*prev_node)->next = temp;
@@ -92,7 +91,7 @@ void	init_node(t_lexer *lexer, t_cmd **cmd,
 	*prev_node = temp;
 }
 
-void	creating_cmd_table(t_operator *operators, t_lexer *lexer, t_cmd **cmd)
+void	creating_cmd_table(t_main *main)
 {
 	t_cmd	*prev_node;
 	int		n_cmds;
@@ -100,12 +99,12 @@ void	creating_cmd_table(t_operator *operators, t_lexer *lexer, t_cmd **cmd)
 
 	i = 0;
 	prev_node = NULL;
-	n_cmds = count_cmds(lexer);
+	n_cmds = count_cmds(main->lexer);
 	if (!n_cmds)
 		return ;
 	while (i < n_cmds)
 	{
-		init_node(lexer, cmd, &prev_node, operators, n_cmds);
+		init_node(main, &main->cmd, &prev_node, n_cmds);
 		i++;
 	}
 }

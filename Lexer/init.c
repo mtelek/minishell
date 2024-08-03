@@ -45,6 +45,7 @@ void	get_tokens(char *input, t_operator *operators, t_lexer **lexer)
 	t_lexer	*prev_node;
 
 	prev_node = NULL;
+	current = NULL;
 	i = 0;
 	n_words = number_of_words(input, operators);
 	while (i < n_words)
@@ -52,7 +53,7 @@ void	get_tokens(char *input, t_operator *operators, t_lexer **lexer)
 		current = malloc(sizeof(t_lexer));
 		if (!current)
 			error_function(2, operators, current, NULL);
-		current->str = getting_word(input, operators, current);
+		current->str = getting_word(input, operators);
 		current->type = get_type(current->str);
 		current->next = NULL;
 		current->prev = prev_node;
@@ -75,6 +76,8 @@ void	creating_l_list(t_operator *current, t_operator **prev_node,
 	else
 		*head = current;
 	*prev_node = current;
+	current = NULL;
+	prev_node = NULL;
 }
 
 void	init_operators(t_operator **head)

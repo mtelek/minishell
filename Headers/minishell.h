@@ -72,10 +72,9 @@ int						is_operator(char c1, char c2, t_operator *operators);
 int						op_check(char *op, t_operator *operators);
 
 // CREATING_WORDS
-char					*getting_word(char *input, t_operator *operators,
-							t_lexer *lexer);
+char					*getting_word(char *input, t_operator *operators);
 char					*creating_word_wout_o(char *input, int i,
-							t_operator *operators, t_lexer *lexer);
+							t_operator *operators);
 int						calculating_end(char *input, int i,
 							t_operator *operators);
 char					*creating_string(int start, int end, char *input);
@@ -95,10 +94,9 @@ int						count_cmds(t_lexer *lexer);
 int						number_of_args(t_lexer *lexer);
 void					args_maker(t_lexer *lexer, t_cmd *cmd,
 							int n_cmds, int n_args);
-void					creating_cmd_table(t_operator *operators,
-							t_lexer *lexer, t_cmd **cmd);
+void					creating_cmd_table(t_main *main);
 
-// DELETE_QUOTES
+//PARSER/QUOTES
 void					delete_qoutes(t_lexer *lexer);
 void					remove_quotes(char *str, int start, int end);
 
@@ -130,5 +128,6 @@ int						ft_strncmp(const char *str1, const char *str2,
 							size_t n);
 void					ft_putchar_fd(char c, int fd);
 void					ft_putstr_fd(char *s, int fd);
+int						ft_strcmp(char *s1, char *s2);
 
 #endif

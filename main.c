@@ -15,47 +15,6 @@
 
 #include "Headers/minishell.h"
 
-void	remove_quotes(char *str, int start, int end)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '\0' && str[i] != str[start])
-		i++;
-	while (str[i + 1] != '\0' && str[i + 1] != str[end])
-	{
-		str[i] = str[i + 1];
-		i++;
-	}
-	while (str[i + 2] != '\0')
-	{
-		str[i] = str[i + 2];
-		i++;
-	}
-	str[i] = '\0';
-	return ;
-}
-
-void	delete_qoutes(t_lexer *lexer)
-{
-	int	start;
-	int	end;
-	int	temp_start;
-
-	while (lexer != NULL)
-	{
-		temp_start = qoutes_checker(lexer->str, 34, -1);
-		start = qoutes_checker(lexer->str, 39, -1);
-		if ((temp_start != 0 && temp_start < start) || start == 0)
-			start = temp_start;
-		if (lexer->str[start])
-			end = qoutes_handler(lexer->str, start) - 1;
-		if (end != 0)
-			remove_quotes(lexer->str, start, end);
-		lexer = lexer->next;
-	}
-}
-
 void	print_cmd_table(t_cmd *cmd)
 {
 	int		j;
@@ -75,28 +34,38 @@ void	print_cmd_table(t_cmd *cmd)
 	}
 }
 
+void	print_lexer(t_lexer *lexer)
+{
+	t_lexer	*temp_lex;
+
+	temp_lex = lexer;
+	printf("LEXER\n");
+	while (temp_lex != NULL)
+	{
+		printf("Tokens:%s\n", temp_lex->str);
+		temp_lex = temp_lex->next;
+	}
+}
+
 int	minishell(char *input)
 {
-	t_operator	*operators;
-	t_lexer		*lexer;
-	t_cmd		*cmd;
-	t_main		*main;
+	t_main		main;
 
-	operators = NULL;
-	lexer = NULL;
-	cmd = NULL;
-	main = NULL;
-	init_operators(&operators);
-	get_tokens(input, operators, &lexer);
-	if (syntax_check(operators, lexer) == false)
+	main.operators = NULL;
+	main.lexer = NULL;
+	main.cmd = NULL;
+	init_operators(&main.operators);
+	get_tokens(input, main.operators, &main.lexer);
+	print_lexer(main.lexer);
+	if (syntax_check(main.operators, main.lexer) == false)
 	{
-		ok_free_function(operators, lexer, NULL);
+		ok_free_function(main.operators, main.lexer, NULL);
 		exit(2);
 	}
-	delete_qoutes(lexer);
-	creating_cmd_table(operators, lexer, &cmd);
-	print_cmd_table(cmd);
-	ok_free_function(operators, lexer, cmd);
+	delete_qoutes(main.lexer);
+	creating_cmd_table(&main);
+	print_cmd_table(main.cmd);
+	ok_free_function(main.operators, main.lexer, main.cmd);
 	return (0);
 }
 
@@ -109,6 +78,8 @@ int	main(int argc, char **argv)
 	argc_checker(argc, argv);
 	while (1)
 	{
+		input = NULL;
+		free(input);
 		input = readline("minishell> ");
 		if (input)
 		{

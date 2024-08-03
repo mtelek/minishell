@@ -18,6 +18,7 @@ char	*creating_string(int start, int end, char *input)
 	int		k;
 
 	k = 0;
+	word = NULL;
 	word = malloc((end - start) + 1);
 	if (!word)
 		return (0);
@@ -50,15 +51,16 @@ int	calculating_end(char *input, int i, t_operator *operators)
 	return (i);
 }
 
-char	*creating_word_wout_o(char *input, int i, t_operator *operators,
-		t_lexer *lexer)
+char	*creating_word_wout_o(char *input, int i, t_operator *operators)
 {
 	int		start;
 	int		end;
 	char	*word;
 
+	start = 0;
+	end = 0;
+	word = NULL;
 	start = i;
-	(void)lexer;
 	end = calculating_end(input, i, operators);
 	i = end;
 	if (start == end)
@@ -69,13 +71,26 @@ char	*creating_word_wout_o(char *input, int i, t_operator *operators,
 	return (word);
 }
 
-char	*getting_word(char *input, t_operator *operators, t_lexer *lexer)
+char	*word_create_and_check(int start, int end, char *input,
+			t_operator *operators)
+{
+	char	*word;
+
+	word = NULL;
+	word = creating_string(start, end, input);
+	if (!word)
+		error_function(3, operators, NULL, NULL);
+	return (word);
+}
+
+char	*getting_word(char *input, t_operator *operators)
 {
 	static int	i;
 	int			start;
 	int			end;
 	char		*word;
 
+	word = NULL;
 	i = getting_word_i_start(input, i);
 	if (is_operator(input[i], input[i + 1], operators))
 	{
@@ -85,13 +100,11 @@ char	*getting_word(char *input, t_operator *operators, t_lexer *lexer)
 							+ 1] == '|' && input[i] == '|'))))
 			i++;
 		end = ++i;
-		word = creating_string(start, end, input);
-		if (!word)
-			error_function(3, operators, NULL, NULL);
+		word = word_create_and_check(start, end, input, operators);
 	}
 	else
 	{
-		word = creating_word_wout_o(input, i, operators, lexer);
+		word = creating_word_wout_o(input, i, operators);
 		i = calculating_end(input, i, operators);
 	}
 	i = null_terminator_check(input, i);

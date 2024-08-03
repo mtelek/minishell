@@ -1,0 +1,93 @@
+char	*getting_word(char *input, t_operator *operators, t_lexer *lexer)
+{
+	static int	i;
+	int			start;
+	int			end;
+	char		*word;
+
+	word = 0;
+	i = getting_word_i_start(input, i);
+	if (input[i] && input[i+1] && is_operator(input[i], input[i + 1], operators)) //here did extra protection
+	{
+		start = i;
+		if ((input[i] && input[i + 1] && ((input[i + 1] == '<' && input[i] == '<') //here did extra input[i+1]
+					|| (input[i + 1] == '>' && input[i] == '>') || (input[i
+							+ 1] == '|' && input[i] == '|'))))
+			i++;
+		end = ++i;
+		word = creating_string(start, end, input);
+		if (!word)
+			error_function(3, operators, NULL, NULL);
+	}
+	else if ((input[i] && input[i+1] && !is_operator(input[i], input[i + 1], operators))) //here did an extra new line
+	{
+		word = creating_word_wout_o(input, i, operators, lexer);
+		i = calculating_end(input, i, operators);
+	}
+	i = null_terminator_check(input, i);
+	return (word);
+}
+
+
+//!OLD N_WORDS_CALCULATOR
+
+int	calculating_i(t_operator *operators, char *input, int i)
+{
+	while (input[i] && input[i + 1] && !ft_isspace(input[i])
+		&& !is_operator(input[i], input[i + 1], operators))
+		i = qoutes_handler(input, i);
+	while (input[i] && input[i + 1] && ft_isspace(input[i])
+		&& !is_operator(input[i], input[i + 1], operators))
+		i++;
+	return (i);
+}
+
+int	calculating_n_words(t_operator *operators, char *input, int i, int n_words)
+{
+	if (input[i] && input[i + 1]
+		&& !is_operator(input[i], input[i + 1], operators))
+		n_words++;
+	else if (input[i] && !input[i + 1] && !(input[i] == '|'
+			|| input[i] == '<' || input[i] == '>') && !ft_isspace(input[i]))
+		n_words++;
+	return (n_words);
+}
+
+// int	number_of_words(char *input, t_operator *operators)
+// {
+// 	int	i;
+// 	int	n_words;
+
+// 	i = 0;
+// 	n_words = 0;
+// 	while (input[i] != '\0')
+// 	{
+// 		while (input[i] && ft_isspace(input[i]))
+// 			i++;
+// 		n_words = calculating_n_words(operators, input, i, n_words);
+// 		i = calculating_i(operators, input, i);
+// 		if (input[i] && input[i + 1]
+// 			&& is_operator(input[i], input[i + 1], operators))
+// 		{
+// 			n_words++;
+// 			printf("haha2\n");
+// 			i = checking_for_doubles(input, i);
+// 		}
+// 		if (input[i] && (input[i] == '|' || input[i] == '<' || input[i] == '>'))
+// 		{
+// 			n_words++;
+// 			printf("haha3\n");
+// 		}
+// 		if (input[i] != '\0')
+// 		{
+// 			// if (input[i] && !ft_isspace(input[i]) && (ft_isspace(input[i+1]) || input[i+1] == '\0'))
+// 			// {
+// 			// 	printf("haha4\n");
+// 			// 	n_words++;
+// 			// }
+// 			i++;
+// 		}
+// 	}
+// 	printf("N_WORDS:%d\n", n_words);
+// 	return (n_words);
+// }

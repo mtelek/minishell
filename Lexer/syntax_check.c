@@ -12,6 +12,8 @@
 
 #include "../Headers/minishell.h"
 
+//! haha | > haha should be a correct input, fix it
+
 bool	checking_lex(char *str)
 {
 	int	i;
