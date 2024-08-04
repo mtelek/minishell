@@ -21,6 +21,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include "error_messages.h"
+# include <signal.h>
 
 typedef struct s_cmd
 {

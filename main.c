@@ -69,6 +69,8 @@ int	minishell(char *input)
 	return (0);
 }
 
+
+
 int	main(int argc, char **argv)
 {
 	char	*input;
@@ -76,15 +78,22 @@ int	main(int argc, char **argv)
 	(void)argc;
 	(void)argv;
 	argc_checker(argc, argv);
+	signal (SIGINT, SIG_IGN);
+	signal (SIGQUIT, SIG_IGN);
 	while (1)
-	{
+	{	
 		input = NULL;
 		free(input);
-		input = readline("minishell> ");
+		input = readline("minishells> ");
 		if (input)
-		{
+		{	
 			minishell(input);
 			free(input);
+			if(input == NULL)
+			{
+				free(input);
+				return(0);
+			}
 		}
 	}
 	return (0);
