@@ -69,7 +69,14 @@ int	minishell(char *input)
 	return (0);
 }
 
-
+void handle_sigint(int sig)
+{
+    (void)sig;
+    write(1, "\n", 1);
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();
+}
 
 int	main(int argc, char **argv)
 {
@@ -78,23 +85,20 @@ int	main(int argc, char **argv)
 	(void)argc;
 	(void)argv;
 	argc_checker(argc, argv);
-	signal (SIGINT, SIG_IGN);
+	signal (SIGINT, handle_sigint);
 	signal (SIGQUIT, SIG_IGN);
 	while (1)
 	{	
 		input = NULL;
 		free(input);
-		input = readline("minishells> ");
+		input = readline("minishell> ");
 		if (input)
 		{	
 			minishell(input);
 			free(input);
-			if(input == NULL)
-			{
-				free(input);
-				return(0);
-			}
 		}
+		if (!input)
+			return (write(1,"exit\n",5),free(input),0);
 	}
 	return (0);
 }
