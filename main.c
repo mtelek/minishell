@@ -55,7 +55,8 @@ int	minishell(char *input)
 	main.lexer = NULL;
 	main.cmd = NULL;
 	init_operators(&main.operators);
-	get_tokens(input, main.operators, &main.lexer);
+	if (get_tokens(input, main.operators, &main.lexer) == -1)
+		return (error_operators(main.operators), 0);
 	print_lexer(main.lexer);
 	if (syntax_check(main.operators, main.lexer) == false)
 	{

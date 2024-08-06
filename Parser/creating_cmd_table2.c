@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 20:24:38 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/02 20:29:53 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/06 00:04:03 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ int	count_cmds(t_lexer *lexer)
 		n_cmds++;
 	if (lexer->type != 6 && lexer->next && !lexer->next->next)
 		n_cmds--;
-	while (lexer != NULL)
+	while (lexer != NULL && lexer->next != NULL)
 	{
-		if (lexer->type == 1)
+		if (lexer->type == 1 && lexer->next->type == 6)
 			n_cmds++;
 		lexer = lexer->next;
 	}
@@ -34,7 +34,10 @@ int	number_of_args(t_lexer *lexer)
 {
 	int				count;
 	static t_lexer	*temp;
+	static int		k;
+	int				n_cmds;
 
+	n_cmds = count_cmds(lexer);
 	count = 0;
 	if (temp == NULL)
 		temp = lexer;
@@ -47,7 +50,11 @@ int	number_of_args(t_lexer *lexer)
 	}
 	if (temp != NULL && temp->type == 1)
 		temp = temp->next;
-	if (count < 0)
-		count = 0;
+	k++;
+	if (k == n_cmds)
+	{
+		temp = NULL;
+		k = 0;
+	}
 	return (count);
 }

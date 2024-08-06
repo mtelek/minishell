@@ -12,6 +12,21 @@
 
 #include "../Headers/minishell.h"
 
+int	ops_check(char *input, int i)
+{
+	if ((input[i] != '|' && input[i + 1] == '|')
+		|| (input[i] != '<' && input[i + 1] == '<')
+		|| (input[i] != '>' && input[i + 1] == '>'))
+		return (1);
+	if (input[i] && input[i + 1]
+		&& (input[i] == '<' || input[i] == '>')
+		&& !ft_isspace(input[i + 1])
+		&& (input[i + 1] != '>' && input[i + 1] != '<'
+			&& input[i + 1] != '|'))
+		return (1);
+	return (0);
+}
+
 int	checking_for_doubles(char *input, int i)
 {
 	if (input[i] && input[i + 1])

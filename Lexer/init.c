@@ -37,7 +37,13 @@ int	get_type(char *str)
 	return (6);
 }
 
-void	get_tokens(char *input, t_operator *operators, t_lexer **lexer)
+void	current_check(t_lexer *current, t_operator *operators)
+{
+	if (!current)
+		error_function(2, operators, current, NULL);
+}
+
+int	get_tokens(char *input, t_operator *operators, t_lexer **lexer)
 {
 	int		n_words;
 	int		i;
@@ -45,14 +51,14 @@ void	get_tokens(char *input, t_operator *operators, t_lexer **lexer)
 	t_lexer	*prev_node;
 
 	prev_node = NULL;
-	current = NULL;
 	i = 0;
-	n_words = number_of_words(input, operators);
-	while (i < n_words)
+	n_words = number_of_words(input);
+	if (n_words == 0)
+		return (-1);
+	while (i++ < n_words)
 	{
 		current = malloc(sizeof(t_lexer));
-		if (!current)
-			error_function(2, operators, current, NULL);
+		current_check(current, operators);
 		current->str = getting_word(input, operators);
 		current->type = get_type(current->str);
 		current->next = NULL;
@@ -62,8 +68,8 @@ void	get_tokens(char *input, t_operator *operators, t_lexer **lexer)
 		else
 			*lexer = current;
 		prev_node = current;
-		i++;
 	}
+	return (0);
 }
 
 void	creating_l_list(t_operator *current, t_operator **prev_node,

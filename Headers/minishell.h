@@ -57,19 +57,19 @@ typedef struct s_main
 
 // INIT
 void					init_operators(t_operator **head);
-void					get_tokens(char *input, t_operator *operators,
+int						get_tokens(char *input, t_operator *operators,
 							t_lexer **lexer);
 int						get_type(char *str);
 
 // NUMBER_OF_WORDS
-int						number_of_words(char *input, t_operator *operators);
-int						calculating_n_words(t_operator *operators, char *input,
-							int i, int n_words);
+int						number_of_words(char *input);
 int						checking_for_doubles(char *input, int i);
 int						qoutes_handler(char *input, int i);
 int						qoutes_checker(char *input, char check, int i);
 int						is_operator(char c1, char c2, t_operator *operators);
 int						op_check(char *op, t_operator *operators);
+int						last_word_check(char *input, int i);
+int						ops_check(char *input, int i);
 
 // CREATING_WORDS
 char					*getting_word(char *input, t_operator *operators);

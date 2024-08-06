@@ -12,8 +12,6 @@
 
 #include "../Headers/minishell.h"
 
-//! haha | > haha should be a correct input, fix it
-
 bool	checking_lex(char *str)
 {
 	int	i;
@@ -25,17 +23,17 @@ bool	checking_lex(char *str)
 		if (str[i] == 34)
 		{
 			temp_i = qoutes_checker(str, 34, i);
-			if (temp_i != 0)
+			if (temp_i != -1)
 				i = temp_i;
-			if (temp_i == 0)
+			if (temp_i == -1)
 				return (ft_putstr_fd(ERR_QUOTE2, 2), false);
 		}
 		else if (str[i] == 39)
 		{
 			temp_i = qoutes_checker(str, 39, i);
-			if (temp_i != 0)
+			if (temp_i != -1)
 				i = temp_i;
-			if (temp_i == 0)
+			if (temp_i == -1)
 				return (ft_putstr_fd(ERR_QUOTE1, 2), false);
 		}
 		i++;
@@ -62,11 +60,11 @@ bool	syntax_doubles_diff(t_lexer *lexer)
 {
 	while (lexer->next != NULL)
 	{
-		if (lexer->type < 6 && lexer->next->type < 6)
+		if ((lexer->type < 6 && lexer->type != 1) && lexer->next->type < 6)
 		{
 			if (checking_combinaton(lexer) == false)
 				return (false);
-			else if (lexer->next->type == 1)
+			if (lexer->next->type == 1)
 				ft_putstr_fd(ERROR_M_PIPE, 2);
 			else if (lexer->next->type == 2)
 				ft_putstr_fd(ERROR_M_LESSER, 2);

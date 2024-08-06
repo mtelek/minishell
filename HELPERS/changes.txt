@@ -91,3 +91,72 @@ int	calculating_n_words(t_operator *operators, char *input, int i, int n_words)
 // 	printf("N_WORDS:%d\n", n_words);
 // 	return (n_words);
 // }
+
+
+
+
+
+int	number_of_words(char *input, t_operator *operators)
+{
+	int	i;
+	int	n_words;
+	int	in_word;
+
+	i = 0;
+	n_words = 0;
+	in_word = 0;
+	while (input[i] != '\0')
+	{
+		if (input[i] == 34 || input[i] == 39)
+		{
+			if ((i > 0 && ft_isspace(input[i - 1])))
+				n_words++;
+			i = qoutes_handler(input, i);
+			if (input[i] == '\0' && (input[i-1] == 34 || input[i-1] == 39))
+			{
+				n_words++;
+				in_word = 0;
+				break;
+			}
+			in_word = 0;
+		}
+		else if (input[i] && ft_isspace(input[i]))
+		{
+			if (in_word)
+			{
+				n_words++;
+				in_word = 0;
+			}
+		}
+		else if (input[i] && input[i + 1] && ((input[i] == '|' && input[i
+						+ 1] == '|') || (input[i] == '>' && input[i + 1] == '>')
+				|| (input[i] == '<' && input[i + 1] == '<')))
+		{
+			if (in_word)
+			{
+				n_words++;
+				in_word = 0;
+			}
+			n_words++;
+			i++;
+		}
+		else if (is_single_operator(input[i], operators))
+		{
+			if (in_word)
+			{
+				n_words++;
+				in_word = 0;
+			}
+			n_words++;
+		}
+		else if (!in_word)
+			in_word = 1;
+		if (input[i])
+			i++;
+	}
+	if (in_word)
+		n_words++;
+	
+	printf("N_WORDS:%d\n", n_words);
+	return (n_words);
+}

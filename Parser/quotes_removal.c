@@ -6,13 +6,14 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:04:41 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/03 20:11:51 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/06 16:58:29 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-//! quotes removal not working correctly if "hgfg'fg'"
+//! not working for "dfjkl'fgds'"
+//! does not work for "'" pr '""
 
 void	remove_quotes(char *str, int start, int end)
 {
@@ -39,15 +40,22 @@ void	delete_qoutes(t_lexer *lexer)
 {
 	int	start;
 	int	end;
-	int	temp_start;
+	int	s_double;
+	int	s_single;
 
 	while (lexer != NULL)
 	{
-		temp_start = qoutes_checker(lexer->str, 34, -1);
-		start = qoutes_checker(lexer->str, 39, -1);
-		if ((temp_start != 0 && temp_start < start) || start == 0)
-			start = temp_start;
-		if (lexer->str[start])
+		start = 0;
+		s_double = qoutes_checker(lexer->str, 34, -1);
+		s_single = qoutes_checker(lexer->str, 39, -1);
+		printf("DOUBLE:%d\n", s_double);
+		printf("Single:%d\n", s_single);
+		if ((s_double < s_single && s_double != 0) || lexer->str[0] == 34)
+			start = s_double;
+		else if ((s_single < s_double && s_single != 0) || lexer->str[0] == 39)
+			start = s_single;
+		printf("Start:%d\n", start);
+		if (start != -1)
 			end = qoutes_handler(lexer->str, start) - 1;
 		if (end != 0)
 			remove_quotes(lexer->str, start, end);

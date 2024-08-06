@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/03 15:20:25 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/06 00:01:12 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ void	creating_cmd_table(t_main *main)
 	i = 0;
 	prev_node = NULL;
 	n_cmds = count_cmds(main->lexer);
+	printf("N_CMDS:%d\n", n_cmds);
 	if (!n_cmds)
 		return ;
 	while (i < n_cmds)
