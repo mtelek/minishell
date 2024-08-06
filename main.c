@@ -80,17 +80,17 @@ int	main(int argc, char **argv)
 	signal (SIGINT, handle_sigint);
 	signal (SIGQUIT, SIG_IGN);
 	while (1)
-	{	
+	{
 		input = NULL;
 		free(input);
 		input = readline("minishell> ");
 		if (input)
-		{	
+		{
 			minishell(input);
 			free(input);
 		}
 		if (!input)
-			return (write(1,"exit\n",5),free(input),0);
+			return (write(1, "exit\n", 5), free(input), 0);
 	}
 	return (0);
 }

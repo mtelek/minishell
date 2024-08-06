@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:04:41 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/06 16:58:29 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/06 17:40:23 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,10 @@ void	delete_qoutes(t_lexer *lexer)
 		start = 0;
 		s_double = qoutes_checker(lexer->str, 34, -1);
 		s_single = qoutes_checker(lexer->str, 39, -1);
-		printf("DOUBLE:%d\n", s_double);
-		printf("Single:%d\n", s_single);
 		if ((s_double < s_single && s_double != 0) || lexer->str[0] == 34)
 			start = s_double;
 		else if ((s_single < s_double && s_single != 0) || lexer->str[0] == 39)
 			start = s_single;
-		printf("Start:%d\n", start);
 		if (start != -1)
 			end = qoutes_handler(lexer->str, start) - 1;
 		if (end != 0)
