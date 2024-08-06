@@ -21,6 +21,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include "error_messages.h"
+# include <signal.h>
 
 typedef struct s_cmd
 {
@@ -129,5 +130,8 @@ int						ft_strncmp(const char *str1, const char *str2,
 void					ft_putchar_fd(char c, int fd);
 void					ft_putstr_fd(char *s, int fd);
 int						ft_strcmp(char *s1, char *s2);
+
+// SIG
+void					handle_sigint(int sig);
 
 #endif
