@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/06 00:01:12 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/07 23:40:58 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,12 @@ int	setting_args(t_lexer **temp_lex, t_cmd **temp_cmd, int n_args)
 	i = 0;
 	while ((*temp_lex) != NULL && (*temp_lex)->type != 1)
 	{
-		if ((*temp_lex)->type != 6 && (*temp_lex)->next
-			&& (*temp_lex)->next->next)
-			(*temp_lex) = (*temp_lex)->next->next;
-		else if ((*temp_lex)->type != 6 && !(*temp_lex)->next->next)
-			break ;
-		else
+		if (i < n_args)
 		{
-			if (i < n_args)
-			{
-				(*temp_cmd)->args[i] = (*temp_lex)->str;
-				i++;
-			}
-			(*temp_lex) = (*temp_lex)->next;
+			(*temp_cmd)->args[i] = (*temp_lex)->str;
+			i++;
 		}
+		(*temp_lex) = (*temp_lex)->next;
 	}
 	return (i);
 }
@@ -62,6 +54,15 @@ void	args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds, int n_args)
 	}
 }
 
+void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
+{
+	temp->cmd = ft_strdup(temp->args[0]);
+	if (!temp->cmd)
+		error_function(6, main->operators, main->lexer, *cmd);
+	temp->in_fd = STDIN_FILENO;
+	temp->out_fd = STDOUT_FILENO;
+}
+
 void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)
 {
 	t_cmd	*temp;
@@ -80,9 +81,7 @@ void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)
 		temp->args[j++] = NULL;
 	temp->next = NULL;
 	args_maker(main->lexer, temp, n_cmds, n_args);
-	temp->cmd = ft_strdup(temp->args[0]);
-	if (!temp->cmd)
-		error_function(6, main->operators, main->lexer, *cmd);
+	init_cmd_fd(main, temp, cmd);
 	temp->prev = *prev_node;
 	if (*prev_node)
 		(*prev_node)->next = temp;
@@ -100,7 +99,7 @@ void	creating_cmd_table(t_main *main)
 	i = 0;
 	prev_node = NULL;
 	n_cmds = count_cmds(main->lexer);
-	printf("N_CMDS:%d\n", n_cmds);
+	//printf("N_CMDS:%d\n", n_cmds);
 	if (!n_cmds)
 		return ;
 	while (i < n_cmds)

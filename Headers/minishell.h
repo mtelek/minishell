@@ -22,13 +22,20 @@
 # include <unistd.h>
 # include "error_messages.h"
 # include <signal.h>
+# include <sys/wait.h>
+
+typedef struct s_parser
+{
+	int			**pipes;
+	int			n_pipes;
+}				t_parser;
 
 typedef struct s_cmd
 {
 	char			*cmd;
 	char			**args;
-	int				op_next;
-	int				op_bef;
+	int				out_fd;
+	int				in_fd;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
 }					t_cmd;
@@ -51,9 +58,11 @@ typedef struct s_lexer
 
 typedef struct s_main
 {
+	char			**env;
 	t_lexer			*lexer;
 	t_operator		*operators;
 	t_cmd			*cmd;
+	t_parser		*parser;
 }					t_main;
 
 // INIT
@@ -96,6 +105,11 @@ int						number_of_args(t_lexer *lexer);
 void					args_maker(t_lexer *lexer, t_cmd *cmd,
 							int n_cmds, int n_args);
 void					creating_cmd_table(t_main *main);
+
+//PARSER/PIPES
+void					init_pipes(t_main *main);
+void					set_pipe_fd(int *pipes);
+int						fork1(void);
 
 //PARSER/QUOTES
 void					delete_qoutes(t_lexer *lexer);

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 20:24:38 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/06 00:04:03 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/06 18:51:47 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ int	number_of_args(t_lexer *lexer)
 	while (temp != NULL && temp->type != 1)
 	{
 		count++;
-		if (temp->type != 6)
-			count = count - 2;
 		temp = temp->next;
 	}
 	if (temp != NULL && temp->type == 1)

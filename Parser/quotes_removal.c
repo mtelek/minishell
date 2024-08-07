@@ -6,14 +6,11 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:04:41 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/06 17:40:23 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/06 17:41:49 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
-
-//! not working for "dfjkl'fgds'"
-//! does not work for "'" pr '""
 
 void	remove_quotes(char *str, int start, int end)
 {

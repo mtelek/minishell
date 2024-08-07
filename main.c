@@ -25,8 +25,12 @@ void	print_cmd_table(t_cmd *cmd)
 	{
 		j = 0;
 		printf("NEW_CMD_TABLE\n");
+		printf("IN_FD:%d\n", temp_cmd->in_fd);
+		printf("IN_FD:%d\n", temp_cmd->out_fd);
 		while (temp_cmd->args[j])
 		{
+			if (j == 0)
+				printf("CMD:%s\n", temp_cmd->cmd);
 			printf("ARGS: %s\n", temp_cmd->args[j]);
 			j++;
 		}
@@ -47,17 +51,17 @@ void	print_lexer(t_lexer *lexer)
 	}
 }
 
-int	minishell(char *input)
+int	minishell(char *input, char **envp)
 {
 	t_main		main;
 
 	main.operators = NULL;
 	main.lexer = NULL;
 	main.cmd = NULL;
+	main.env = envp;
 	init_operators(&main.operators);
 	if (get_tokens(input, main.operators, &main.lexer) == -1)
 		return (error_operators(main.operators), 0);
-	print_lexer(main.lexer);
 	if (syntax_check(main.operators, main.lexer) == false)
 	{
 		ok_free_function(main.operators, main.lexer, NULL);
@@ -65,15 +69,17 @@ int	minishell(char *input)
 	}
 	delete_qoutes(main.lexer);
 	creating_cmd_table(&main);
-	print_cmd_table(main.cmd);
+	init_pipes(&main);
+	//print_cmd_table(main.cmd);
 	ok_free_function(main.operators, main.lexer, main.cmd);
 	return (0);
 }
 
-int	main(int argc, char **argv)
+int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
 
+	//put env into linked list
 	(void)argc;
 	(void)argv;
 	argc_checker(argc, argv);
@@ -86,7 +92,7 @@ int	main(int argc, char **argv)
 		input = readline("minishell> ");
 		if (input)
 		{
-			minishell(input);
+			minishell(input, envp);
 			free(input);
 		}
 		if (!input)
