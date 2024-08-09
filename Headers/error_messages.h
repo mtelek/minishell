@@ -27,5 +27,15 @@
 # define MF_CMD_TABLE "Error, malloc for creating the command table failed\n"
 # define MF_CMD_ARGS "Error, malloc for creating args failed\n"
 # define MF_CMD_CMD "Error, malloc for creating cmd table failed\n"
+# define MF_PARSER "Error, malloc for creating parser failed\n"
+# define MF_PIPES "Error, malloc for creating pipes failed\n"
+# define MF_ONE_PIPE "Error, malloc for creating a pipe failed\n"
+# define ERROR_PIPE "Error, creating a pipe failed\n"
+# define ERROR_FORK "Error, creating a fork failed\n"
+# define ERROR_DUP2 "Error, duplicating fd failed\n"
+# define MF_INPUT_FD "Error, malloc for creating input_fd failed\n"
+# define ERROR_OPEN "Error, failed to open .txt file\n"
+# define MF_OUPUT_FD "Error, malloc for creating output_fd failed\n"
+# define MF_APPEND_OUT "Error, malloc for creating append_out_fd failed"
 
 #endif

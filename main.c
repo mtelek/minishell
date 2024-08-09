@@ -59,8 +59,8 @@ int	minishell(char *input, char **envp)
 	main.lexer = NULL;
 	main.cmd = NULL;
 	main.env = envp;
-	init_operators(&main.operators);
-	if (get_tokens(input, main.operators, &main.lexer) == -1)
+	init_operators(&main.operators, &main);
+	if (get_tokens(input, &main.lexer, &main) == -1)
 		return (error_operators(main.operators), 0);
 	if (syntax_check(main.operators, main.lexer) == false)
 	{
@@ -68,9 +68,7 @@ int	minishell(char *input, char **envp)
 		exit(2);
 	}
 	delete_qoutes(main.lexer);
-	creating_cmd_table(&main);
-	init_pipes(&main);
-	//print_cmd_table(main.cmd);
+	parser(&main);
 	ok_free_function(main.operators, main.lexer, main.cmd);
 	return (0);
 }
@@ -78,10 +76,12 @@ int	minishell(char *input, char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
+	char	*history_file;
 
 	//put env into linked list
-	(void)argc;
-	(void)argv;
+	//should doublechek which one is syntax error and which one is not
+	history_file = ".minishell_history";
+	read_history(history_file);
 	argc_checker(argc, argv);
 	signal (SIGINT, handle_sigint);
 	signal (SIGQUIT, SIG_IGN);
@@ -92,11 +92,18 @@ int	main(int argc, char **argv, char **envp)
 		input = readline("minishell> ");
 		if (input)
 		{
+			if (ft_strcmp(input, "history reset") == 0)
+				clear_history();
+			if (*input != '\0')
+				add_history(input);
 			minishell(input, envp);
 			free(input);
 		}
 		if (!input)
+		{
+			write_history(history_file);
 			return (write(1, "exit\n", 5), free(input), 0);
+		}
 	}
 	return (0);
 }

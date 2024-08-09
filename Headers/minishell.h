@@ -23,11 +23,24 @@
 # include "error_messages.h"
 # include <signal.h>
 # include <sys/wait.h>
+# include <fcntl.h>
+
+# define PIPE 1
+# define INPUT_RED 2
+# define OUTPUT_RED 3
+# define HEREDOC 4
+# define APPEND_OUT 5
 
 typedef struct s_parser
 {
 	int			**pipes;
 	int			n_pipes;
+	int			*input_fd;
+	int			n_input_red;
+	int			*output_fd;
+	int			n_output_red;
+	int			n_append_out;
+	int			*append_out_fd;
 }				t_parser;
 
 typedef struct s_cmd
@@ -65,31 +78,37 @@ typedef struct s_main
 	t_parser		*parser;
 }					t_main;
 
+//HELPER/PRINTING
+void					print_cmd_table(t_cmd *cmd);
+void					print_lexer(t_lexer *lexer);
+
 // INIT
-void					init_operators(t_operator **head);
-int						get_tokens(char *input, t_operator *operators,
-							t_lexer **lexer);
+void					init_operators(t_operator **head, t_main *main);
+int						get_tokens(char *input, t_lexer **lexer, t_main *main);
 int						get_type(char *str);
 
 // NUMBER_OF_WORDS
-int						number_of_words(char *input);
+int						number_of_words(char *input, t_main *main);
 int						checking_for_doubles(char *input, int i);
 int						qoutes_handler(char *input, int i);
 int						qoutes_checker(char *input, char check, int i);
-int						is_operator(char c1, char c2, t_operator *operators);
+int						is_operator(char c1, char c2, t_operator *operators,
+							t_main *main);
 int						op_check(char *op, t_operator *operators);
-int						last_word_check(char *input, int i);
+int						last_word_check(char *input, int i, t_main *main);
 int						ops_check(char *input, int i);
+int						calc_n_words_w_op(int n_words, char *input, int i);
+int						calc_n_words_for_op(char *input, int n_words, int i);
+int						checker_for_op_space(t_main *main, char *input, int i);
 
 // CREATING_WORDS
-char					*getting_word(char *input, t_operator *operators);
-char					*creating_word_wout_o(char *input, int i,
-							t_operator *operators);
+char					*getting_word(char *input, t_main *main);
+char					*creating_word_wout_o(char *input, int i, t_main *main);
 int						calculating_end(char *input, int i,
-							t_operator *operators);
+							t_operator *operators, t_main *main);
 char					*creating_string(int start, int end, char *input);
 int						getting_word_i_start(char *input, int i);
-int						null_terminator_check(char *input, int i);
+int						null_terminator_check(char *input, int i, t_main *main);
 
 // SYNTAX_CHECK
 bool					syntax_check(t_operator *operators, t_lexer *lexer);
@@ -98,6 +117,10 @@ bool					syntax_doubles_same(t_operator *temp_op, t_lexer *lexer,
 bool					syntax_doubles_diff(t_lexer *lexer);
 bool					checking_combinaton(t_lexer *lexer);
 bool					checking_lex(char *str);
+
+//PARSER
+void					parser(t_main *main);
+void					alloc_parser(t_main *main);
 
 // PARSER/CMD_TABLE
 int						count_cmds(t_lexer *lexer);
@@ -108,19 +131,32 @@ void					creating_cmd_table(t_main *main);
 
 //PARSER/PIPES
 void					init_pipes(t_main *main);
-void					set_pipe_fd(int *pipes);
-int						fork1(void);
+void					set_pipe_fd(int *pipes, t_main *main);
+int						fork1(t_main *main);
+
+//PARSER/REDIR
+int						red_count(t_lexer *lexer, int type);
+void					init_infile(t_main *main);
+void					init_outfile(t_main *main);
+char					*get_txt_name(t_main *main, int type);
+
+//PARSER/APPEND
+void					init_append_out(t_main *main);
+void					switch_fd_append_out(t_main *main);
+void					alloc_append_out_f(t_main *main);
+void					set_append_out_fd(int *append_out_fd, t_main *main);
 
 //PARSER/QUOTES
 void					delete_qoutes(t_lexer *lexer);
 void					remove_quotes(char *str, int start, int end);
 
 // ERRORS
-void					error_function(int error_type, t_operator *operators,
-							t_lexer *lexer, t_cmd *cmd);
+void					error_function(int error_type, t_main *main);
 void					error_operators(t_operator *operators);
 void					error_lexer(int error_type, t_lexer *lexer);
 void					error_cmd(int error_type, t_cmd *cmd);
+void					error_type10(int error_type);
+void					error_type20(int error_type);
 
 // FREE
 

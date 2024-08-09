@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/07 23:40:58 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/09 21:08:01 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,14 @@ int	setting_args(t_lexer **temp_lex, t_cmd **temp_cmd, int n_args)
 	{
 		if (i < n_args)
 		{
-			(*temp_cmd)->args[i] = (*temp_lex)->str;
+			if ((*temp_lex)->type == INPUT_RED) //here made changes, added new rule
+				(*temp_lex) = (*temp_lex)->next;
+			if ((*temp_lex)->type == OUTPUT_RED) //here made changes, added new rule
+				(*temp_lex) = (*temp_lex)->next;
+			if (i > 0 && (*temp_lex)->prev->type != OUTPUT_RED) //here made changes as well
+				(*temp_cmd)->args[i] = (*temp_lex)->str;
+			else if (i == 0)
+				(*temp_cmd)->args[i] = (*temp_lex)->str; //added extra line, was not here before
 			i++;
 		}
 		(*temp_lex) = (*temp_lex)->next;
@@ -56,14 +63,16 @@ void	args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds, int n_args)
 
 void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 {
+	(void)cmd;
 	temp->cmd = ft_strdup(temp->args[0]);
 	if (!temp->cmd)
-		error_function(6, main->operators, main->lexer, *cmd);
+		error_function(6, main);
 	temp->in_fd = STDIN_FILENO;
 	temp->out_fd = STDOUT_FILENO;
 }
 
-void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)
+void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node,
+			int n_cmds)
 {
 	t_cmd	*temp;
 	int		j;
@@ -73,10 +82,10 @@ void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)
 	n_args = number_of_args(main->lexer);
 	temp = malloc(sizeof(t_cmd));
 	if (!temp)
-		error_function(4, main->operators, main->lexer, *cmd);
+		error_function(4, main);
 	temp->args = malloc(sizeof(char *) * (n_args + 1));
 	if (!temp->args)
-		error_function(5, main->operators, main->lexer, *cmd);
+		error_function(5, main);
 	while (j < n_args)
 		temp->args[j++] = NULL;
 	temp->next = NULL;
@@ -99,7 +108,7 @@ void	creating_cmd_table(t_main *main)
 	i = 0;
 	prev_node = NULL;
 	n_cmds = count_cmds(main->lexer);
-	//printf("N_CMDS:%d\n", n_cmds);
+	// printf("N_CMDS:%d\n", n_cmds);
 	if (!n_cmds)
 		return ;
 	while (i < n_cmds)

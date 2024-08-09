@@ -28,13 +28,13 @@ char	*creating_string(int start, int end, char *input)
 	return (word);
 }
 
-int	calculating_end(char *input, int i, t_operator *operators)
+int	calculating_end(char *input, int i, t_operator *operators, t_main *main)
 {
 	int	temp_i;
 
 	temp_i = 0;
 	while (input[i] != '\0' && !ft_isspace(input[i]) && !is_operator(input[i],
-			input[i + 1], operators))
+			input[i + 1], operators, main))
 	{
 		if (input[i] == 34)
 			temp_i = qoutes_checker(input, 34, i);
@@ -51,7 +51,7 @@ int	calculating_end(char *input, int i, t_operator *operators)
 	return (i);
 }
 
-char	*creating_word_wout_o(char *input, int i, t_operator *operators)
+char	*creating_word_wout_o(char *input, int i, t_main *main)
 {
 	int		start;
 	int		end;
@@ -61,29 +61,28 @@ char	*creating_word_wout_o(char *input, int i, t_operator *operators)
 	end = 0;
 	word = NULL;
 	start = i;
-	end = calculating_end(input, i, operators);
+	end = calculating_end(input, i, main->operators, main);
 	i = end;
 	if (start == end)
 		return (NULL);
 	word = creating_string(start, end, input);
 	if (!word)
-		error_function(3, operators, NULL, NULL);
+		error_function(3, main);
 	return (word);
 }
 
-char	*word_create_and_check(int start, int end, char *input,
-			t_operator *operators)
+char	*word_create_and_check(int start, int end, char *input, t_main *main)
 {
 	char	*word;
 
 	word = NULL;
 	word = creating_string(start, end, input);
 	if (!word)
-		error_function(3, operators, NULL, NULL);
+		error_function(3, main);
 	return (word);
 }
 
-char	*getting_word(char *input, t_operator *operators)
+char	*getting_word(char *input, t_main *main)
 {
 	static int	i;
 	int			start;
@@ -92,7 +91,7 @@ char	*getting_word(char *input, t_operator *operators)
 
 	word = NULL;
 	i = getting_word_i_start(input, i);
-	if (is_operator(input[i], input[i + 1], operators))
+	if (is_operator(input[i], input[i + 1], main->operators, main))
 	{
 		start = i;
 		if ((input[i + 1] && ((input[i + 1] == '<' && input[i] == '<')
@@ -100,13 +99,13 @@ char	*getting_word(char *input, t_operator *operators)
 							+ 1] == '|' && input[i] == '|'))))
 			i++;
 		end = ++i;
-		word = word_create_and_check(start, end, input, operators);
+		word = word_create_and_check(start, end, input, main);
 	}
 	else
 	{
-		word = creating_word_wout_o(input, i, operators);
-		i = calculating_end(input, i, operators);
+		word = creating_word_wout_o(input, i, main);
+		i = calculating_end(input, i, main->operators, main);
 	}
-	i = null_terminator_check(input, i);
+	i = null_terminator_check(input, i, main);
 	return (word);
 }

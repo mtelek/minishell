@@ -60,7 +60,7 @@ int	op_check(char *op, t_operator *operators)
 	return (0);
 }
 
-int	is_operator(char c1, char c2, t_operator *operators)
+int	is_operator(char c1, char c2, t_operator *operators, t_main *main)
 {
 	char	*op;
 
@@ -69,7 +69,7 @@ int	is_operator(char c1, char c2, t_operator *operators)
 	{
 		op = malloc(3);
 		if (!op)
-			error_function(2, operators, NULL, NULL);
+			error_function(2, main);
 		op[0] = c1;
 		op[1] = c2;
 		op[2] = '\0';
@@ -78,7 +78,7 @@ int	is_operator(char c1, char c2, t_operator *operators)
 	{
 		op = malloc(2);
 		if (!op)
-			error_function(2, operators, NULL, NULL);
+			error_function(2, main);
 		op[0] = c1;
 		op[1] = '\0';
 	}

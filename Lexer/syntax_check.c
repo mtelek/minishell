@@ -41,14 +41,15 @@ bool	checking_lex(char *str)
 	return (true);
 }
 
-bool	checking_combinaton(t_lexer *lexer)
+bool	checking_combinaton(t_lexer *lexer) // wrong message for wc >< ls
 {
 	if ((lexer->type == 1 && lexer->next->type == 3) || (lexer->type == 3
 			&& lexer->next->type == 1) || (lexer->type == 1
-			&& lexer->next->type == 2) || (lexer->type == 2
-			&& lexer->next->type == 3) || (lexer->type == 1
+			&& lexer->next->type == 2) || (lexer->type == 1
 			&& lexer->next->type == 4) || (lexer->type == 1
-			&& lexer->next->type == 5))
+			&& lexer->next->type == 5) || (lexer->type == 3
+			&& lexer->next->type == 2) || (lexer->type == 3
+			&& lexer->next->type == 2))
 	{
 		ft_putstr_fd(ERROR_M_NEWLINE, 2);
 		return (false);
@@ -64,17 +65,6 @@ bool	syntax_doubles_diff(t_lexer *lexer)
 		{
 			if (checking_combinaton(lexer) == false)
 				return (false);
-			if (lexer->next->type == 1)
-				ft_putstr_fd(ERROR_M_PIPE, 2);
-			else if (lexer->next->type == 2)
-				ft_putstr_fd(ERROR_M_LESSER, 2);
-			else if (lexer->next->type == 3)
-				ft_putstr_fd(ERROR_M_GREATER, 2);
-			else if (lexer->next->type == 4)
-				ft_putstr_fd(ERROR_M_LESSERP, 2);
-			else if (lexer->next->type == 5)
-				ft_putstr_fd(ERROR_M_GREATERP, 2);
-			return (false);
 		}
 		lexer = lexer->next;
 	}

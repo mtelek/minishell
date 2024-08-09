@@ -12,9 +12,9 @@
 
 #include "../Headers/minishell.h"
 
-int	null_terminator_check(char *input, int i)
+int	null_terminator_check(char *input, int i, t_main *main)
 {
-	if (input[i] == '\0' || !last_word_check(input, i))
+	if (input[i] == '\0' || !last_word_check(input, i, main))
 		i = 0;
 	return (i);
 }
