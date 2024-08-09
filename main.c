@@ -94,14 +94,15 @@ int	main(int argc, char **argv, char **envp)
 		{
 			if (ft_strcmp(input, "history reset") == 0)
 				clear_history();
-			if (*input != '\0')
+			else if (*input != '\0')
 				add_history(input);
 			minishell(input, envp);
 			free(input);
 		}
 		if (!input)
 		{
-			write_history(history_file);
+			if (ft_strcmp(input, "history reset") != 0)
+				write_history(history_file);
 			return (write(1, "exit\n", 5), free(input), 0);
 		}
 	}
