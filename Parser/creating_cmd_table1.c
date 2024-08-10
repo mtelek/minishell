@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/09 21:08:01 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/10 22:37:31 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,16 @@ int	setting_args(t_lexer **temp_lex, t_cmd **temp_cmd, int n_args)
 				(*temp_lex) = (*temp_lex)->next;
 			if ((*temp_lex)->type == OUTPUT_RED) //here made changes, added new rule
 				(*temp_lex) = (*temp_lex)->next;
-			if (i > 0 && (*temp_lex)->prev->type != OUTPUT_RED) //here made changes as well
+			if ((*temp_lex)->type == APPEND_OUT) //here made changes, added new rule
+				(*temp_lex) = (*temp_lex)->next->next;
+			if (i > 0 && (*temp_lex) && (*temp_lex)->prev->type != OUTPUT_RED)
 				(*temp_cmd)->args[i] = (*temp_lex)->str;
-			else if (i == 0)
-				(*temp_cmd)->args[i] = (*temp_lex)->str; //added extra line, was not here before
+			else if (i == 0 && (*temp_lex)) //added extra line, was not here before
+				(*temp_cmd)->args[i] = (*temp_lex)->str;
 			i++;
 		}
-		(*temp_lex) = (*temp_lex)->next;
+		if (*temp_lex)
+			(*temp_lex) = (*temp_lex)->next;
 	}
 	return (i);
 }
@@ -69,6 +72,9 @@ void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 		error_function(6, main);
 	temp->in_fd = STDIN_FILENO;
 	temp->out_fd = STDOUT_FILENO;
+	temp->input_redicrection = 0;
+	temp->output_redirection = 0;
+	temp->append_redirection = 0;
 }
 
 void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node,

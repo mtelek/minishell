@@ -49,6 +49,9 @@ typedef struct s_cmd
 	char			**args;
 	int				out_fd;
 	int				in_fd;
+	int				input_redicrection;
+	int				output_redirection;
+	int				append_redirection;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
 }					t_cmd;
@@ -111,9 +114,8 @@ int						getting_word_i_start(char *input, int i);
 int						null_terminator_check(char *input, int i, t_main *main);
 
 // SYNTAX_CHECK
-bool					syntax_check(t_operator *operators, t_lexer *lexer);
-bool					syntax_doubles_same(t_operator *temp_op, t_lexer *lexer,
-							t_lexer *temp_lex);
+bool					syntax_check(t_lexer *lexer);
+bool					syntax_doubles_same(t_lexer *temp_lex);
 bool					syntax_doubles_diff(t_lexer *lexer);
 bool					checking_combinaton(t_lexer *lexer);
 bool					checking_lex(char *str);
@@ -130,7 +132,7 @@ void					args_maker(t_lexer *lexer, t_cmd *cmd,
 void					creating_cmd_table(t_main *main);
 
 //PARSER/PIPES
-void					init_pipes(t_main *main);
+t_cmd					*init_pipes(t_main *main);
 void					set_pipe_fd(int *pipes, t_main *main);
 int						fork1(t_main *main);
 
@@ -139,12 +141,7 @@ int						red_count(t_lexer *lexer, int type);
 void					init_infile(t_main *main);
 void					init_outfile(t_main *main);
 char					*get_txt_name(t_main *main, int type);
-
-//PARSER/APPEND
 void					init_append_out(t_main *main);
-void					switch_fd_append_out(t_main *main);
-void					alloc_append_out_f(t_main *main);
-void					set_append_out_fd(int *append_out_fd, t_main *main);
 
 //PARSER/QUOTES
 void					delete_qoutes(t_lexer *lexer);

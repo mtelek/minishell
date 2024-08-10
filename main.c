@@ -62,7 +62,8 @@ int	minishell(char *input, char **envp)
 	init_operators(&main.operators, &main);
 	if (get_tokens(input, &main.lexer, &main) == -1)
 		return (error_operators(main.operators), 0);
-	if (syntax_check(main.operators, main.lexer) == false)
+	// print_lexer(main.lexer);
+	if (syntax_check(main.lexer) == false)
 	{
 		ok_free_function(main.operators, main.lexer, NULL);
 		exit(2);
@@ -79,7 +80,9 @@ int	main(int argc, char **argv, char **envp)
 	char	*history_file;
 
 	//put env into linked list
-	//should doublechek which one is syntax error and which one is not
+	//one task, check errors if im freeing correctly
+	//check ctrl d and c with valgrind
+	//output file and append might not work with a pipe
 	history_file = ".minishell_history";
 	read_history(history_file);
 	argc_checker(argc, argv);
@@ -101,8 +104,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (!input)
 		{
-			if (ft_strcmp(input, "history reset") != 0)
-				write_history(history_file);
+			write_history(history_file);
 			return (write(1, "exit\n", 5), free(input), 0);
 		}
 	}

@@ -41,87 +41,55 @@ bool	checking_lex(char *str)
 	return (true);
 }
 
-bool	checking_combinaton(t_lexer *lexer) // wrong message for wc >< ls
+bool	checking_combinaton(t_lexer *lexer)
 {
-	if ((lexer->type == 1 && lexer->next->type == 3) || (lexer->type == 3
-			&& lexer->next->type == 1) || (lexer->type == 1
-			&& lexer->next->type == 2) || (lexer->type == 1
-			&& lexer->next->type == 4) || (lexer->type == 1
-			&& lexer->next->type == 5) || (lexer->type == 3
-			&& lexer->next->type == 2) || (lexer->type == 3
-			&& lexer->next->type == 2))
-	{
-		ft_putstr_fd(ERROR_M_NEWLINE, 2);
-		return (false);
-	}
+	if ((lexer->type == 3 && lexer->next->type == 2))
+		return (ft_putstr_fd(ERROR_M_LESSER, 2), false);
+	else if ((lexer->type == 2 && lexer->next->type == 1)
+		|| (lexer->type == 3 && lexer->next->type == 1))
+		return (ft_putstr_fd(ERROR_M_PIPE, 2), false);
 	return (true);
 }
 
 bool	syntax_doubles_diff(t_lexer *lexer)
 {
-	while (lexer->next != NULL)
+	while (lexer != NULL)
 	{
-		if ((lexer->type < 6 && lexer->type != 1) && lexer->next->type < 6)
-		{
+		if (lexer->next && lexer->type < 6 && lexer->next->type < 6)
 			if (checking_combinaton(lexer) == false)
 				return (false);
-		}
+		if (lexer->type < 6 && !lexer->next)
+			return (ft_putstr_fd(ERROR_M_NEWLINE, 2), false);
 		lexer = lexer->next;
 	}
 	return (true);
 }
 
-bool	syntax_doubles_same(t_operator *temp_op, t_lexer *lexer,
-		t_lexer *temp_lex)
+bool	syntax_doubles_same(t_lexer *lexer)
 {
-	while (temp_op != NULL)
+	while (lexer != NULL)
 	{
-		if (lexer->type < 6 && lexer->next->type == temp_op->type)
+		if (lexer->type == 7)
+			return (ft_putstr_fd(ERROR_M_PIPE, 2), false);
+		if (lexer->type < 6 && lexer->next == NULL)
 			return (ft_putstr_fd(ERROR_M_NEWLINE, 2), false);
-		temp_op = temp_op->next;
-	}
-	while (temp_lex != NULL)
-	{
-		if (temp_lex->type == 7)
-		{
-			ft_putstr_fd(ERROR_M_PIPE, 2);
+		if (checking_lex(lexer->str) == false)
 			return (false);
-		}
-		if (temp_lex->type < 6 && temp_lex->next == NULL)
-		{
-			ft_putstr_fd(ERROR_M_NEWLINE, 2);
-			return (false);
-		}
-		if (checking_lex(temp_lex->str) == false)
-			return (false);
-		temp_lex = temp_lex->next;
+		lexer = lexer->next;
 	}
 	return (true);
 }
 
-bool	syntax_check(t_operator *operators, t_lexer *lexer)
+bool	syntax_check(t_lexer *lexer)
 {
-	t_operator	*temp_op;
-	t_lexer		*temp_lex;
-
-	temp_op = operators;
-	temp_lex = lexer;
-	if (temp_lex->type == 1)
-	{
-		ft_putstr_fd(ERROR_M_PIPE, 2);
-		return (false);
-	}
+	if (lexer->type == 1)
+		return (ft_putstr_fd(ERROR_M_PIPE, 2), false);
 	if (lexer != NULL && lexer->next == NULL)
-	{
 		if (lexer->type < 6)
-		{
-			ft_putstr_fd(ERROR_M_NEWLINE, 2);
-			return (false);
-		}
-	}
+			return (ft_putstr_fd(ERROR_M_NEWLINE, 2), false);
 	if (syntax_doubles_diff(lexer) == false)
 		return (false);
-	if (syntax_doubles_same(temp_op, lexer, temp_lex) == false)
+	if (syntax_doubles_same(lexer) == false)
 		return (false);
 	return (true);
 }

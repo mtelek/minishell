@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:44:10 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/09 23:28:10 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/10 22:30:37 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,6 @@ void	switch_fd_outfile(t_main *main)
 		close(main->parser->output_fd[i]);
 		i++;
 	}
-	// Execute the command directly in the current process
-	execvp(main->cmd->cmd, main->cmd->args);
-	perror("execvp");
-	exit(1);
 }
 
 void	init_outfile(t_main *main)

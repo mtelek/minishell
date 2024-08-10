@@ -50,10 +50,10 @@ int	qoutes_handler(char *input, int i)
 
 int	last_word_check(char *input, int i, t_main *main)
 {
-	while (input[i] != '\0')
+	while (input[i])
 	{
-		if (!ft_isspace(input[i]) && !is_operator(input[i],
-				input[i + 1], main->operators, main))
+		if (!ft_isspace(input[i]) && !is_operator(input[i], input[i + 1],
+				main->operators, main))
 			return (1);
 		i++;
 	}
@@ -74,7 +74,7 @@ int	calc_i_w_quotes(char *input, int i)
 	return (i);
 }
 
-int	number_of_words(char *input, t_main *main) //hopefully its correct now
+int	number_of_words(char *input, t_main *main) // hopefully its correct now
 {
 	int	n_words;
 	int	i;
@@ -91,6 +91,14 @@ int	number_of_words(char *input, t_main *main) //hopefully its correct now
 		{
 			if (last_word_check(input, i, main))
 				n_words++;
+			else if ((input[i + 1] == '|' || input[i + 1] == '<' || input[i
+						+ 1] == '>') && !input[i + 2])
+				n_words++;
+			else if (input[i + 1] && input[i + 2] && ((input[i + 1] == '|'
+						&& input[i + 2] == '|') || (input[i + 1] == '<'
+						&& input[i + 2] == '<') || (input[i + 1] == '>'
+						&& input[i + 2] == '>')))
+				n_words++;
 			while (input[i + 1] && ft_isspace(input[i + 1]))
 				i++;
 		}
@@ -100,6 +108,6 @@ int	number_of_words(char *input, t_main *main) //hopefully its correct now
 			n_words++;
 		i++;
 	}
-	//printf("N_WORDS:%d\n", n_words);
+	// printf("N_WORDS:%d\n", n_words);
 	return (n_words);
 }

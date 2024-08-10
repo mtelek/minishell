@@ -12,9 +12,21 @@
 
 #include "../Headers/minishell.h"
 
+int	checking_last_word(char *input, int i, t_main *main)
+{
+	(void)main;
+	while (input[i])
+	{
+		if (!ft_isspace(input[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	null_terminator_check(char *input, int i, t_main *main)
 {
-	if (input[i] == '\0' || !last_word_check(input, i, main))
+	if (input[i] == '\0' || !checking_last_word(input, i, main))
 		i = 0;
 	return (i);
 }

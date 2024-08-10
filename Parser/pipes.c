@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:16:28 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/09 23:28:29 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/10 23:57:29 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,23 @@ void	close_child_fds(t_main *main)
 	j = 0;
 	while (j < main->parser->n_pipes)
 	{
-		close(main->parser->pipes[j][0]);
-		close(main->parser->pipes[j][1]);
+		if (close(main->parser->pipes[j][0]) == -1)
+			error_function(17, main);
+		if (close(main->parser->pipes[j][1]) == -1)
+			error_function(17, main);
 		j++;
 	}
 }
 
-int	switching_fds(t_main *main)
+t_cmd	*switching_fds(t_main *main)
 {
 	int		i;
 	__pid_t	pid;
+	t_cmd *parent_cmd;
 
 	i = 0;
+	pid = 0;
+	parent_cmd = main->cmd;
 	while (main->cmd != NULL)
 	{
 		pid = fork1(main);
@@ -49,16 +54,12 @@ int	switching_fds(t_main *main)
 				if (dup2(main->parser->pipes[i][1], STDOUT_FILENO) < 0)
 					error_function(12, main);
 			close_child_fds(main);
-			// Execute the command directly in the current process
-			execvp(main->cmd->cmd, main->cmd->args);
-			// execve(main->cmd->cmd, main->cmd->args, main->env);
-			perror("execvp");
-			exit(1);
+			return (main->cmd);
 		}
 		i++;
 		main->cmd = main->cmd->next;
 	}
-	return (i);
+	return (parent_cmd);
 }
 
 void	alloc_pipes(t_main *main)
@@ -79,22 +80,15 @@ void	alloc_pipes(t_main *main)
 	}
 }
 
-void	init_pipes(t_main *main)
+t_cmd *init_pipes(t_main *main)
 {
 	int	i;
-	int	j;
+	t_cmd *own_cmd;
 
 	i = 0;
-	j = 0;
 	alloc_pipes(main);
-	i = switching_fds(main);
-	while (j < main->parser->n_pipes)
-	{
-		close(main->parser->pipes[j][0]);
-		close(main->parser->pipes[j][1]);
-		j++;
-	}
-	j = 0;
-	while (j++ < i)
+	own_cmd = switching_fds(main);
+	while (i++ < main->parser->n_pipes)
 		wait(0);
+	return (own_cmd);
 }

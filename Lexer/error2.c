@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:03:45 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/09 23:25:31 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/10 16:57:38 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,6 @@ void	error_type20(int error_type)
 		ft_putstr_fd(MF_OUPUT_FD, 2);
 	else if (error_type == 16)
 		ft_putstr_fd(MF_APPEND_OUT, 2);
+	else if (error_type == 17)
+		ft_putstr_fd(ERROR_CLOSE, 2);
 }
