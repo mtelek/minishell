@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/10 23:57:57 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/11 22:40:04 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,9 @@ void	alloc_parser(t_main *main)
 
 void	parser(t_main *main)
 {
-	int i;
 	t_cmd *own_cmd;
 
-	i = 0;
+	own_cmd = NULL;
 	creating_cmd_table(main);
 	alloc_parser(main);
 	main->parser->n_pipes = count_cmds(main->lexer) - 1;
@@ -53,21 +52,7 @@ void	parser(t_main *main)
 		init_outfile(main);
 	if (main->parser->n_append_out)
 		init_append_out(main);
-	if (main->parser->n_pipes == 0)
-	{
-		if (main->cmd->cmd)
-		{
-			execvp(main->cmd->cmd, main->cmd->args);
-			perror("execvp");
-			exit(1);
-		}
-	}
-	else if (main->parser->n_pipes != 0)
-	{
-		execvp(own_cmd->cmd, own_cmd->args);
-		perror("execvp");
-		exit(1);
-	}
-	while (i++ < main->parser->n_pipes)
-		wait(0);
+	if (!own_cmd)
+		own_cmd = main->cmd;
+	executor(main, own_cmd);
 }

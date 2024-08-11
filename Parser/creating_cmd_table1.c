@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/10 22:37:31 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/11 15:12:07 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,7 @@ void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 		error_function(6, main);
 	temp->in_fd = STDIN_FILENO;
 	temp->out_fd = STDOUT_FILENO;
-	temp->input_redicrection = 0;
-	temp->output_redirection = 0;
-	temp->append_redirection = 0;
+	temp->pid = -1;
 }
 
 void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node,

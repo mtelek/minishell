@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:16:28 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/10 23:57:29 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/11 23:30:09 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,15 @@ t_cmd	*switching_fds(t_main *main)
 {
 	int		i;
 	__pid_t	pid;
-	t_cmd *parent_cmd;
+	t_cmd	*temp_main;
 
 	i = 0;
 	pid = 0;
-	parent_cmd = main->cmd;
+	temp_main = main->cmd;
 	while (main->cmd != NULL)
 	{
 		pid = fork1(main);
+		main->cmd->pid = pid;
 		if (pid == 0)
 		{
 			if (i > 0)
@@ -59,7 +60,7 @@ t_cmd	*switching_fds(t_main *main)
 		i++;
 		main->cmd = main->cmd->next;
 	}
-	return (parent_cmd);
+	return (temp_main);
 }
 
 void	alloc_pipes(t_main *main)
@@ -80,10 +81,10 @@ void	alloc_pipes(t_main *main)
 	}
 }
 
-t_cmd *init_pipes(t_main *main)
+t_cmd	*init_pipes(t_main *main)
 {
-	int	i;
-	t_cmd *own_cmd;
+	int		i;
+	t_cmd	*own_cmd;
 
 	i = 0;
 	alloc_pipes(main);

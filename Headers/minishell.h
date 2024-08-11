@@ -24,12 +24,19 @@
 # include <signal.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+# include <dirent.h>
 
 # define PIPE 1
 # define INPUT_RED 2
 # define OUTPUT_RED 3
 # define HEREDOC 4
 # define APPEND_OUT 5
+
+typedef struct s_env
+{
+	char				*env;
+	struct s_env		*next;
+}				t_env;
 
 typedef struct s_parser
 {
@@ -49,9 +56,7 @@ typedef struct s_cmd
 	char			**args;
 	int				out_fd;
 	int				in_fd;
-	int				input_redicrection;
-	int				output_redirection;
-	int				append_redirection;
+	__pid_t			pid;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
 }					t_cmd;
@@ -74,16 +79,21 @@ typedef struct s_lexer
 
 typedef struct s_main
 {
-	char			**env;
+	char			**envp;
 	t_lexer			*lexer;
 	t_operator		*operators;
 	t_cmd			*cmd;
 	t_parser		*parser;
+	t_env			*env;
 }					t_main;
 
 //HELPER/PRINTING
 void					print_cmd_table(t_cmd *cmd);
 void					print_lexer(t_lexer *lexer);
+
+// ENV
+int						init_env(t_main *main, char **env);
+char					**linked_to_env_array(t_env *env_list, t_main *main);
 
 // INIT
 void					init_operators(t_operator **head, t_main *main);
@@ -147,6 +157,11 @@ void					init_append_out(t_main *main);
 void					delete_qoutes(t_lexer *lexer);
 void					remove_quotes(char *str, int start, int end);
 
+//Executor
+void					executor(t_main *main, t_cmd *own_cmd);
+void					free_env_array(char **env_array);
+void					free_bin(char **bin);
+
 // ERRORS
 void					error_function(int error_type, t_main *main);
 void					error_operators(t_operator *operators);
@@ -157,8 +172,7 @@ void					error_type20(int error_type);
 
 // FREE
 
-void					ok_free_function(t_operator *operators,
-							t_lexer *lexer, t_cmd *cmd);
+void					ok_free_function(t_main *main);
 void					free_lexer(t_lexer *lexer);
 void					free_operator(t_operator *operators);
 void					free_cmd(t_cmd *cmd);
@@ -166,7 +180,7 @@ void					free_cmd(t_cmd *cmd);
 // CHECKERS
 void					argc_checker(int argc, char **argv);
 
-// LIBFT UTILS
+// LIBFT_UTILS
 void					*ft_memmove(void *dest, const void *src, size_t n);
 int						ft_isspace(int c);
 char					*ft_strdup(const char *s1);
@@ -177,6 +191,10 @@ int						ft_strncmp(const char *str1, const char *str2,
 void					ft_putchar_fd(char c, int fd);
 void					ft_putstr_fd(char *s, int fd);
 int						ft_strcmp(char *s1, char *s2);
+char					**ft_split(char const *s, char c);
+char					*ft_strchr(const char *str, int c);
+char					*ft_substr(char const *s, unsigned int start, size_t len);
+char					*ft_strjoin(char const *s1, char const *s2);
 
 // SIG
 void					handle_sigint(int sig);

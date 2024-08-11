@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 21:42:59 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/02 22:34:11 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/11 23:34:10 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,25 @@ void	free_cmd(t_cmd *cmd)
 	}
 }
 
-void	ok_free_function(t_operator *operators, t_lexer *lexer, t_cmd *cmd)
+void	free_env_list(t_env *env)
 {
-	free_lexer(lexer);
-	free_operator(operators);
-	free_cmd(cmd);
+	t_env	*temp_env;
+
+	while (env != NULL)
+	{
+		temp_env = env;
+		env = env->next;
+		free(temp_env->env);
+		temp_env->env = NULL;
+		free(temp_env);
+		temp_env = NULL;
+	}
+}
+
+void	ok_free_function(t_main *main)
+{
+	free_env_list(main->env);
+	free_operator(main->operators);
+	free_lexer(main->lexer);
+	free_cmd(main->cmd);
 }

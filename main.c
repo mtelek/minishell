@@ -51,26 +51,37 @@ void	print_lexer(t_lexer *lexer)
 	}
 }
 
+void	print_env(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		printf("%s\n", envp[i]);
+		i++;
+	}
+}
+
 int	minishell(char *input, char **envp)
 {
-	t_main		main;
+	t_main	main;
 
 	main.operators = NULL;
 	main.lexer = NULL;
 	main.cmd = NULL;
-	main.env = envp;
+	init_env(&main, envp);
 	init_operators(&main.operators, &main);
 	if (get_tokens(input, &main.lexer, &main) == -1)
 		return (error_operators(main.operators), 0);
-	// print_lexer(main.lexer);
 	if (syntax_check(main.lexer) == false)
 	{
-		ok_free_function(main.operators, main.lexer, NULL);
+		ok_free_function(&main);
 		exit(2);
 	}
 	delete_qoutes(main.lexer);
 	parser(&main);
-	ok_free_function(main.operators, main.lexer, main.cmd);
+	ok_free_function(&main);
 	return (0);
 }
 
@@ -79,15 +90,14 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 	char	*history_file;
 
-	//put env into linked list
-	//one task, check errors if im freeing correctly
-	//check ctrl d and c with valgrind
-	//output file and append might not work with a pipe
+	// one task, check errors if im freeing correctly
+	// check ctrl d and c with valgrind
+	// output file and append might not work with a pipe
 	history_file = ".minishell_history";
 	read_history(history_file);
 	argc_checker(argc, argv);
-	signal (SIGINT, handle_sigint);
-	signal (SIGQUIT, SIG_IGN);
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		input = NULL;

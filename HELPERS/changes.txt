@@ -160,3 +160,148 @@ int	number_of_words(char *input, t_operator *operators)
 	printf("N_WORDS:%d\n", n_words);
 	return (n_words);
 }
+
+
+
+//EXECUTOR
+
+
+
+
+
+
+
+
+
+
+
+
+#include "../Headers/minishell.h"
+
+void    free_env_array(char **env_array)
+{
+    int i;
+
+    i = -1;
+    while(env_array[++i])
+        free(env_array[i]);
+    free(env_array);
+}
+
+void    free_bin(char **bin)
+{
+    int i;
+
+    i = -1;
+    while(bin[++i])
+        free(bin[i]);
+    free(bin);
+}
+
+void exec(t_main *main, t_cmd *own_cmd, char *path)
+{
+    int i;
+    char *temp;
+    char **env_array;
+
+    i = 0;
+    temp = env_to_str(main->env);
+    env_array = ft_split(temp, '\n');
+    if (main->parser->n_pipes == 0)
+	{
+		if (main->cmd->cmd)
+		{
+			execve(path, main->cmd->args, env_array);
+			perror("execve"); //to something else here
+            free_env_array(env_array);  
+			exit(1);
+		}
+	}
+	else if (main->parser->n_pipes != 0)
+	{
+		if (own_cmd != NULL && own_cmd->pid == 0)
+		{
+			execve(path, own_cmd->args, env_array);
+			perror("execve"); //do something else here
+            free_env_array(env_array);
+			exit(1);
+		}
+	}
+	while (i++ < main->parser->n_pipes)
+		wait(0);
+    free_env_array(env_array);
+}
+
+char *join_path(char *bin, char *d_name)
+{
+    char *path;
+    char *temp_path;
+
+    temp_path = ft_strjoin(bin, "/");
+    path = ft_strjoin(temp_path, d_name);
+    free(temp_path);
+    return (path);
+}
+
+char *find_path(char *bin, char *cmd)
+{
+    DIR *folder;
+    struct dirent *entry;
+    
+    entry = NULL;
+    folder = opendir(bin);
+    while ((entry = readdir(folder)) != NULL)
+    {
+        if (ft_strcmp(entry->d_name, cmd) == 0)
+        {
+            closedir(folder);
+           return join_path(bin, entry->d_name);
+        }
+    }
+    closedir(folder);
+    return (0);
+}
+
+char   *create_path(t_main *main, t_cmd *own_cmd)
+{
+    char **bin;
+    char *path;
+    
+    int i;
+
+    i = 0;
+    path = NULL;
+    while (main->env && ft_strncmp(main->env->env, "PATH=", 5) != 0)
+        main->env = main->env->next;
+    bin = ft_split(main->env->env + 5, ':');
+    while (bin[i] && !path && own_cmd)
+    {
+        path = find_path(bin[i], own_cmd->cmd);
+        i++;
+    }
+    free_bin(bin);
+    return (path);
+        
+}
+
+void    executor(t_main *main, t_cmd *own_cmd)
+{
+    char *path;
+        
+
+    //What happens if main->env is NULL?
+    // What if own_cmd is NULL?
+    // What if the PATH variable is not set or is malformed?
+    path = create_path(main, own_cmd);
+    if (!path)
+    {
+        printf("haha\n");
+        return;
+    }
+    if (own_cmd->pid == 0 || count_cmds(main->lexer) == 1)
+    {
+        if (ft_strchr(path, '/') != NULL)
+            exec(main, own_cmd, path);
+    }
+    free(path);
+}

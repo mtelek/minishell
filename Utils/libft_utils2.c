@@ -12,6 +12,19 @@
 
 #include "../Headers/minishell.h"
 
+char	*ft_strchr(const char *str, int c)
+{
+	while (*str != '\0')
+	{
+		if (*str == (char)c)
+			return ((char *)str);
+		str++;
+	}
+	if ((char)c == '\0')
+		return ((char *)str);
+	return (NULL);
+}
+
 int	ft_strcmp(char *s1, char *s2)
 {
 	int	i;
