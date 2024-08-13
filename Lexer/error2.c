@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:03:45 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/10 16:57:38 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/13 00:14:06 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,11 @@
 
 void	error_type10(int error_type)
 {
-	if (error_type == 1)
+	if (error_type == -1)
+		ft_putstr_fd(ERROR_STRDUP, 2);
+	else if (error_type == 0)
+		ft_putstr_fd(MF_ENV_LIST, 2);
+	else if (error_type == 1)
 		ft_putstr_fd(MF_OPERATOR, 2);
 	else if (error_type == 2)
 		ft_putstr_fd(MF_LEXER, 2);
@@ -36,6 +40,55 @@ void	error_type10(int error_type)
 		ft_putstr_fd(ERROR_PIPE, 2);
 }
 
+int execve_error(char *path)
+{
+	DIR		*dir;
+	int		fd;
+	int		exit_code;
+
+	fd = open(path, O_WRONLY); //can fail
+	dir = opendir(path); //can fail
+	ft_putstr_fd("minishell> ", 2);
+	ft_putstr_fd(path, 2);
+	if (!ft_strchr(path, '/'))
+	{
+		ft_putstr_fd(": command not found\n", 2);
+		exit_code = 127;
+	}
+	else if (fd == -1)
+	{
+		if (dir)
+		{
+			ft_putstr_fd(": is a directory\n", 2);
+			exit_code = 126;
+		}	
+		else
+		{
+			ft_putstr_fd(": No such file or directory\n", 2);
+			exit_code = 127;
+		}
+	}
+	else
+	{
+		ft_putstr_fd(": Permission denied\n", 2);
+		exit_code = 126;
+	}
+	if (dir)
+		closedir(dir); //error menagement, can fail
+	close(fd); //error menagement, can fail
+	return (exit_code);
+}
+
+void	exec_error_function(t_main *main, char *path)
+{
+	int exit_code;
+
+	exit_code = 0;
+	exit_code = execve_error(path);
+	error_function(20, main);
+	exit(exit_code);
+}
+
 void	error_type20(int error_type)
 {
 	if (error_type == 11)
@@ -52,4 +105,8 @@ void	error_type20(int error_type)
 		ft_putstr_fd(MF_APPEND_OUT, 2);
 	else if (error_type == 17)
 		ft_putstr_fd(ERROR_CLOSE, 2);
+	else if (error_type == 18)
+		ft_putstr_fd(MF_ENV_ARRAY, 2);
+	else if (error_type == 19)
+		ft_putstr_fd(ERROR_STRDUP, 2);
 }

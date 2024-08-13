@@ -32,6 +32,11 @@
 # define HEREDOC 4
 # define APPEND_OUT 5
 
+typedef struct s_exec
+{
+	int n_childs;
+}				t_exec;
+
 typedef struct s_env
 {
 	char				*env;
@@ -85,6 +90,7 @@ typedef struct s_main
 	t_cmd			*cmd;
 	t_parser		*parser;
 	t_env			*env;
+	t_exec			*exec;
 }					t_main;
 
 //HELPER/PRINTING
@@ -169,6 +175,8 @@ void					error_lexer(int error_type, t_lexer *lexer);
 void					error_cmd(int error_type, t_cmd *cmd);
 void					error_type10(int error_type);
 void					error_type20(int error_type);
+int						execve_error(char *path);
+void					exec_error_function(t_main *main, char *path);
 
 // FREE
 

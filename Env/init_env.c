@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 16:15:24 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/11 22:10:44 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/12 18:09:38 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	init_env(t_main *main, char **env)
 			error_function(0, main);
 		new->env = ft_strdup(env[i]);
 		if (!new->env)
-			error_function(0, main);
+			error_function(-1, main);
 		new->next = NULL;
 		if (main->env == NULL)
 			main->env = new;
@@ -56,13 +56,13 @@ char	**linked_to_env_array(t_env *env_list, t_main *main)
 	}
 	env_array = (char **)malloc(sizeof(char *) * (list_size + 1));
 	if (!env_array)
-		error_function(0, main);
+		error_function(18, main);
 	current = env_list;
 	while (++i < list_size)
 	{
 		env_array[i] = strdup(current->env);
 		if (!env_array[i])
-			error_function(0, main);
+			error_function(19, main);
 		current = current->next;
 	}
 	env_array[list_size] = NULL;

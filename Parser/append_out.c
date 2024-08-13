@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   append_out.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 23:04:24 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/11 23:28:51 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/13 21:58:58 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	set_append_out_fd(int *append_out_fd, t_main *main)
 	file_name = get_txt_name(main, APPEND_OUT);
 	*append_out_fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (*append_out_fd == -1)
-		error_function(14, main); // should specify which one failed to open
+		error_function(14, main); // should specify which one failed to open, for open i surely need exit code
 }
 
 void	alloc_append_out_f(t_main *main)

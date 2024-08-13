@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:50 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/11 23:28:08 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/13 22:26:34 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,39 +17,24 @@ void	exec(t_main *main, t_cmd *own_cmd, char *path, char **env_array)
 	int	i;
 
 	i = 0;
-	if (main->parser->n_pipes == 0)
+	if (own_cmd != NULL && own_cmd->pid == 0)
 	{
-		if (main->cmd->cmd)
-		{
-			execve(path, main->cmd->args, env_array);
-			error_function(0, main);
-			free_env_array(env_array);
-			perror("execve"); // to something else here
-			exit(1);
-		}
+		if (execve(path, own_cmd->args, env_array) == -1)
+			exec_error_function(main, path);
 	}
-	else if (main->parser->n_pipes != 0)
-	{
-		if (own_cmd != NULL && own_cmd->pid == 0)
-		{
-			execve(path, own_cmd->args, env_array);
-			error_function(0, main);
-			free_env_array(env_array);
-			perror("execve"); // do something else here
-			exit(1);
-		}
-	}
-	free(path); // could do somewhere else as well
+	//if (path)
+	//	free(path); // could do somewhere else as well
 	free_env_array(env_array);
-	while (i++ < main->parser->n_pipes)
+	while (i++ < main->exec->n_childs)
 		wait(0);
 }
 
-char	*check_dir(char *bin, char *command)
+char	*find_dir(char *bin, char *command)
 {
 	DIR				*dir;
 	struct dirent	*entry;
 	char			*path;
+	char			*temp;
 
 	path = NULL;
 	dir = opendir(bin);
@@ -57,7 +42,10 @@ char	*check_dir(char *bin, char *command)
 		return (NULL);
 	while ((entry = readdir(dir)))
 		if (ft_strcmp(entry->d_name, command) == 0)
-			path = ft_strjoin(ft_strjoin(bin, "/"), entry->d_name);
+		{
+			temp = ft_strjoin(bin, "/");
+			path = ft_strjoin(temp, entry->d_name);
+		}
 	closedir(dir);
 	return (path);
 }
@@ -73,13 +61,13 @@ char	*find_path(t_main *main, t_cmd *own_cmd)
 			"PATH=", 5) != 0)
 		main->env = main->env->next;
 	if (main->env == NULL || main->env->next == NULL)
-		error_function(0, main); //append error fucntion
+		exec(main, own_cmd, NULL, NULL);//dont know what to do here really
 	bin = ft_split(main->env->env, ':');
 	if (!bin[0] && !own_cmd->cmd)
-		error_function(0, main); //append error function
-	path = check_dir(bin[0] + 5, own_cmd->cmd);
+		exec(main, own_cmd, NULL, NULL); // dont know what to do here really
+	path = find_dir(bin[0] + 5, own_cmd->cmd);
 	while (bin[i] && path == NULL)
-		path = check_dir(bin[i++], own_cmd->cmd);
+		path = find_dir(bin[i++], own_cmd->cmd);
 	free_bin(bin);
 	return (path);
 }

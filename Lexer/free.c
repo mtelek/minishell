@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 21:42:59 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/11 23:34:10 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/13 21:21:12 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,37 @@ void	free_env_list(t_env *env)
 	}
 }
 
+void free_exec(t_exec *exec)
+{
+	free(exec);
+	exec = NULL;
+}
+
+void	free_parser(t_parser *parser)
+{
+	int i;
+
+	i = -1;
+	while (++i < parser->n_pipes)
+	{
+		if (parser->pipes[i])
+		{
+			free(parser->pipes[i]);
+			parser->pipes[i] = NULL;
+		}
+	}
+	free(parser->pipes);
+	parser->pipes = NULL;
+	free(parser);
+	parser  = NULL;
+}
+
 void	ok_free_function(t_main *main)
 {
 	free_env_list(main->env);
 	free_operator(main->operators);
 	free_lexer(main->lexer);
 	free_cmd(main->cmd);
+	free_parser(main->parser);
+	free_exec(main->exec);
 }

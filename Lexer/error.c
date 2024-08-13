@@ -65,11 +65,12 @@ void	error_parser(int error_type, t_parser *parser)
 {
 	int	i;
 
+	i = -1;
 	if (error_type > 7 && parser)
 	{
 		if (parser->pipes)
 		{
-			for (i = 0; i < parser->n_pipes; i++)
+			while (++i < parser->n_pipes)
 			{
 				if (parser->pipes[i])
 				{
@@ -89,7 +90,7 @@ void	error_env_list(t_env *env)
 {
 	t_env	*temp_env;
 
-	while (env != NULL)
+	while (env)
 	{
 		temp_env = env;
 		env = env->next;
@@ -100,6 +101,7 @@ void	error_env_list(t_env *env)
 
 void	error_function(int error_type, t_main *main)
 {
+	//erre_exec missing
 	error_env_list(main->env);
 	error_operators(main->operators);
 	error_lexer(error_type, main->lexer);
@@ -109,5 +111,6 @@ void	error_function(int error_type, t_main *main)
 		error_type10(error_type);
 	else if (error_type <= 20 && error_type > 10)
 		error_type20(error_type);
-	exit(2);
+	if (error_type != 20)
+		exit(1);
 }

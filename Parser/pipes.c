@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:16:28 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/11 23:30:09 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/13 17:56:39 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	close_child_fds(t_main *main)
 t_cmd	*switching_fds(t_main *main)
 {
 	int		i;
-	__pid_t	pid;
+	pid_t	pid;  //should be _pid_t
 	t_cmd	*temp_main;
 
 	i = 0;

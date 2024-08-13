@@ -70,6 +70,8 @@ int	minishell(char *input, char **envp)
 	main.operators = NULL;
 	main.lexer = NULL;
 	main.cmd = NULL;
+	main.env = NULL;
+	main.exec = NULL;
 	init_env(&main, envp);
 	init_operators(&main.operators, &main);
 	if (get_tokens(input, &main.lexer, &main) == -1)
@@ -93,6 +95,8 @@ int	main(int argc, char **argv, char **envp)
 	// one task, check errors if im freeing correctly
 	// check ctrl d and c with valgrind
 	// output file and append might not work with a pipe
+	// create fd_open, fd_clsoe, fd_close_dir and so on
+	//fixed the quitting issue, program runs endlessly now
 	history_file = ".minishell_history";
 	read_history(history_file);
 	argc_checker(argc, argv);
@@ -100,8 +104,6 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		input = NULL;
-		free(input);
 		input = readline("minishell> ");
 		if (input)
 		{
@@ -110,13 +112,14 @@ int	main(int argc, char **argv, char **envp)
 			else if (*input != '\0')
 				add_history(input);
 			minishell(input, envp);
-			free(input);
 		}
-		if (!input)
+		else
 		{
-			write_history(history_file);
+			clear_history();
 			return (write(1, "exit\n", 5), free(input), 0);
 		}
+		free(input);
 	}
+	clear_history();
 	return (0);
 }

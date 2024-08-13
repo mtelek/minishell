@@ -38,5 +38,8 @@
 # define MF_OUPUT_FD "Error, malloc for creating output_fd failed\n"
 # define MF_APPEND_OUT "Error, malloc for creating append_out_fd failed"
 # define ERROR_CLOSE "Error, failed to close .txt file\n"
+# define MF_ENV_LIST "Error, malloc failed for creating env list\n"
+# define ERROR_STRDUP "Error, duplicating string failed\n"
+# define MF_ENV_ARRAY "Error, malloc for creating env array failed\n"
 
 #endif
