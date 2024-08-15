@@ -1,20 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   free2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/02 21:42:59 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/13 21:21:12 by mtelek           ###   ########.fr       */
+/*   Created: 2024/08/15 22:45:40 by mtelek            #+#    #+#             */
+/*   Updated: 2024/08/15 22:47:04 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
+void	free_cmd(t_cmd *cmd)
+{
+	t_cmd	*temp_cmd;
+
+	while (cmd != NULL)
+	{
+		temp_cmd = cmd;
+		cmd = cmd->next;
+		free(temp_cmd->args);
+		temp_cmd->args = NULL;
+		free(temp_cmd->cmd);
+		temp_cmd->cmd = NULL;
+		free(temp_cmd);
+		temp_cmd = NULL;
+	}
+}
+
 void	free_lexer(t_lexer *lexer)
 {
-	t_lexer		*temp_lexer;
+	t_lexer	*temp_lexer;
 
 	while (lexer != NULL)
 	{
@@ -42,23 +59,6 @@ void	free_operator(t_operator *operators)
 	}
 }
 
-void	free_cmd(t_cmd *cmd)
-{
-	t_cmd		*temp_cmd;
-
-	while (cmd != NULL)
-	{
-		temp_cmd = cmd;
-		cmd = cmd->next;
-		free(temp_cmd->args);
-		temp_cmd->args = NULL;
-		free(temp_cmd->cmd);
-		temp_cmd->cmd = NULL;
-		free(temp_cmd);
-		temp_cmd = NULL;
-	}
-}
-
 void	free_env_list(t_env *env)
 {
 	t_env	*temp_env;
@@ -72,39 +72,4 @@ void	free_env_list(t_env *env)
 		free(temp_env);
 		temp_env = NULL;
 	}
-}
-
-void free_exec(t_exec *exec)
-{
-	free(exec);
-	exec = NULL;
-}
-
-void	free_parser(t_parser *parser)
-{
-	int i;
-
-	i = -1;
-	while (++i < parser->n_pipes)
-	{
-		if (parser->pipes[i])
-		{
-			free(parser->pipes[i]);
-			parser->pipes[i] = NULL;
-		}
-	}
-	free(parser->pipes);
-	parser->pipes = NULL;
-	free(parser);
-	parser  = NULL;
-}
-
-void	ok_free_function(t_main *main)
-{
-	free_env_list(main->env);
-	free_operator(main->operators);
-	free_lexer(main->lexer);
-	free_cmd(main->cmd);
-	free_parser(main->parser);
-	free_exec(main->exec);
 }

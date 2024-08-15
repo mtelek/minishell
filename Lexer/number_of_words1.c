@@ -74,7 +74,7 @@ int	calc_i_w_quotes(char *input, int i)
 	return (i);
 }
 
-int	number_of_words(char *input, t_main *main) // hopefully its correct now
+int	number_of_words(char *input, t_main *main)
 {
 	int	n_words;
 	int	i;
@@ -108,6 +108,5 @@ int	number_of_words(char *input, t_main *main) // hopefully its correct now
 			n_words++;
 		i++;
 	}
-	// printf("N_WORDS:%d\n", n_words);
 	return (n_words);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/13 22:18:58 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/15 23:03:21 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,59 +26,64 @@ int	red_count(t_lexer *lexer, int type)
 	return (counter);
 }
 
-void	alloc_parser(t_main *main)
+void	calling_redirects(t_main *main, t_cmd *own_cmd)
 {
-	main->parser = malloc(sizeof(t_parser));
-	if (!main->parser)
-		error_function(7, main);
-	main->parser->n_pipes = 0;
-    main->parser->n_input_red = 0;
-    main->parser->n_output_red = 0;
-    main->parser->n_append_out = 0;
-    main->parser->pipes = NULL;
+	if (own_cmd->pid == 0)
+	{
+		printf("IN: %d, OUT: %d, APPEND: %d\n", own_cmd->n_in, own_cmd->n_out,
+			own_cmd->n_append);
+		if (own_cmd->n_in)
+			init_infile(main, own_cmd);
+		if (own_cmd->n_out)
+			init_outfile(main, own_cmd);
+		if (own_cmd->n_append)
+			init_append_out(main, own_cmd);
+	}
 }
 
-void alloc_exec(t_main *main)
+void	wait_for_children(t_main *main)
 {
-	main->exec = malloc(sizeof(t_exec));
-	if (!main->exec)
-		error_function(7, main); //def mallloc failure here
-	main->exec->n_childs = 1;
-}
+	int	i;
+	int	status;
+	int	exit_status;
 
-void	count_operators(t_main *main)
-{
-	main->parser->n_pipes = count_cmds(main->lexer) - 1;
-	main->parser->n_input_red = red_count(main->lexer, INPUT_RED);
-	main->parser->n_output_red = red_count(main->lexer, OUTPUT_RED);
-	main->parser->n_append_out = red_count(main->lexer, APPEND_OUT);
+	status = 0;
+	exit_status = 0;
+	i = 0;
+	while (i < main->exec->n_childs)
+	{
+		waitpid(-1, &status, 0);
+		if (WIFEXITED(status))
+		{
+			exit_status = WEXITSTATUS(status);
+			main->exit_code = exit_status;
+		}
+		i++;
+	}
 }
 
 void	parser(t_main *main)
 {
 	t_cmd	*own_cmd;
-	pid_t	pid; //should be _pid_t
+	__pid_t	pid;
 
 	own_cmd = NULL;
 	creating_cmd_table(main);
 	alloc_parser(main);
-	count_operators(main);
 	alloc_exec(main);
 	if (main->parser->n_pipes)
+	{
 		own_cmd = init_pipes(main);
-	if (main->parser->n_input_red)
-		init_infile(main);
-	if (main->parser->n_output_red)
-		init_outfile(main);
-	if (main->parser->n_append_out)
-		init_append_out(main);
-	if (!own_cmd)
+		wait_for_children(main);
+		executor(main, own_cmd);
+	}
+	else if (main->parser->n_pipes == 0)
 	{
 		pid = fork1(main);
 		main->cmd->pid = pid;
 		own_cmd = main->cmd;
+		calling_redirects(main, own_cmd);
+		wait_for_children(main);
+		executor(main, own_cmd);
 	}
-	else if (own_cmd)
-		main->exec->n_childs = count_cmds(main->lexer);
-	executor(main, own_cmd);
 }

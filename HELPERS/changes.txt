@@ -305,3 +305,71 @@ void    executor(t_main *main, t_cmd *own_cmd)
     }
     free(path);
 }
+
+
+
+
+
+counting redirects
+
+void	calling_redirects(t_main *main, t_cmd *own_cmd)
+{
+	printf("IN:%d\n", own_cmd->n_in);
+	if (own_cmd->n_in)
+		init_infile(main, own_cmd);
+	if (own_cmd->n_out)
+		init_outfile(main, own_cmd);
+	if (own_cmd->n_append)
+		init_append_out(main, own_cmd);
+}
+
+void	wait_for_children(t_main *main)
+{
+	int i;
+	int status;
+	int exit_status;
+
+	for (i = 0; i < main->exec->n_childs; i++)
+	{
+		waitpid(-1, &status, 0); // Wait for any child process
+		if (WIFEXITED(status))
+		{
+			exit_status = WEXITSTATUS(status);
+			// Handle exit status if needed
+			main->exit_code = exit_status; // dont know if i need it
+		}
+	}
+}
+
+void	parser(t_main *main)
+{
+	// t_cmd	*own_cmd;
+	__pid_t	pid;
+
+	// own_cmd = NULL;
+	creating_cmd_table(main);
+	alloc_parser(main);
+	count_operators(main);
+	alloc_exec(main);
+	if (main->parser->n_pipes)
+		init_pipes(main);
+	else if (main->parser->n_pipes == 0)
+	{
+		pid = fork1(main);
+		main->cmd->pid = pid;
+		printf("CMD:%s\n", main->cmd->cmd);
+		//own_cmd = main->cmd;
+		if (pid == 0)
+		{
+			if (main->parser->n_input_red)
+				init_infile(main, main->cmd);
+			if (main->parser->n_output_red)
+				init_outfile(main, main->cmd);
+			if (main->parser->n_append_out)
+				init_append_out(main, main->cmd);
+		}
+		executor(main, main->cmd);
+	}
+	// executor(main, main->cmd);
+	wait_for_children(main);
+}

@@ -25,6 +25,7 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <dirent.h>
+# include <errno.h>
 
 # define PIPE 1
 # define INPUT_RED 2
@@ -34,7 +35,7 @@
 
 typedef struct s_exec
 {
-	int n_childs;
+	int	n_childs;
 }				t_exec;
 
 typedef struct s_env
@@ -48,10 +49,7 @@ typedef struct s_parser
 	int			**pipes;
 	int			n_pipes;
 	int			*input_fd;
-	int			n_input_red;
 	int			*output_fd;
-	int			n_output_red;
-	int			n_append_out;
 	int			*append_out_fd;
 }				t_parser;
 
@@ -64,6 +62,9 @@ typedef struct s_cmd
 	__pid_t			pid;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
+	int				n_in;
+	int				n_out;
+	int				n_append;
 }					t_cmd;
 
 typedef struct s_operator
@@ -85,6 +86,7 @@ typedef struct s_lexer
 typedef struct s_main
 {
 	char			**envp;
+	int				exit_code;
 	t_lexer			*lexer;
 	t_operator		*operators;
 	t_cmd			*cmd;
@@ -139,6 +141,9 @@ bool					checking_lex(char *str);
 //PARSER
 void					parser(t_main *main);
 void					alloc_parser(t_main *main);
+void					alloc_exec(t_main *main);
+void					calling_redirects(t_main *main, t_cmd *own_cmd);
+void					wait_for_children(t_main *main);
 
 // PARSER/CMD_TABLE
 int						count_cmds(t_lexer *lexer);
@@ -154,10 +159,10 @@ int						fork1(t_main *main);
 
 //PARSER/REDIR
 int						red_count(t_lexer *lexer, int type);
-void					init_infile(t_main *main);
-void					init_outfile(t_main *main);
+void					init_infile(t_main *main, t_cmd *own_cmd);
+void					init_outfile(t_main *main, t_cmd *own_cmd);
+void					init_append_out(t_main *main, t_cmd *own_cmd);
 char					*get_txt_name(t_main *main, int type);
-void					init_append_out(t_main *main);
 
 //PARSER/QUOTES
 void					delete_qoutes(t_lexer *lexer);
@@ -170,20 +175,27 @@ void					free_bin(char **bin);
 
 // ERRORS
 void					error_function(int error_type, t_main *main);
-void					error_operators(t_operator *operators);
-void					error_lexer(int error_type, t_lexer *lexer);
-void					error_cmd(int error_type, t_cmd *cmd);
 void					error_type10(int error_type);
 void					error_type20(int error_type);
-int						execve_error(char *path);
+int						execve_error(t_main *main, char *path);
 void					exec_error_function(t_main *main, char *path);
+void					open_failed(t_main *main, char *file_name);
+void					dup_failed(t_main *main, int old_fd, int new_fd);
+void					close_failed(t_main *main, int fd);
+void					closedir_failed(t_main *main, DIR *dir);
+void					readdir_failed(t_main *main, DIR *dir);
+void					pipe_failed(t_main *main);
+void					fork_failed(t_main *main);
 
 // FREE
-
 void					ok_free_function(t_main *main);
-void					free_lexer(t_lexer *lexer);
+void					free_env_list(t_env *env);
 void					free_operator(t_operator *operators);
+void					free_lexer(t_lexer *lexer);
 void					free_cmd(t_cmd *cmd);
+void					free_parser(t_parser *parser);
+void					free_exec(t_exec *exec);
+void					free_structs(t_main *main);
 
 // CHECKERS
 void					argc_checker(int argc, char **argv);
@@ -198,10 +210,11 @@ int						ft_strncmp(const char *str1, const char *str2,
 							size_t n);
 void					ft_putchar_fd(char c, int fd);
 void					ft_putstr_fd(char *s, int fd);
-int						ft_strcmp(char *s1, char *s2);
+int						ft_strcmp(const char *s1, const char *s2);
 char					**ft_split(char const *s, char c);
 char					*ft_strchr(const char *str, int c);
-char					*ft_substr(char const *s, unsigned int start, size_t len);
+char					*ft_substr(char const *s, unsigned int start,
+							size_t len);
 char					*ft_strjoin(char const *s1, char const *s2);
 
 // SIG

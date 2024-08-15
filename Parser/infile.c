@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:44:13 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/11 23:29:18 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/15 22:03:13 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,40 +30,41 @@ void	set_infile_fd(int *input_fd, t_main *main)
 	file_name = get_txt_name(main, INPUT_RED);
 	*input_fd = open(file_name, O_RDONLY);
 	if (*input_fd == -1)
-		error_function(14, main); // should specify which file failed to open
+		open_failed(main, file_name);
 }
 
-void	alloc_input_f(t_main *main)
+void	alloc_input_f(t_main *main, t_cmd *own_cmd)
 {
 	int	i;
 
 	i = 0;
-	main->parser->input_fd = malloc(main->parser->n_input_red * sizeof(int));
+	main->parser->input_fd = malloc(own_cmd->n_in * sizeof(int));
 	if (!main->parser->input_fd)
 		error_function(13, main);
-	while (i < main->parser->n_input_red)
+	while (i < own_cmd->n_in)
 	{
 		set_infile_fd(&main->parser->input_fd[i], main);
 		i++;
 	}
 }
 
-void	switch_fd_infile(t_main *main)
+void	switch_fd_infile(t_main *main, t_cmd *own_cmd)
 {
 	int	i;
 
 	i = 0;
-	while (i < main->parser->n_input_red)
+	while (i < own_cmd->n_in)
 	{
 		if (dup2(main->parser->input_fd[i], STDIN_FILENO) < 0)
-			error_function(12, main);
-		close(main->parser->input_fd[i]);
+			dup_failed(main, main->parser->input_fd[i], STDIN_FILENO);
+		if (close(main->parser->input_fd[i]) == -1)
+			close_failed(main, main->parser->input_fd[i]);
 		i++;
 	}
 }
 
-void	init_infile(t_main *main)
+void	init_infile(t_main *main, t_cmd *own_cmd)
 {
-	alloc_input_f(main);
-	switch_fd_infile(main);
+	alloc_input_f(main, own_cmd);
+	switch_fd_infile(main, own_cmd);
 }

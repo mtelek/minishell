@@ -26,7 +26,7 @@ void	print_cmd_table(t_cmd *cmd)
 		j = 0;
 		printf("NEW_CMD_TABLE\n");
 		printf("IN_FD:%d\n", temp_cmd->in_fd);
-		printf("IN_FD:%d\n", temp_cmd->out_fd);
+		printf("OUT_FD:%d\n", temp_cmd->out_fd);
 		while (temp_cmd->args[j])
 		{
 			if (j == 0)
@@ -63,19 +63,25 @@ void	print_env(char **envp)
 	}
 }
 
+void	init_main(t_main *main)
+{
+	main->operators = NULL;
+	main->lexer = NULL;
+	main->cmd = NULL;
+	main->env = NULL;
+	main->exec = NULL;
+	main->exit_code = 0;
+}
+
 int	minishell(char *input, char **envp)
 {
 	t_main	main;
 
-	main.operators = NULL;
-	main.lexer = NULL;
-	main.cmd = NULL;
-	main.env = NULL;
-	main.exec = NULL;
+	init_main(&main);
 	init_env(&main, envp);
 	init_operators(&main.operators, &main);
 	if (get_tokens(input, &main.lexer, &main) == -1)
-		return (error_operators(main.operators), 0);
+		return (free_operator(main.operators), 0);
 	if (syntax_check(main.lexer) == false)
 	{
 		ok_free_function(&main);
@@ -84,7 +90,7 @@ int	minishell(char *input, char **envp)
 	delete_qoutes(main.lexer);
 	parser(&main);
 	ok_free_function(&main);
-	return (0);
+	return (main.exit_code);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -93,10 +99,9 @@ int	main(int argc, char **argv, char **envp)
 	char	*history_file;
 
 	// one task, check errors if im freeing correctly
-	// check ctrl d and c with valgrind
-	// output file and append might not work with a pipe
-	// create fd_open, fd_clsoe, fd_close_dir and so on
-	//fixed the quitting issue, program runs endlessly now
+	// incorrect behavior echo haha >> output >> out
+	//error_malloc free ok_malloc free could be the same
+	//still have malloc issues 
 	history_file = ".minishell_history";
 	read_history(history_file);
 	argc_checker(argc, argv);
@@ -115,7 +120,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		else
 		{
-			clear_history();
+			write_history(history_file);
 			return (write(1, "exit\n", 5), free(input), 0);
 		}
 		free(input);

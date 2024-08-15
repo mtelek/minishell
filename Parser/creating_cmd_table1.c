@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/11 15:12:07 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/15 22:38:57 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,24 @@ int	setting_args(t_lexer **temp_lex, t_cmd **temp_cmd, int n_args)
 	{
 		if (i < n_args)
 		{
-			if ((*temp_lex)->type == INPUT_RED) //here made changes, added new rule
+			if ((*temp_lex)->type == INPUT_RED) // here made changes, added new rule
+			{
+				(*temp_cmd)->n_in++;
 				(*temp_lex) = (*temp_lex)->next;
-			if ((*temp_lex)->type == OUTPUT_RED) //here made changes, added new rule
+			}
+			if ((*temp_lex)->type == OUTPUT_RED) // here made changes, added new rule
+			{
+				(*temp_cmd)->n_out++;
 				(*temp_lex) = (*temp_lex)->next;
-			if ((*temp_lex)->type == APPEND_OUT) //here made changes, added new rule
+			}
+			if ((*temp_lex)->type == APPEND_OUT) // here made changes, added new rule
+			{
+				(*temp_cmd)->n_append++;
 				(*temp_lex) = (*temp_lex)->next->next;
+			}
 			if (i > 0 && (*temp_lex) && (*temp_lex)->prev->type != OUTPUT_RED)
 				(*temp_cmd)->args[i] = (*temp_lex)->str;
-			else if (i == 0 && (*temp_lex)) //added extra line, was not here before
+			else if (i == 0 && (*temp_lex)) // added extra line, was not here before
 				(*temp_cmd)->args[i] = (*temp_lex)->str;
 			i++;
 		}
@@ -46,6 +55,9 @@ void	args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds, int n_args)
 	static t_lexer	*temp_lex;
 	static t_cmd	*temp_cmd;
 
+	cmd->n_in = 0;
+	cmd->n_out = 0;
+	cmd->n_append = 0;
 	if (temp_cmd == NULL)
 		temp_cmd = cmd;
 	if (temp_lex == NULL)
@@ -75,8 +87,7 @@ void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 	temp->pid = -1;
 }
 
-void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node,
-			int n_cmds)
+void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)
 {
 	t_cmd	*temp;
 	int		j;
@@ -112,7 +123,6 @@ void	creating_cmd_table(t_main *main)
 	i = 0;
 	prev_node = NULL;
 	n_cmds = count_cmds(main->lexer);
-	// printf("N_CMDS:%d\n", n_cmds);
 	if (!n_cmds)
 		return ;
 	while (i < n_cmds)

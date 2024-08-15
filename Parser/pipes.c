@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:16:28 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/13 17:56:39 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/15 22:36:32 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	set_pipe_fd(int *pipes, t_main *main)
 {
 	if (pipe(pipes) == -1)
-		error_function(10, main);
+		pipe_failed(main);
 }
 
 void	close_child_fds(t_main *main)
@@ -26,9 +26,9 @@ void	close_child_fds(t_main *main)
 	while (j < main->parser->n_pipes)
 	{
 		if (close(main->parser->pipes[j][0]) == -1)
-			error_function(17, main);
+			close_failed(main, main->parser->pipes[j][0]);
 		if (close(main->parser->pipes[j][1]) == -1)
-			error_function(17, main);
+			close_failed(main, main->parser->pipes[j][1]);
 		j++;
 	}
 }
@@ -36,31 +36,53 @@ void	close_child_fds(t_main *main)
 t_cmd	*switching_fds(t_main *main)
 {
 	int		i;
-	pid_t	pid;  //should be _pid_t
-	t_cmd	*temp_main;
+	int		j;
+	t_cmd	*current;
 
 	i = 0;
-	pid = 0;
-	temp_main = main->cmd;
-	while (main->cmd != NULL)
+	j = 0;
+	current = main->cmd;
+	while (current != NULL)
 	{
-		pid = fork1(main);
-		main->cmd->pid = pid;
-		if (pid == 0)
+		if (j < main->exec->n_childs)
 		{
-			if (i > 0)
-				if (dup2(main->parser->pipes[i - 1][0], STDIN_FILENO) < 0)
-					error_function(12, main);
-			if (main->cmd->next != NULL)
-				if (dup2(main->parser->pipes[i][1], STDOUT_FILENO) < 0)
-					error_function(12, main);
-			close_child_fds(main);
-			return (main->cmd);
+			current->pid = fork1(main);
+			if (current->pid == 0)
+			{
+				if (i > 0)
+				{
+					if (dup2(main->parser->pipes[i - 1][0], STDIN_FILENO) == -1)
+						dup_failed(main, main->parser->pipes[i - 1][0],
+							STDIN_FILENO);
+					if (close(main->parser->pipes[i - 1][0]) == -1)
+						close_failed(main, main->parser->pipes[i - 1][0]);
+				}
+				if (current->next != NULL)
+				{
+					if (dup2(main->parser->pipes[i][1], STDOUT_FILENO) == -1)
+						dup_failed(main, main->parser->pipes[i][1],
+							STDOUT_FILENO);
+					if (close(main->parser->pipes[i][1]) == -1)
+						close_failed(main, main->parser->pipes[i][1]);
+				}
+				calling_redirects(main, current);
+				return (current);
+			}
 		}
-		i++;
-		main->cmd = main->cmd->next;
+		if (i > 0) // for parent
+			if (close(main->parser->pipes[i - 1][0]) == -1)
+				close_failed(main, main->parser->pipes[i - 1][0]);
+		if (current->next != NULL)
+			if (close(main->parser->pipes[i][1]) == -1)
+				close_failed(main, main->parser->pipes[i][1]);
+		if (current->pid != 0)
+		{
+			i++;
+			j++;
+			current = current->next;
+		}
 	}
-	return (temp_main);
+	return (main->cmd);
 }
 
 void	alloc_pipes(t_main *main)
@@ -89,7 +111,5 @@ t_cmd	*init_pipes(t_main *main)
 	i = 0;
 	alloc_pipes(main);
 	own_cmd = switching_fds(main);
-	while (i++ < main->parser->n_pipes)
-		wait(0);
 	return (own_cmd);
 }

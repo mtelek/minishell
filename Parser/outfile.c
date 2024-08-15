@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:44:10 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/11 23:28:59 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/15 22:37:55 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,40 +19,41 @@ void	set_outfile_fd(int *output_fd, t_main *main)
 	file_name = get_txt_name(main, OUTPUT_RED);
 	*output_fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (*output_fd == -1)
-		error_function(14, main); // should specify here as well
+		open_failed(main, file_name);
 }
 
-void	alloc_output_f(t_main *main)
+void	alloc_output_f(t_main *main, t_cmd *own_cmd)
 {
 	int	i;
 
 	i = 0;
-	main->parser->output_fd = malloc(main->parser->n_output_red * sizeof(int));
+	main->parser->output_fd = malloc(own_cmd->n_out * sizeof(int));
 	if (!main->parser->output_fd)
 		error_function(15, main);
-	while (i < main->parser->n_output_red)
+	while (i < own_cmd->n_out)
 	{
 		set_outfile_fd(&main->parser->output_fd[i], main);
 		i++;
 	}
 }
 
-void	switch_fd_outfile(t_main *main)
+void	switch_fd_outfile(t_main *main, t_cmd *own_cmd)
 {
 	int	i;
 
 	i = 0;
-	while (i < main->parser->n_output_red)
+	while (i < own_cmd->n_out)
 	{
 		if (dup2(main->parser->output_fd[i], STDOUT_FILENO) < 0)
-			error_function(12, main);
-		close(main->parser->output_fd[i]);
+			dup_failed(main, main->parser->output_fd[i], STDOUT_FILENO);
+		if (close(main->parser->output_fd[i]) == -1)
+			close_failed(main, main->parser->output_fd[i]);
 		i++;
 	}
 }
 
-void	init_outfile(t_main *main)
+void	init_outfile(t_main *main, t_cmd *own_cmd)
 {
-	alloc_output_f(main);
-	switch_fd_outfile(main);
+	alloc_output_f(main, own_cmd);
+	switch_fd_outfile(main, own_cmd);
 }
