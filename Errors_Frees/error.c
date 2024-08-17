@@ -17,13 +17,12 @@
 
 void	exec_error_function(t_main *main, char *path)
 {
-	main->exit_code = execve_error(main, path);
+	execve_error(main, path);
 	free_structs(main);
 }
 
 void	free_structs(t_main *main)
 {
-	free_env_list(main->env);
 	free_operator(main->operators);
 	free_lexer(main->lexer);
 	free_cmd(main->cmd);

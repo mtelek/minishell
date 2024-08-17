@@ -6,11 +6,107 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 19:12:04 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/11 23:32:53 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/17 19:56:16 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
+
+int	ft_isalpha(int c)
+{
+	if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
+	{
+		return (1);
+	}
+	return (0);
+}
+
+int	ft_isalnum(int c)
+{
+	if ((64 < c && c < 91) || (96 < c && c < 123) || (c > 47 && c < 58))
+		return (1);
+	return (0);
+}
+
+int	ft_atoi(const char *str)
+{
+	int	parity;
+	int	num;
+	int	i;
+
+	parity = 0;
+	num = 0;
+	i = 0;
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
+		i++;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			parity++;
+		i++;
+	}
+	while (str[i] >= 48 && str[i] <= 57)
+	{
+		num *= 10;
+		num += str[i] - 48;
+		i++;
+	}
+	if (! (parity % 2))
+		return (num);
+	return (-num);
+}
+
+int	ft_memcmp(const void *s1, const void *s2, size_t n)
+{
+	unsigned char	*str1;
+	unsigned char	*str2;
+	size_t			i;
+
+	str1 = (unsigned char *) s1;
+	str2 = (unsigned char *) s2;
+	i = 0;
+	while (i < n)
+	{
+		if (str1[i] != str2[i])
+			return (str1[i] - str2[i]);
+		i++;
+	}
+	return (0);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	size_t			i;
+	unsigned char	*p;
+
+	p = (unsigned char *)s;
+	i = 0;
+	while (i < n)
+	{
+		p[i] = 0;
+		i++;
+	}
+}
+
+void	*ft_calloc(size_t num, size_t size)
+{
+	size_t	tot_size;
+	void	*dst;
+
+	tot_size = num * size;
+	dst = malloc(tot_size);
+	if (!dst)
+		return (0);
+	ft_bzero(dst, tot_size);
+	return (dst);
+}
+
+int	ft_isdigit(int c)
+{
+	if (c > 47 && c < 58)
+		return (1);
+	return (0);
+}
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {

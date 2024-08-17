@@ -6,11 +6,25 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 22:45:40 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/15 22:47:04 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/17 19:03:40 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
+
+void	free_array(char **array)
+{
+	int	i;
+
+	i = 0;
+	if (!array)
+		return ;
+	while (array[i])
+	{
+		free(array[i++]);
+	}
+	free(array);
+}
 
 void	free_cmd(t_cmd *cmd)
 {
@@ -56,20 +70,5 @@ void	free_operator(t_operator *operators)
 		temp_operator->operator = NULL;
 		free(temp_operator);
 		temp_operator = NULL;
-	}
-}
-
-void	free_env_list(t_env *env)
-{
-	t_env	*temp_env;
-
-	while (env != NULL)
-	{
-		temp_env = env;
-		env = env->next;
-		free(temp_env->env);
-		temp_env->env = NULL;
-		free(temp_env);
-		temp_env = NULL;
 	}
 }

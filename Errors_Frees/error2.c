@@ -6,17 +6,22 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:03:45 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/15 22:53:34 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/16 17:06:21 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-int	execve_error(t_main *main, char *path)
+void	error_message(t_main *main, int exit_code, char *message)
+{
+	ft_putstr_fd(message, 2);
+	main->exit_code = exit_code;
+}
+
+void	execve_error(t_main *main, char *path)
 {
 	DIR		*dir;
 	int		fd;
-	int		exit_code;
 
 	fd = open(path, O_WRONLY);
 	if (fd == -1)
@@ -25,34 +30,19 @@ int	execve_error(t_main *main, char *path)
 	ft_putstr_fd("minishell> ", 2);
 	ft_putstr_fd(path, 2);
 	if (!ft_strchr(path, '/'))
-	{
-		ft_putstr_fd(": command not found\n", 2);
-		exit_code = 127;
-	}
+		error_message(main, 127, NO_CMD);
 	else if (fd == -1)
-	{
 		if (dir)
-		{
-			ft_putstr_fd(": is a directory\n", 2);
-			exit_code = 126;
-		}
+			error_message(main, 126, IS_DIR);
 		else
-		{
-			ft_putstr_fd(": No such file or directory\n", 2);
-			exit_code = 127;
-		}
-	}
+			error_message(main, 127, NO_DIR);
 	else
-	{
-		ft_putstr_fd(": Permission denied\n", 2);
-		exit_code = 126;
-	}
+		error_message(main, 126, NO_PERMISSION);
 	if (dir)
 		if (closedir(dir) == -1)
 			closedir_failed(main, dir);
 	if (close(fd) == -1)
 		close_failed(main, fd);
-	return (exit_code);
 }
 
 void	error_type10(int error_type)

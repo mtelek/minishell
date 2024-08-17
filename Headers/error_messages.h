@@ -67,5 +67,15 @@
 # define E_NO_FILE "Error: No such file or directory '%s'\n"
 # define E_READ_ONLY "Error: Read-only file system '%s'\n"
 # define E_OPEN_FILE "Error opening file '%s': %s\n"
+# define NO_CMD ": command not found\n"
+# define IS_DIR ": is a directory\n"
+# define NO_DIR ": No such file or directory\n"
+# define NO_PERMISSION ": Permission denied\n"
+
+//BUILTINS_ERRORS
+# define E_NUM_ARG_P1 "exit\nbash: exit: "
+# define E_NUM_ARG_P2 ": numeric argument required\n"
+# define TOO_MANY_ARGS "exit\nbash: exit: too many arguments\n"
+# define EXIT "exit\n"
 
 #endif

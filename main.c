@@ -65,43 +65,39 @@ void	print_env(char **envp)
 
 void	init_main(t_main *main)
 {
+	main->env_array = NULL;
 	main->operators = NULL;
 	main->lexer = NULL;
 	main->cmd = NULL;
-	main->env = NULL;
 	main->exec = NULL;
+	main->builtin = NULL;
 	main->exit_code = 0;
 }
 
-int	minishell(char *input, char **envp)
+int	minishell(char *input, t_main *main)
 {
-	t_main	main;
-
-	init_main(&main);
-	init_env(&main, envp);
-	init_operators(&main.operators, &main);
-	if (get_tokens(input, &main.lexer, &main) == -1)
-		return (free_operator(main.operators), 0);
-	if (syntax_check(main.lexer) == false)
+	init_operators(&main->operators, main);
+	if (get_tokens(input, &main->lexer, main) == -1)
+		return (free_operator(main->operators), 0);
+	if (syntax_check(main->lexer) == false)
 	{
-		ok_free_function(&main);
+		ok_free_function(main);
 		exit(2);
 	}
-	delete_qoutes(main.lexer);
-	parser(&main);
-	ok_free_function(&main);
-	return (main.exit_code);
+	delete_qoutes(main->lexer);
+	parser(main);
+	ok_free_function(main);
+	return (main->exit_code);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*input;
-	char	*history_file;
+	t_main		main;
+	char		*input;
+	char		*history_file;
 
-	// one task, check errors if im freeing correctly
-	// incorrect behavior echo haha >> output >> out
-	//error_malloc free ok_malloc free could be the same
-	//still have malloc issues 
+	init_main(&main);
+	creating_env_array(&main, envp);
 	history_file = ".minishell_history";
 	read_history(history_file);
 	argc_checker(argc, argv);
@@ -112,11 +108,9 @@ int	main(int argc, char **argv, char **envp)
 		input = readline("minishell> ");
 		if (input)
 		{
-			if (ft_strcmp(input, "history reset") == 0)
-				clear_history();
-			else if (*input != '\0')
+			if (*input != '\0')
 				add_history(input);
-			minishell(input, envp);
+			minishell(input, &main);
 		}
 		else
 		{

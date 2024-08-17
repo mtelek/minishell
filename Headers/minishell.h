@@ -33,16 +33,17 @@
 # define HEREDOC 4
 # define APPEND_OUT 5
 
+# define BUF_SIZE 4096 //might gonna choose something else
+
+typedef struct s_builtin
+{
+	char **export;
+}				t_builtin;
+
 typedef struct s_exec
 {
 	int	n_childs;
 }				t_exec;
-
-typedef struct s_env
-{
-	char				*env;
-	struct s_env		*next;
-}				t_env;
 
 typedef struct s_parser
 {
@@ -85,23 +86,23 @@ typedef struct s_lexer
 
 typedef struct s_main
 {
-	char			**envp;
+	char			**env_array;
 	int				exit_code;
 	t_lexer			*lexer;
 	t_operator		*operators;
 	t_cmd			*cmd;
 	t_parser		*parser;
-	t_env			*env;
 	t_exec			*exec;
+	t_builtin		*builtin;
 }					t_main;
 
 //HELPER/PRINTING
 void					print_cmd_table(t_cmd *cmd);
 void					print_lexer(t_lexer *lexer);
+void					print_env(char **envp);
 
 // ENV
-int						init_env(t_main *main, char **env);
-char					**linked_to_env_array(t_env *env_list, t_main *main);
+int						creating_env_array(t_main *main, char **envp);
 
 // INIT
 void					init_operators(t_operator **head, t_main *main);
@@ -142,6 +143,7 @@ bool					checking_lex(char *str);
 void					parser(t_main *main);
 void					alloc_parser(t_main *main);
 void					alloc_exec(t_main *main);
+void					alloc_builtin(t_main *main);
 void					calling_redirects(t_main *main, t_cmd *own_cmd);
 void					wait_for_children(t_main *main);
 
@@ -170,15 +172,33 @@ void					remove_quotes(char *str, int start, int end);
 
 //Executor
 void					executor(t_main *main, t_cmd *own_cmd);
+char					*find_path(t_main *main, t_cmd *own_cmd, char *dir);
+char					*find_dir(char *bin, char *command, t_main *main);
 void					free_env_array(char **env_array);
 void					free_bin(char **bin);
+
+//BUILTINS
+int						count_arg(char **args);
+void					free_array(char **array);
+char					**export_cmd(t_main *main, int j);
+void					ft_echo(t_cmd *own_cmd);
+void					ft_cd(t_main *main);
+void					ft_exit(t_main *main);
+void					ft_export(t_main *main, char **args);
+char					**ft_cpy_environ(char **env_array, int add);
+int						handle_export_error(char **argv);
+void					ft_unset(t_main *main, char **args);
+void					ft_pwd(t_main *main);
+void 					ft_env(t_main *main);
+int 					handle_unset_error(char **args);
 
 // ERRORS
 void					error_function(int error_type, t_main *main);
 void					error_type10(int error_type);
 void					error_type20(int error_type);
-int						execve_error(t_main *main, char *path);
+void					execve_error(t_main *main, char *path);
 void					exec_error_function(t_main *main, char *path);
+void					error_message(t_main *main, int exit_code, char *message);
 void					open_failed(t_main *main, char *file_name);
 void					dup_failed(t_main *main, int old_fd, int new_fd);
 void					close_failed(t_main *main, int fd);
@@ -189,7 +209,6 @@ void					fork_failed(t_main *main);
 
 // FREE
 void					ok_free_function(t_main *main);
-void					free_env_list(t_env *env);
 void					free_operator(t_operator *operators);
 void					free_lexer(t_lexer *lexer);
 void					free_cmd(t_cmd *cmd);
@@ -216,6 +235,13 @@ char					*ft_strchr(const char *str, int c);
 char					*ft_substr(char const *s, unsigned int start,
 							size_t len);
 char					*ft_strjoin(char const *s1, char const *s2);
+int						ft_isdigit(int c);
+void					*ft_calloc(size_t num, size_t size);
+void					ft_bzero(void *s, size_t n);
+int						ft_memcmp(const void *s1, const void *s2, size_t n);; //check out this one
+int						ft_atoi(const char *str);
+int						ft_isalnum(int c);
+int						ft_isalpha(int c);
 
 // SIG
 void					handle_sigint(int sig);

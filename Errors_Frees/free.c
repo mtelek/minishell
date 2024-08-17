@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 21:42:59 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/15 22:47:13 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/17 19:03:47 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	free_parser(t_parser *parser)
 
 void	ok_free_function(t_main *main)
 {
-	free_env_list(main->env);
 	free_operator(main->operators);
 	free_lexer(main->lexer);
 	free_cmd(main->cmd);

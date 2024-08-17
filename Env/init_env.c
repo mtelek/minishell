@@ -6,65 +6,34 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 16:15:24 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/15 22:52:51 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/17 19:10:12 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-int	init_env(t_main *main, char **env)
+int	creating_env_array(t_main *main, char **envp)
 {
-	t_env	*new;
-	t_env	*last;
 	int		i;
+	int		env_count;
 
-	main->env = NULL;
-	last = NULL;
-	i = -1;
-	while (env && env[0] && env[++i])
+	env_count = 0;
+	while (envp[env_count])
+		env_count++;
+	main->env_array = (char **)malloc(sizeof(char *) * (env_count + 1));
+	if (!main->env_array)
+		return (-1);
+	for (i = 0; i < env_count; i++)
 	{
-		new = malloc(sizeof(t_env));
-		if (!new)
-			error_function(0, main);
-		new->env = ft_strdup(env[i]);
-		if (!new->env)
-			error_function(-1, main);
-		new->next = NULL;
-		if (main->env == NULL)
-			main->env = new;
-		else
-			last->next = new;
-		last = new;
+		main->env_array[i] = strdup(envp[i]);
+		if (!main->env_array[i])
+		{
+			while (i > 0)
+				free(main->env_array[--i]);
+			free(main->env_array);
+			return (-1);
+		}
 	}
+	main->env_array[env_count] = NULL;
 	return (0);
-}
-
-char	**linked_to_env_array(t_env *env_list, t_main *main)
-{
-	t_env	*current;
-	int		list_size;
-	char	**env_array;
-	int		i;
-
-	current = env_list;
-	list_size = 0;
-	i = -1;
-	while (current != NULL)
-	{
-		list_size++;
-		current = current->next;
-	}
-	env_array = (char **)malloc(sizeof(char *) * (list_size + 1));
-	if (!env_array)
-		error_function(18, main);
-	current = env_list;
-	while (++i < list_size)
-	{
-		env_array[i] = strdup(current->env);
-		if (!env_array[i])
-			error_function(19, main);
-		current = current->next;
-	}
-	env_array[list_size] = NULL;
-	return (env_array);
 }
