@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:16:28 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/17 23:01:27 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/18 22:34:37 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ t_cmd	*switching_fds(t_main *main)
 			current = current->next;
 		}
 	}
-	return (main->cmd);
+	return (NULL); //was main->cmd before
 }
 
 void	alloc_pipes(t_main *main)

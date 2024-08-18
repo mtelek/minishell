@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/15 22:38:57 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/18 21:14:01 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ int	setting_args(t_lexer **temp_lex, t_cmd **temp_cmd, int n_args)
 				(*temp_cmd)->n_append++;
 				(*temp_lex) = (*temp_lex)->next->next;
 			}
+			if ((*temp_lex)->type == HEREDOC) // here made changes, added new rule
+			{
+				(*temp_cmd)->n_heredoc++;
+				(*temp_lex) = (*temp_lex)->next->next;
+			}
 			if (i > 0 && (*temp_lex) && (*temp_lex)->prev->type != OUTPUT_RED)
 				(*temp_cmd)->args[i] = (*temp_lex)->str;
 			else if (i == 0 && (*temp_lex)) // added extra line, was not here before
@@ -58,6 +63,7 @@ void	args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds, int n_args)
 	cmd->n_in = 0;
 	cmd->n_out = 0;
 	cmd->n_append = 0;
+	cmd->n_heredoc = 0;
 	if (temp_cmd == NULL)
 		temp_cmd = cmd;
 	if (temp_lex == NULL)

@@ -52,6 +52,7 @@ typedef struct s_parser
 	int			*input_fd;
 	int			*output_fd;
 	int			*append_out_fd;
+	int			*heredoc_fd;
 }				t_parser;
 
 typedef struct s_cmd
@@ -66,6 +67,7 @@ typedef struct s_cmd
 	int				n_in;
 	int				n_out;
 	int				n_append;
+	int				n_heredoc;
 }					t_cmd;
 
 typedef struct s_operator
@@ -88,6 +90,7 @@ typedef struct s_main
 {
 	char			**env_array;
 	int				exit_code;
+	int				heredoc_flag;
 	t_lexer			*lexer;
 	t_operator		*operators;
 	t_cmd			*cmd;
@@ -164,6 +167,7 @@ int						red_count(t_lexer *lexer, int type);
 void					init_infile(t_main *main, t_cmd *own_cmd);
 void					init_outfile(t_main *main, t_cmd *own_cmd);
 void					init_append_out(t_main *main, t_cmd *own_cmd);
+void					init_heredoc(t_main *main, t_cmd *own_cmd);
 char					*get_txt_name(t_main *main, int type);
 
 //PARSER/QUOTES

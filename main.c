@@ -72,6 +72,7 @@ void	init_main(t_main *main)
 	main->exec = NULL;
 	main->builtin = NULL;
 	main->exit_code = 0;
+	main->heredoc_flag = 0;
 }
 
 int	minishell(char *input, t_main *main)
