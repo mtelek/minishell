@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:50 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/17 18:55:13 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/19 00:24:17 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 void	exec(t_main *main, t_cmd *own_cmd, char *path)
 {
-	int	i;
-
-	i = 0;
 	if (execve(path, own_cmd->args, main->env_array) == -1)
 		exec_error_function(main, path);
 }

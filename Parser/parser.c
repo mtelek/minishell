@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/18 22:37:11 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/19 01:16:51 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,8 @@ void	calling_redirects(t_main *main, t_cmd *own_cmd)
 {
 	if (own_cmd->pid == 0)
 	{
-		printf("OWN_CMD: %s\n", own_cmd->cmd);
-		printf("IN: %d, OUT: %d, APPEND: %d, HD: %d\n", own_cmd->n_in, own_cmd->n_out,
-			own_cmd->n_append, own_cmd->n_heredoc);
+		//printf("IN: %d, OUT: %d, APPEND: %d, HD: %d\n", own_cmd->n_in, own_cmd->n_out,
+			//own_cmd->n_append, own_cmd->n_heredoc);
 		if (own_cmd->n_in)
 			init_infile(main, own_cmd);
 		if (own_cmd->n_out)
@@ -95,13 +94,15 @@ bool	builtin_check(t_main *main)
 
 int		echo_check(t_main *main, t_cmd *own_cmd)
 {
-	if (ft_strncmp(own_cmd->cmd, "echo", 4) == 0 
-		&& own_cmd->pid == 0)
+	if (ft_strncmp(own_cmd->cmd, "echo", 4) == 0)
 	{
-		if (!main->parser->n_pipes)
-			calling_redirects(main, own_cmd);
-		ft_echo(own_cmd);
-		exit (0);
+		if (own_cmd->pid == 0)
+		{
+			if (!main->parser->n_pipes)
+				calling_redirects(main, own_cmd);
+			ft_echo(own_cmd);
+		}
+		return (1);
 	}
 	return (0);
 }
@@ -123,14 +124,10 @@ void	parser(t_main *main)
 		own_cmd = init_pipes(main);
 		while (main->heredoc_flag)
 			wait(0);
-		if (own_cmd && !echo_check(main, own_cmd))
-		{
-			if (own_cmd->pid == 0)
-			{
-				printf("haha\n");
-				executor(main, own_cmd);
-			}
-		}
+		if (!echo_check(main, own_cmd))
+			executor(main, own_cmd);
+		if (own_cmd->pid == 0)
+			exit(0);
 		wait_for_children(main);
 	}
 	else if (main->parser->n_pipes == 0)
@@ -141,10 +138,10 @@ void	parser(t_main *main)
 		if (!echo_check(main, own_cmd))
 		{
 			calling_redirects(main, own_cmd);
-			while (main->heredoc_flag)
-				wait(0);
 			executor(main, own_cmd);
 		}
+		if (own_cmd->pid == 0)
+			exit(0);
 		wait_for_children(main);
 	}
 }

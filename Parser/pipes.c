@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:16:28 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/18 22:34:37 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/19 01:18:00 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ t_cmd	*switching_fds(t_main *main)
 			current = current->next;
 		}
 	}
-	return (NULL); //was main->cmd before
+	return (main->cmd);
 }
 
 void	alloc_pipes(t_main *main)
@@ -105,11 +105,10 @@ void	alloc_pipes(t_main *main)
 
 t_cmd	*init_pipes(t_main *main)
 {
-	int		i;
 	t_cmd	*own_cmd;
 
-	i = 0;
 	alloc_pipes(main);
 	own_cmd = switching_fds(main);
+	//printf("CMD:%s\n", own_cmd->cmd);
 	return (own_cmd);
 }

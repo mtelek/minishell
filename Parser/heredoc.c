@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 18:49:08 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/18 22:05:41 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/19 01:22:37 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,51 +14,48 @@
 
 //can be echo <<haha and echo << haha as well
 //check for 'delimeter'
-
-void	set_heredoc_fd(int *heredoc_fd, t_main *main)
+void	set_heredoc_fd(int *heredoc_fd, t_main *main, t_cmd *own_cmd)
 {
     char *line;
-    char *content;
-    char    *temp_line;
+    char *content = NULL;
     char *delimiter;
     int   pipe_fd[2];
 
-    content = NULL;
-    temp_line = NULL;
     delimiter = get_txt_name(main, HEREDOC);
     if (pipe(pipe_fd) == -1)
         pipe_failed(main);
-    while (1)
+    if (ft_strcmp(own_cmd->cmd, "echo") == 0)
     {
-        line = readline("> ");
-        if (!line)
+        while (1)
         {
-            free(content);
-            break;
-        }
-        if (ft_strcmp(line, delimiter) == 0)
-        {
-            content = ft_strjoin(content, "\n");
-            free(temp_line);
+            line = readline("> ");
+            if (!line || ft_strcmp(line, delimiter) == 0)
+            {
+                free(line);
+                break;
+            }
             free(line);
-            break;
-        }
-        if (!content)
-        {
-            temp_line = ft_strdup(line); //need error message
-            content = ft_strjoin(temp_line, "\n");
-        }
-        else
-        {
-            temp_line = ft_strjoin(line, "\n");
-            content = ft_strjoin(content, temp_line);
         }
     }
-    if (content)
+    else
     {
-        ft_putstr_fd(content, 1);
-        free(content);
-        main->heredoc_flag = 0;
+        while (1)
+        {
+            line = readline("> ");
+            if (!line || ft_strcmp(line, delimiter) == 0)
+            {
+                free(line);
+                break;
+            }
+            content = content ? ft_strjoin(content, line) : ft_strdup(line);
+            content = ft_strjoin(content, "\n");
+            free(line);
+        }
+        if (content)
+        {
+            write(pipe_fd[1], content, ft_strlen(content));
+            free(content);
+        }
     }
     close(pipe_fd[1]);
     *heredoc_fd = pipe_fd[0];
@@ -74,7 +71,7 @@ void	alloc_heredoc_f(t_main *main, t_cmd *own_cmd)
 		error_function(15, main);
 	while (i < own_cmd->n_heredoc)
 	{
-		set_heredoc_fd(&main->parser->heredoc_fd[i], main);
+		set_heredoc_fd(&main->parser->heredoc_fd[i], main, own_cmd);
 		i++;
 	}
 }

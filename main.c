@@ -106,19 +106,22 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		input = readline("minishell> ");
-		if (input)
+		if (!main.heredoc_flag)
 		{
-			if (*input != '\0')
-				add_history(input);
-			minishell(input, &main);
+			input = readline("minishell> ");
+			if (input)
+			{
+				if (*input != '\0')
+					add_history(input);
+				minishell(input, &main);
+			}
+			else
+			{
+				write_history(history_file);
+				return (write(1, "exit\n", 5), free(input), 0);
+			}
+			free(input);
 		}
-		else
-		{
-			write_history(history_file);
-			return (write(1, "exit\n", 5), free(input), 0);
-		}
-		free(input);
 	}
 	clear_history();
 	return (0);
