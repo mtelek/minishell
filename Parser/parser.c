@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/19 01:16:51 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/19 21:57:16 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	calling_redirects(t_main *main, t_cmd *own_cmd)
 {
 	if (own_cmd->pid == 0)
 	{
-		//printf("IN: %d, OUT: %d, APPEND: %d, HD: %d\n", own_cmd->n_in, own_cmd->n_out,
-			//own_cmd->n_append, own_cmd->n_heredoc);
 		if (own_cmd->n_in)
 			init_infile(main, own_cmd);
 		if (own_cmd->n_out)
@@ -51,11 +49,16 @@ void	wait_for_children(t_main *main)
 	int	i;
 	int	status;
 	int	exit_status;
+	int count;
 
 	status = 0;
 	exit_status = 0;
 	i = 0;
-	while (i < main->exec->n_childs)
+	if (main->exec->n_childs)
+		count = main->exec->n_childs;
+	else
+		count = 1;
+	while (i < count)
 	{
 		waitpid(-1, &status, 0);
 		if (WIFEXITED(status))
@@ -92,7 +95,7 @@ bool	builtin_check(t_main *main)
 	return (false);
 }
 
-int		echo_check(t_main *main, t_cmd *own_cmd)
+int	echo_check(t_main *main, t_cmd *own_cmd)
 {
 	if (ft_strncmp(own_cmd->cmd, "echo", 4) == 0)
 	{
@@ -115,33 +118,23 @@ void	parser(t_main *main)
 	own_cmd = NULL;
 	creating_cmd_table(main);
 	alloc_parser(main);
+	find_hd_indicator(main, main->cmd);
 	alloc_exec(main);
 	alloc_builtin(main);
 	if (builtin_check(main) == true)
 		return ;
 	if (main->parser->n_pipes)
-	{
 		own_cmd = init_pipes(main);
-		while (main->heredoc_flag)
-			wait(0);
-		if (!echo_check(main, own_cmd))
-			executor(main, own_cmd);
-		if (own_cmd->pid == 0)
-			exit(0);
-		wait_for_children(main);
-	}
 	else if (main->parser->n_pipes == 0)
 	{
 		pid = fork1(main);
 		main->cmd->pid = pid;
 		own_cmd = main->cmd;
-		if (!echo_check(main, own_cmd))
-		{
-			calling_redirects(main, own_cmd);
-			executor(main, own_cmd);
-		}
-		if (own_cmd->pid == 0)
-			exit(0);
-		wait_for_children(main);
+		calling_redirects(main, own_cmd);
 	}
+	if (!echo_check(main, own_cmd))
+		executor(main, own_cmd);
+	if (own_cmd->pid == 0)
+		exit(0);
+	wait_for_children(main);
 }

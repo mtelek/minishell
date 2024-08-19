@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/18 21:14:01 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/19 20:25:09 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,15 @@ int	setting_args(t_lexer **temp_lex, t_cmd **temp_cmd, int n_args)
 			if ((*temp_lex)->type == APPEND_OUT) // here made changes, added new rule
 			{
 				(*temp_cmd)->n_append++;
-				(*temp_lex) = (*temp_lex)->next->next;
+				(*temp_lex) = (*temp_lex)->next;
 			}
 			if ((*temp_lex)->type == HEREDOC) // here made changes, added new rule
 			{
 				(*temp_cmd)->n_heredoc++;
-				(*temp_lex) = (*temp_lex)->next->next;
+				(*temp_cmd)->hd_indicator = 1;
+				(*temp_lex) = (*temp_lex)->next;
 			}
-			if (i > 0 && (*temp_lex) && (*temp_lex)->prev->type != OUTPUT_RED)
+			if (i > 0 && (*temp_lex) && (*temp_lex)->prev->type != OUTPUT_RED && (*temp_lex)->prev->type != HEREDOC && (*temp_lex)->prev->type != APPEND_OUT) // made changes as well
 				(*temp_cmd)->args[i] = (*temp_lex)->str;
 			else if (i == 0 && (*temp_lex)) // added extra line, was not here before
 				(*temp_cmd)->args[i] = (*temp_lex)->str;
@@ -91,6 +92,7 @@ void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 	temp->in_fd = STDIN_FILENO;
 	temp->out_fd = STDOUT_FILENO;
 	temp->pid = -1;
+	temp->heredoc_delimiter = NULL;
 }
 
 void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)
@@ -110,6 +112,7 @@ void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)
 	while (j < n_args)
 		temp->args[j++] = NULL;
 	temp->next = NULL;
+	temp->hd_indicator = 0;
 	args_maker(main->lexer, temp, n_cmds, n_args);
 	init_cmd_fd(main, temp, cmd);
 	temp->prev = *prev_node;

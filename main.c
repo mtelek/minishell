@@ -17,8 +17,8 @@
 
 void	print_cmd_table(t_cmd *cmd)
 {
-	int		j;
-	t_cmd	*temp_cmd;
+	int j;
+	t_cmd *temp_cmd;
 
 	temp_cmd = cmd;
 	while (temp_cmd != NULL)
@@ -40,7 +40,7 @@ void	print_cmd_table(t_cmd *cmd)
 
 void	print_lexer(t_lexer *lexer)
 {
-	t_lexer	*temp_lex;
+	t_lexer *temp_lex;
 
 	temp_lex = lexer;
 	printf("LEXER\n");
@@ -53,7 +53,7 @@ void	print_lexer(t_lexer *lexer)
 
 void	print_env(char **envp)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (envp[i] != NULL)
@@ -72,6 +72,7 @@ void	init_main(t_main *main)
 	main->exec = NULL;
 	main->builtin = NULL;
 	main->exit_code = 0;
+	main->hd_content = NULL;
 	main->heredoc_flag = 0;
 }
 
@@ -87,15 +88,16 @@ int	minishell(char *input, t_main *main)
 	}
 	delete_qoutes(main->lexer);
 	parser(main);
+	main->heredoc_flag = 0;
 	ok_free_function(main);
 	return (main->exit_code);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_main		main;
-	char		*input;
-	char		*history_file;
+	t_main main;
+	char *input;
+	char *history_file;
 
 	init_main(&main);
 	creating_env_array(&main, envp);

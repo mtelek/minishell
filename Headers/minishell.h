@@ -68,6 +68,8 @@ typedef struct s_cmd
 	int				n_out;
 	int				n_append;
 	int				n_heredoc;
+	char			*heredoc_delimiter;
+	int				hd_indicator;
 }					t_cmd;
 
 typedef struct s_operator
@@ -90,6 +92,7 @@ typedef struct s_main
 {
 	char			**env_array;
 	int				exit_code;
+	char			*hd_content;
 	int				heredoc_flag;
 	t_lexer			*lexer;
 	t_operator		*operators;
@@ -149,6 +152,8 @@ void					alloc_exec(t_main *main);
 void					alloc_builtin(t_main *main);
 void					calling_redirects(t_main *main, t_cmd *own_cmd);
 void					wait_for_children(t_main *main);
+void					find_hd_indicator(t_main *main, t_cmd *cmd);
+void    				get_hd_content(t_main *main, t_cmd *own_cmd);
 
 // PARSER/CMD_TABLE
 int						count_cmds(t_lexer *lexer);
