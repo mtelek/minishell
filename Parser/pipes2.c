@@ -6,11 +6,17 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:06:46 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/15 21:04:06 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/20 19:52:10 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
+
+void	set_pipe_fd(int *pipes, t_main *main)
+{
+	if (pipe(pipes) == -1)
+		pipe_failed(main);
+}
 
 int	fork1(t_main *main)
 {

@@ -6,17 +6,31 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 22:56:11 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/17 18:50:15 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/20 20:40:24 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
+int	red_count(t_lexer *lexer, int type)
+{
+	int	counter;
+
+	counter = 0;
+	while (lexer != NULL)
+	{
+		if (lexer->type == type)
+			counter++;
+		lexer = lexer->next;
+	}
+	return (counter);
+}
+
 void	alloc_builtin(t_main *main)
 {
 	main->builtin = malloc(sizeof(t_builtin));
 	if (!main->builtin)
-		error_function(-1, main); //another error_type needed
+		error_function(12, main);
 	main->builtin->export = NULL;
 }
 
@@ -26,13 +40,13 @@ void	alloc_parser(t_main *main)
 	if (!main->parser)
 		error_function(7, main);
 	main->parser->n_pipes = count_cmds(main->lexer) - 1;
-	main->parser->pipes = NULL;
+	main->parser->pipes = 0;
 }
 
 void	alloc_exec(t_main *main)
 {
 	main->exec = malloc(sizeof(t_exec));
 	if (!main->exec)
-		error_function(7, main); //another error_type needed
+		error_function(14, main);
 	main->exec->n_childs = count_cmds(main->lexer);
 }

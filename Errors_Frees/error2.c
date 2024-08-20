@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:03:45 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/16 17:06:21 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/20 21:55:47 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	error_message(t_main *main, int exit_code, char *message)
 {
-	ft_putstr_fd(message, 2);
+	ft_putstr_fd(message, 2, main);
 	main->exit_code = exit_code;
 }
 
@@ -27,15 +27,17 @@ void	execve_error(t_main *main, char *path)
 	if (fd == -1)
 		open_failed(main, path);
 	dir = opendir(path);
-	ft_putstr_fd("minishell> ", 2);
-	ft_putstr_fd(path, 2);
+	ft_putstr_fd("minishell> ", 2, main);
+	ft_putstr_fd(path, 2, main);
 	if (!ft_strchr(path, '/'))
 		error_message(main, 127, NO_CMD);
 	else if (fd == -1)
+	{
 		if (dir)
 			error_message(main, 126, IS_DIR);
 		else
 			error_message(main, 127, NO_DIR);
+	}
 	else
 		error_message(main, 126, NO_PERMISSION);
 	if (dir)
@@ -45,42 +47,50 @@ void	execve_error(t_main *main, char *path)
 		close_failed(main, fd);
 }
 
-void	error_type10(int error_type)
+void	error_type10(int error_type, t_main *main)
 {
 	if (error_type == -1)
-		ft_putstr_fd(ERROR_STRDUP, 2);
+		ft_putstr_fd(ERROR_STRDUP, 2, main);
 	else if (error_type == 0)
-		ft_putstr_fd(MF_ENV_LIST, 2);
+		ft_putstr_fd(MF_ENV_LIST, 2, main);
 	else if (error_type == 1)
-		ft_putstr_fd(MF_OPERATOR, 2);
+		ft_putstr_fd(MF_OPERATOR, 2, main);
 	else if (error_type == 2)
-		ft_putstr_fd(MF_LEXER, 2);
+		ft_putstr_fd(MF_LEXER, 2, main);
 	else if (error_type == 3)
-		ft_putstr_fd(MF_WORD, 2);
+		ft_putstr_fd(MF_WORD, 2, main);
 	else if (error_type == 4)
-		ft_putstr_fd(MF_CMD_TABLE, 2);
+		ft_putstr_fd(MF_CMD_TABLE, 2, main);
 	else if (error_type == 5)
-		ft_putstr_fd(MF_CMD_ARGS, 2);
+		ft_putstr_fd(MF_CMD_ARGS, 2, main);
 	else if (error_type == 6)
-		ft_putstr_fd(MF_CMD_CMD, 2);
+		ft_putstr_fd(MF_CMD_CMD, 2, main);
 	else if (error_type == 7)
-		ft_putstr_fd(MF_PARSER, 2);
+		ft_putstr_fd(MF_PARSER, 2, main);
 	else if (error_type == 8)
-		ft_putstr_fd(MF_PIPES, 2);
+		ft_putstr_fd(MF_PIPES, 2, main);
 	else if (error_type == 9)
-		ft_putstr_fd(MF_ONE_PIPE, 2);
+		ft_putstr_fd(MF_ONE_PIPE, 2, main);
 }
 
-void	error_type20(int error_type)
+void	error_type20(int error_type, t_main *main)
 {
-	if (error_type == 13)
-		ft_putstr_fd(MF_INPUT_FD, 2);
+	if (error_type == 10)
+		ft_putstr_fd(MF_N_ENV_ARRAY, 2, main);
+	else if (error_type == 11)
+		ft_putstr_fd(MF_HEREDOC, 2, main);
+	else if (error_type == 12)
+		ft_putstr_fd(MF_BUILTIN, 2, main);
+	else if (error_type == 13)
+		ft_putstr_fd(MF_INPUT_FD, 2, main);
+	else if (error_type == 14)
+		ft_putstr_fd(MF_EXEC, 2, main);
 	else if (error_type == 15)
-		ft_putstr_fd(MF_OUPUT_FD, 2);
+		ft_putstr_fd(MF_OUPUT_FD, 2, main);
 	else if (error_type == 16)
-		ft_putstr_fd(MF_APPEND_OUT, 2);
+		ft_putstr_fd(MF_APPEND_OUT, 2, main);
 	else if (error_type == 18)
-		ft_putstr_fd(MF_ENV_ARRAY, 2);
+		ft_putstr_fd(MF_ENV_ARRAY, 2, main);
 	else if (error_type == 19)
-		ft_putstr_fd(ERROR_STRDUP, 2);
+		ft_putstr_fd(ERROR_STRDUP, 2, main);
 }

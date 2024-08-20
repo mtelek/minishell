@@ -3,3 +3,5 @@ grep "apple"  > infile.txt | sort > out.txt
 grep "apple" < in.txt | sort
 cat < in.txt | grep "apple" | sort | uniq > out
 cat < in.txt | grep "apple" > out
+
+cat >./outfiles/outfile01 <missing >./test_files/invalid_permission

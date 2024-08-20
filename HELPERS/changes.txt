@@ -434,3 +434,44 @@ void	init_heredoc(t_main *main, t_cmd *own_cmd)
 {
 	alloc_heredoc_f(main, own_cmd);
 }
+
+
+//number_of_words
+
+
+int	number_of_words(char *input, t_main *main)
+{
+	int	n_words;
+	int	i;
+
+	n_words = 0;
+	i = 0;
+	if (n_words == 0 && input[0] != '\0')
+		n_words++;
+	while (input[i] != '\0')
+	{
+		if (input[i] == 34 || input[i] == 39)
+			i = calc_i_w_quotes(input, i);
+		else if ((input[i] && ft_isspace(input[i])))
+		{
+			if (last_word_check(input, i, main))
+				n_words++;
+			else if ((input[i + 1] == '|' || input[i + 1] == '<' || input[i
+						+ 1] == '>') && !input[i + 2])
+				n_words++;
+			else if (input[i + 1] && input[i + 2] && ((input[i + 1] == '|'
+						&& input[i + 2] == '|') || (input[i + 1] == '<'
+						&& input[i + 2] == '<') || (input[i + 1] == '>'
+						&& input[i + 2] == '>')))
+				n_words++;
+			while (input[i + 1] && ft_isspace(input[i + 1]))
+				i++;
+		}
+		else if (checker_for_op_space(main, input, i))
+			n_words = calc_n_words_for_op(input, n_words, i);
+		else if (ops_check(input, i))
+			n_words++;
+		i++;
+	}
+	return (n_words);
+}

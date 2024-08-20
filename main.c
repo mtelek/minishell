@@ -17,8 +17,8 @@
 
 void	print_cmd_table(t_cmd *cmd)
 {
-	int j;
-	t_cmd *temp_cmd;
+	int			j;
+	t_cmd		*temp_cmd;
 
 	temp_cmd = cmd;
 	while (temp_cmd != NULL)
@@ -40,7 +40,7 @@ void	print_cmd_table(t_cmd *cmd)
 
 void	print_lexer(t_lexer *lexer)
 {
-	t_lexer *temp_lex;
+	t_lexer	*temp_lex;
 
 	temp_lex = lexer;
 	printf("LEXER\n");
@@ -53,7 +53,7 @@ void	print_lexer(t_lexer *lexer)
 
 void	print_env(char **envp)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (envp[i] != NULL)
@@ -69,11 +69,13 @@ void	init_main(t_main *main)
 	main->operators = NULL;
 	main->lexer = NULL;
 	main->cmd = NULL;
+	main->parser = NULL;
 	main->exec = NULL;
 	main->builtin = NULL;
 	main->exit_code = 0;
 	main->hd_content = NULL;
 	main->heredoc_flag = 0;
+	main->printf_flag = 0;
 }
 
 int	minishell(char *input, t_main *main)
@@ -81,23 +83,24 @@ int	minishell(char *input, t_main *main)
 	init_operators(&main->operators, main);
 	if (get_tokens(input, &main->lexer, main) == -1)
 		return (free_operator(main->operators), 0);
-	if (syntax_check(main->lexer) == false)
+	if (!syntax_check(main->lexer, main))
 	{
 		ok_free_function(main);
-		exit(2);
+		main->exit_code = 2;
+		exit(main->exit_code);
 	}
 	delete_qoutes(main->lexer);
 	parser(main);
 	main->heredoc_flag = 0;
 	ok_free_function(main);
-	return (main->exit_code);
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_main main;
-	char *input;
-	char *history_file;
+	t_main	main;
+	char	*input;
+	char	*history_file;
 
 	init_main(&main);
 	creating_env_array(&main, envp);
@@ -110,21 +113,42 @@ int	main(int argc, char **argv, char **envp)
 	{
 		if (!main.heredoc_flag)
 		{
-			input = readline("minishell> ");
-			if (input)
-			{
-				if (*input != '\0')
-					add_history(input);
-				minishell(input, &main);
-			}
+			if (isatty(fileno(stdin)))
+				input = readline("tester> ");
 			else
 			{
-				write_history(history_file);
-				return (write(1, "exit\n", 5), free(input), 0);
+				char	*line;
+				line = get_next_line(fileno(stdin));
+				if (!line)
+					input = ft_strtrim(line, "\n");
+				else
+					input = NULL;
+				free(line);
 			}
+			if (!input)
+			{
+				if (isatty(fileno(stdin)))
+					printf("exit\n");
+				ok_free_function(&main);
+				exit (main.exit_code);
+			}
+			minishell(input, &main);
 			free(input);
+			// input = readline("minishell> ");
+			// if (input)
+			// {
+			// 	if (*input != '\0')
+			// 		add_history(input);
+			// 	minishell(input, &main);
+			// }
+			// else
+			// {
+			// 	write_history(history_file);
+			// 	return (write(1, "exit\n", 5), free(input), 0);
+			// }
+			// free(input);
 		}
 	}
-	clear_history();
+	//clear_history();
 	return (0);
 }

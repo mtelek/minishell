@@ -17,6 +17,6 @@ void	argc_checker(int argc, char **argv)
 	if (argc != 1 || argv[1])
 	{
 		printf("Error, no arguments needed\n");
-		exit(EXIT_FAILURE);
+		//exit(EXIT_FAILURE);
 	}
 }

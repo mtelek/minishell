@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:33 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/18 18:48:31 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/20 21:48:34 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ char	*get_env_path(char **env_array, char *env)
 	int		len;
 	char	*tmp;
 
+	i = 0;
 	env = ft_strjoin(env, "=");
 	if (!env)
 		return (NULL);
-	len = strlen(env);
-	i = 0;
+	len = ft_strlen(env);
 	while (env_array[i] && env_array[i][0] && ft_memcmp(env, env_array[i], len))
-    	i++;
+		i++;
 	if (env_array[i])
 		tmp = env_array[i] + len;
 	else
@@ -78,20 +78,15 @@ void	change_dir(t_main *main, char *path)
 	}
 	else
 	{
-		ft_putstr_fd("bash: cd: ", 2);
-		ft_putstr_fd(main->cmd->args[1], 2);
-		ft_putstr_fd(": ", 2);
+		ft_putstrs_fd("bash: cd: ", main->cmd->args[1], ": ", 2, main);
 	}
 }
 
-void	ft_cd(t_main *main)
+void	ft_cd(t_main *main, int argc)
 {
 	char	*path;
-	int		argc;
 
-	path = NULL;
 	errno = 0;
-	argc = count_arg(main->cmd->args);
 	if (argc < 3)
 	{
 		if (!main->cmd->args[1] || !ft_memcmp(main->cmd->args[1], "--", 3)
@@ -104,16 +99,14 @@ void	ft_cd(t_main *main)
 		change_dir(main, path);
 		if (errno > 0)
 		{
-			ft_putstr_fd(strerror(errno), 2);
-			ft_putstr_fd("\n", 2);
+			ft_putstrs_fd(strerror(errno), "\n", NULL, 2, main);
 			main->exit_code = 1;
 		}
 	}
 	else
 	{
-		ft_putstr_fd("bash:  ", 2);
-		ft_putstr_fd(main->cmd->args[0], 2);
-		ft_putstr_fd(": too many arguments\n", 2);
+		ft_putstrs_fd("bash:  ", main->cmd->args[0],
+			": too many arguments\n", 2, main);
 		main->exit_code = 1;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 21:08:22 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/15 22:31:53 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/20 22:05:29 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	fork_failed(t_main *main)
 	else
 		printf(E_CREATING_PROCESS, strerror(errno));
 	free_structs(main);
-	perror("");
-	exit(EXIT_FAILURE);
+	// perror("");
+	//exit(EXIT_FAILURE);
 }
 
 void	pipe_failed(t_main *main)
@@ -36,8 +36,8 @@ void	pipe_failed(t_main *main)
 	else
 		printf(E_PIPE_CREATION, strerror(errno));
 	free_structs(main);
-	perror("");
-	exit(EXIT_FAILURE);
+	// perror("");
+	//exit(EXIT_FAILURE);
 }
 
 void	readdir_failed(t_main *main, DIR *dir)
@@ -47,8 +47,8 @@ void	readdir_failed(t_main *main, DIR *dir)
 	else
 		printf(E_READ_DIR, (void *)dir, strerror(errno));
 	free_structs(main);
-	perror("");
-	exit(EXIT_FAILURE); // might not be necessary here
+	// perror("");
+	//exit(EXIT_FAILURE); // might not be necessary here
 }
 
 void	closedir_failed(t_main *main, DIR *dir)
@@ -58,6 +58,6 @@ void	closedir_failed(t_main *main, DIR *dir)
 	else
 		printf(E_CLOSE_DIR, (void *)dir, strerror(errno));
 	free_structs(main);
-	perror("");
-	exit(EXIT_FAILURE); // might not be necessary here
+	// perror("");
+	//exit(EXIT_FAILURE); // might not be necessary here
 }

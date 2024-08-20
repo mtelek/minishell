@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:35 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/17 20:56:25 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/20 21:50:42 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,16 @@ void	ft_pwd(t_main *main)
 
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
-		ft_putstr_fd(cwd, 1);
-		ft_putstr_fd("\n", 1);
+		ft_putstr_fd(cwd, 1, main);
+		ft_putstr_fd("\n", 1, main);
 	}
 	else
 	{
-		ft_putstr_fd("bash: pwd: ", 2);
-		ft_putstr_fd(strerror(errno), 2);
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd("bash: pwd: ", 2, main);
+		ft_putstr_fd(strerror(errno), 2, main);
+		ft_putstr_fd("\n", 2, main);
 		main->exit_code = 1;
-		return;
+		return ;
 	}
 	main->exit_code = 0;
 }

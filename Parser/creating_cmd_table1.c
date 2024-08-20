@@ -6,53 +6,11 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/19 20:25:09 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/20 21:12:02 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
-
-int	setting_args(t_lexer **temp_lex, t_cmd **temp_cmd, int n_args)
-{
-	int	i;
-
-	i = 0;
-	while ((*temp_lex) != NULL && (*temp_lex)->type != 1)
-	{
-		if (i < n_args)
-		{
-			if ((*temp_lex)->type == INPUT_RED) // here made changes, added new rule
-			{
-				(*temp_cmd)->n_in++;
-				(*temp_lex) = (*temp_lex)->next;
-			}
-			if ((*temp_lex)->type == OUTPUT_RED) // here made changes, added new rule
-			{
-				(*temp_cmd)->n_out++;
-				(*temp_lex) = (*temp_lex)->next;
-			}
-			if ((*temp_lex)->type == APPEND_OUT) // here made changes, added new rule
-			{
-				(*temp_cmd)->n_append++;
-				(*temp_lex) = (*temp_lex)->next;
-			}
-			if ((*temp_lex)->type == HEREDOC) // here made changes, added new rule
-			{
-				(*temp_cmd)->n_heredoc++;
-				(*temp_cmd)->hd_indicator = 1;
-				(*temp_lex) = (*temp_lex)->next;
-			}
-			if (i > 0 && (*temp_lex) && (*temp_lex)->prev->type != OUTPUT_RED && (*temp_lex)->prev->type != HEREDOC && (*temp_lex)->prev->type != APPEND_OUT) // made changes as well
-				(*temp_cmd)->args[i] = (*temp_lex)->str;
-			else if (i == 0 && (*temp_lex)) // added extra line, was not here before
-				(*temp_cmd)->args[i] = (*temp_lex)->str;
-			i++;
-		}
-		if (*temp_lex)
-			(*temp_lex) = (*temp_lex)->next;
-	}
-	return (i);
-}
 
 void	args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds, int n_args)
 {

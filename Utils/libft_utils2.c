@@ -2,9 +2,12 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   libft_utils2.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+        
+	+:+     */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+      
+	+#+        */
+/*                                                +#+#+#+#+#+  
+	+#+           */
 /*   Created: 2024/07/27 22:21:52 by mtelek            #+#    #+#             */
 /*   Updated: 2024/07/27 23:25:38 by mtelek           ###   ########.fr       */
 /*                                                                            */
@@ -40,17 +43,21 @@ void	ft_putchar_fd(char c, int fd)
 	write(fd, &c, 1);
 }
 
-void	ft_putstr_fd(char *s, int fd)
+void	ft_putstr_fd(char *s, int fd, t_main *main)
 {
 	int	i;
 
 	i = 0;
-	if (s[i] != '\0')
+	if (!main->printf_flag)
 	{
-		while (s[i] != '\0')
+		if (s[i] != '\0')
 		{
-			ft_putchar_fd(s[i], fd);
-			i++;
+			while (s[i] != '\0')
+			{
+				ft_putchar_fd(s[i], fd);
+				i++;
+			}
+			main->printf_flag = 1;
 		}
 	}
 }

@@ -6,31 +6,48 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:16:28 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/19 20:17:17 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/20 19:51:48 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-void	set_pipe_fd(int *pipes, t_main *main)
+void	handle_fds(t_main *main, t_cmd *current, int i)
 {
-	if (pipe(pipes) == -1)
-		pipe_failed(main);
+	if (i > 0)
+	{
+		if (dup2(main->parser->pipes[i - 1][0], STDIN_FILENO) == -1)
+			dup_failed(main, main->parser->pipes[i - 1][0], STDIN_FILENO);
+		if (close(main->parser->pipes[i - 1][0]) == -1)
+			close_failed(main, main->parser->pipes[i - 1][0]);
+	}
+	if (current->next != NULL)
+	{
+		if (dup2(main->parser->pipes[i][1], STDOUT_FILENO) == -1)
+			dup_failed(main, main->parser->pipes[i][1], STDOUT_FILENO);
+		if (close(main->parser->pipes[i][1]) == -1)
+			close_failed(main, main->parser->pipes[i][1]);
+	}
 }
 
-void	close_child_fds(t_main *main)
+t_cmd	*process_command(t_main *main, t_cmd *current, int *i, int *j)
 {
-	int	j;
-
-	j = 0;
-	while (j < main->parser->n_pipes)
+	current->pid = fork1(main);
+	if (current->pid == 0)
 	{
-		if (close(main->parser->pipes[j][0]) == -1)
-			close_failed(main, main->parser->pipes[j][0]);
-		if (close(main->parser->pipes[j][1]) == -1)
-			close_failed(main, main->parser->pipes[j][1]);
-		j++;
+		handle_fds(main, current, *i);
+		calling_redirects(main, current);
+		return (current);
 	}
+	if (*i > 0)
+		if (close(main->parser->pipes[*i - 1][0]) == -1)
+			close_failed(main, main->parser->pipes[*i - 1][0]);
+	if (current->next != NULL)
+		if (close(main->parser->pipes[*i][1]) == -1)
+			close_failed(main, main->parser->pipes[*i][1]);
+	(*i)++;
+	(*j)++;
+	return (current->next);
 }
 
 t_cmd	*switching_fds(t_main *main)
@@ -46,40 +63,9 @@ t_cmd	*switching_fds(t_main *main)
 	{
 		if (j < main->exec->n_childs)
 		{
-			current->pid = fork1(main);
-			if (current->pid == 0)
-			{
-				if (i > 0)
-				{
-					if (dup2(main->parser->pipes[i - 1][0], STDIN_FILENO) == -1)
-						dup_failed(main, main->parser->pipes[i - 1][0],
-							STDIN_FILENO);
-					if (close(main->parser->pipes[i - 1][0]) == -1)
-						close_failed(main, main->parser->pipes[i - 1][0]);
-				}
-				if (current->next != NULL)
-				{
-					if (dup2(main->parser->pipes[i][1], STDOUT_FILENO) == -1)
-						dup_failed(main, main->parser->pipes[i][1],
-							STDOUT_FILENO);
-					if (close(main->parser->pipes[i][1]) == -1)
-						close_failed(main, main->parser->pipes[i][1]);
-				}
-				calling_redirects(main, current);
+			current = process_command(main, current, &i, &j);
+			if (current && current->pid == 0)
 				return (current);
-			}
-		}
-		if (i > 0) // for parent
-			if (close(main->parser->pipes[i - 1][0]) == -1)
-				close_failed(main, main->parser->pipes[i - 1][0]);
-		if (current->next != NULL)
-			if (close(main->parser->pipes[i][1]) == -1)
-				close_failed(main, main->parser->pipes[i][1]);
-		if (current->pid != 0)
-		{
-			i++;
-			j++;
-			current = current->next;
 		}
 	}
 	return (main->cmd);

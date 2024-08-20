@@ -15,39 +15,6 @@
 
 #include "../Headers/minishell.h"
 
-int	qoutes_checker(char *input, char check, int i)
-{
-	i++;
-	while (input[i] != '\0')
-	{
-		if (input[i] == check)
-			return (i);
-		i++;
-	}
-	return (0);
-}
-
-int	qoutes_handler(char *input, int i)
-{
-	int	temp_i;
-
-	temp_i = 0;
-	if (input[i] == 34)
-	{
-		temp_i = qoutes_checker(input, 34, i);
-		if (temp_i != 0)
-			i = temp_i;
-	}
-	else if (input[i] == 39)
-	{
-		temp_i = qoutes_checker(input, 39, i);
-		if (temp_i != 0)
-			i = temp_i;
-	}
-	i++;
-	return (i);
-}
-
 int	last_word_check(char *input, int i, t_main *main)
 {
 	while (input[i])
@@ -74,6 +41,22 @@ int	calc_i_w_quotes(char *input, int i)
 	return (i);
 }
 
+int	handle_spaces_and_operators(char *input, int i, int *n_words, t_main *main)
+{
+	if (last_word_check(input, i, main))
+		(*n_words)++;
+	else if ((input[i + 1] == '|' || input[i + 1] == '<' || input[i + 1] == '>')
+		&& !input[i + 2])
+		(*n_words)++;
+	else if (input[i + 1] && input[i + 2] && ((input[i + 1] == '|' && input[i
+					+ 2] == '|') || (input[i + 1] == '<' && input[i + 2] == '<')
+			|| (input[i + 1] == '>' && input[i + 2] == '>')))
+		(*n_words)++;
+	while (input[i + 1] && ft_isspace(input[i + 1]))
+		i++;
+	return (i);
+}
+
 int	number_of_words(char *input, t_main *main)
 {
 	int	n_words;
@@ -88,20 +71,7 @@ int	number_of_words(char *input, t_main *main)
 		if (input[i] == 34 || input[i] == 39)
 			i = calc_i_w_quotes(input, i);
 		else if ((input[i] && ft_isspace(input[i])))
-		{
-			if (last_word_check(input, i, main))
-				n_words++;
-			else if ((input[i + 1] == '|' || input[i + 1] == '<' || input[i
-						+ 1] == '>') && !input[i + 2])
-				n_words++;
-			else if (input[i + 1] && input[i + 2] && ((input[i + 1] == '|'
-						&& input[i + 2] == '|') || (input[i + 1] == '<'
-						&& input[i + 2] == '<') || (input[i + 1] == '>'
-						&& input[i + 2] == '>')))
-				n_words++;
-			while (input[i + 1] && ft_isspace(input[i + 1]))
-				i++;
-		}
+			i = handle_spaces_and_operators(input, i, &n_words, main);
 		else if (checker_for_op_space(main, input, i))
 			n_words = calc_n_words_for_op(input, n_words, i);
 		else if (ops_check(input, i))

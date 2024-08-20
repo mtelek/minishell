@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:50 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/19 21:08:20 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/20 21:35:41 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,27 @@
 
 void	exec(t_main *main, t_cmd *own_cmd, char *path)
 {
-	if (execve(path, own_cmd->args, main->env_array) == -1)
-		exec_error_function(main, path);
+	if (own_cmd->pid == 0)
+	{
+		if (execve(path, own_cmd->args, main->env_array) == -1)
+			exec_error_function(main, path);
+	}
+}
+
+char	*check_and_construct_path(char *bin, char *command,
+		struct dirent *entry)
+{
+	char	*path;
+	char	*temp;
+
+	if (ft_strcmp(entry->d_name, command) == 0)
+	{
+		temp = ft_strjoin(bin, "/");
+		path = ft_strjoin(temp, entry->d_name);
+		free(temp);
+		return (path);
+	}
+	return (NULL);
 }
 
 char	*find_dir(char *bin, char *command, t_main *main)
@@ -23,22 +42,19 @@ char	*find_dir(char *bin, char *command, t_main *main)
 	DIR				*dir;
 	struct dirent	*entry;
 	char			*path;
-	char			*temp;
 
 	path = NULL;
 	dir = opendir(bin);
 	if (!dir)
 		return (NULL);
 	errno = 0;
-	while ((entry = readdir(dir)) != NULL)
+	entry = readdir(dir);
+	while (entry != NULL)
 	{
-		if (ft_strcmp(entry->d_name, command) == 0)
-		{
-			temp = ft_strjoin(bin, "/");
-			path = ft_strjoin(temp, entry->d_name);
-			free(temp);
+		path = check_and_construct_path(bin, command, entry);
+		if (path != NULL)
 			break ;
-		}
+		entry = readdir(dir);
 	}
 	if (entry == NULL && errno != 0)
 		readdir_failed(main, dir);
@@ -56,7 +72,8 @@ char	*find_path(t_main *main, t_cmd *own_cmd, char *dir)
 
 	i = 0;
 	len_dir = ft_strlen(dir);
-	while (main->env_array[i] && ft_strncmp(main->env_array[i], dir, len_dir) != 0)
+	while (main->env_array[i] && ft_strncmp(main->env_array[i], dir,
+			len_dir) != 0)
 		i++;
 	if (main->env_array[i] == NULL)
 		exec(main, own_cmd, own_cmd->cmd);

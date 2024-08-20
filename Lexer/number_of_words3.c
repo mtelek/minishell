@@ -6,11 +6,44 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 22:45:50 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/09 23:31:29 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/20 21:13:04 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
+
+int	qoutes_checker(char *input, char check, int i)
+{
+	i++;
+	while (input[i] != '\0')
+	{
+		if (input[i] == check)
+			return (i);
+		i++;
+	}
+	return (0);
+}
+
+int	qoutes_handler(char *input, int i)
+{
+	int	temp_i;
+
+	temp_i = 0;
+	if (input[i] == 34)
+	{
+		temp_i = qoutes_checker(input, 34, i);
+		if (temp_i != 0)
+			i = temp_i;
+	}
+	else if (input[i] == 39)
+	{
+		temp_i = qoutes_checker(input, 39, i);
+		if (temp_i != 0)
+			i = temp_i;
+	}
+	i++;
+	return (i);
+}
 
 int	calc_n_words_w_op(int n_words, char *input, int i)
 {

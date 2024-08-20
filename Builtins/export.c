@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:38 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/17 21:26:47 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/20 19:22:38 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ char	**ft_cpy_environ(char **env_array, int add)
 	i = -1;
 	cpy = NULL;
 	if (env_array)
-		while (env_array[len++])
+		while (env_array[len])
+			len++;
 	cpy = (char **)ft_calloc(sizeof(char *), (len + add + 1));
 	if (!cpy)
 		return (NULL);
@@ -74,13 +75,14 @@ char	**export_cmd(t_main *main, int j)
 {
 	int	i;
 
+	i = -1;
 	if (!main->env_array)
 	{
 		main->env_array = ft_cpy_environ(NULL, 1);
 		if (!main->env_array)
 			error_function(-1, main);
 	}
-	for (i = 0; main->env_array[i]; i++)
+	while (main->env_array[++i])
 	{
 		if (!ft_memcmp(main->env_array[i], main->cmd->args[j],
 				ft_strlen(main->cmd->args[j])))

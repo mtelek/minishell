@@ -26,6 +26,7 @@
 # include <fcntl.h>
 # include <dirent.h>
 # include <errno.h>
+# include "../get_next_line/get_next_line.h"
 
 # define PIPE 1
 # define INPUT_RED 2
@@ -33,16 +34,16 @@
 # define HEREDOC 4
 # define APPEND_OUT 5
 
-# define BUF_SIZE 4096 //might gonna choose something else
+# define BUF_SIZE 4096
 
 typedef struct s_builtin
 {
-	char **export;
+	char		**export;
 }				t_builtin;
 
 typedef struct s_exec
 {
-	int	n_childs;
+	int			n_childs;
 }				t_exec;
 
 typedef struct s_parser
@@ -94,6 +95,7 @@ typedef struct s_main
 	int				exit_code;
 	char			*hd_content;
 	int				heredoc_flag;
+	int				printf_flag;
 	t_lexer			*lexer;
 	t_operator		*operators;
 	t_cmd			*cmd;
@@ -101,6 +103,9 @@ typedef struct s_main
 	t_exec			*exec;
 	t_builtin		*builtin;
 }					t_main;
+
+//TESSTER
+char					*ft_strtrim(char const *s1, char const *set);
 
 //HELPER/PRINTING
 void					print_cmd_table(t_cmd *cmd);
@@ -139,11 +144,11 @@ int						getting_word_i_start(char *input, int i);
 int						null_terminator_check(char *input, int i, t_main *main);
 
 // SYNTAX_CHECK
-bool					syntax_check(t_lexer *lexer);
-bool					syntax_doubles_same(t_lexer *temp_lex);
-bool					syntax_doubles_diff(t_lexer *lexer);
-bool					checking_combinaton(t_lexer *lexer);
-bool					checking_lex(char *str);
+bool					syntax_check(t_lexer *lexer, t_main *main);
+bool					syntax_doubles_same(t_lexer *temp_lex, t_main *main);
+bool					syntax_doubles_diff(t_lexer *lexer, t_main *main);
+bool					checking_combinaton(t_lexer *lexer, t_main *main);
+bool					checking_lex(char *str, t_main *main);
 
 //PARSER
 void					parser(t_main *main);
@@ -153,7 +158,7 @@ void					alloc_builtin(t_main *main);
 void					calling_redirects(t_main *main, t_cmd *own_cmd);
 void					wait_for_children(t_main *main);
 void					find_hd_indicator(t_main *main, t_cmd *cmd);
-void    				get_hd_content(t_main *main, t_cmd *own_cmd);
+void					get_hd_content(t_main *main, t_cmd *own_cmd);
 
 // PARSER/CMD_TABLE
 int						count_cmds(t_lexer *lexer);
@@ -161,6 +166,8 @@ int						number_of_args(t_lexer *lexer);
 void					args_maker(t_lexer *lexer, t_cmd *cmd,
 							int n_cmds, int n_args);
 void					creating_cmd_table(t_main *main);
+int						setting_args(t_lexer **temp_lex, t_cmd **temp_cmd,
+							int n_args);
 
 //PARSER/PIPES
 t_cmd					*init_pipes(t_main *main);
@@ -190,24 +197,31 @@ void					free_bin(char **bin);
 int						count_arg(char **args);
 void					free_array(char **array);
 char					**export_cmd(t_main *main, int j);
-void					ft_echo(t_cmd *own_cmd);
-void					ft_cd(t_main *main);
+void					ft_echo(t_cmd *own_cmd, t_main *main);
+void					ft_cd(t_main *main, int argc);
 void					ft_exit(t_main *main);
 void					ft_export(t_main *main, char **args);
 char					**ft_cpy_environ(char **env_array, int add);
-int						handle_export_error(char **argv);
+int						handle_export_error(char **argv, t_main *main);
 void					ft_unset(t_main *main, char **args);
 void					ft_pwd(t_main *main);
-void 					ft_env(t_main *main);
-int 					handle_unset_error(char **args);
+void					ft_env(t_main *main);
+int						handle_unset_error(char **args, t_main *main);
+
+//BUILTINS/HEREDOC
+void					get_hd_content(t_main *main, t_cmd *own_cmd);
+char					*no_echo_but_heredoc(char *delimiter, char *content);
+int						echo_and_heredoc(char *delimiter);
+void					find_hd_indicator(t_main *main, t_cmd *cmd);
 
 // ERRORS
 void					error_function(int error_type, t_main *main);
-void					error_type10(int error_type);
-void					error_type20(int error_type);
+void					error_type10(int error_type, t_main *main);
+void					error_type20(int error_type, t_main *main);
 void					execve_error(t_main *main, char *path);
 void					exec_error_function(t_main *main, char *path);
-void					error_message(t_main *main, int exit_code, char *message);
+void					error_message(t_main *main, int exit_code,
+							char *message);
 void					open_failed(t_main *main, char *file_name);
 void					dup_failed(t_main *main, int old_fd, int new_fd);
 void					close_failed(t_main *main, int fd);
@@ -237,7 +251,7 @@ size_t					ft_strlen(const char *str);
 int						ft_strncmp(const char *str1, const char *str2,
 							size_t n);
 void					ft_putchar_fd(char c, int fd);
-void					ft_putstr_fd(char *s, int fd);
+void					ft_putstr_fd(char *s, int fd, t_main *main);
 int						ft_strcmp(const char *s1, const char *s2);
 char					**ft_split(char const *s, char c);
 char					*ft_strchr(const char *str, int c);
@@ -247,10 +261,12 @@ char					*ft_strjoin(char const *s1, char const *s2);
 int						ft_isdigit(int c);
 void					*ft_calloc(size_t num, size_t size);
 void					ft_bzero(void *s, size_t n);
-int						ft_memcmp(const void *s1, const void *s2, size_t n);; //check out this one
+int						ft_memcmp(const void *s1, const void *s2, size_t n);
 int						ft_atoi(const char *str);
 int						ft_isalnum(int c);
 int						ft_isalpha(int c);
+void					ft_putstrs_fd(char *one, char *two,
+							char *three, int fd, t_main *main);
 
 // SIG
 void					handle_sigint(int sig);

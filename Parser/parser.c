@@ -6,25 +6,11 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/19 21:57:16 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/20 22:11:52 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
-
-int	red_count(t_lexer *lexer, int type)
-{
-	int	counter;
-
-	counter = 0;
-	while (lexer != NULL)
-	{
-		if (lexer->type == type)
-			counter++;
-		lexer = lexer->next;
-	}
-	return (counter);
-}
 
 void	calling_redirects(t_main *main, t_cmd *own_cmd)
 {
@@ -49,7 +35,7 @@ void	wait_for_children(t_main *main)
 	int	i;
 	int	status;
 	int	exit_status;
-	int count;
+	int	count;
 
 	status = 0;
 	exit_status = 0;
@@ -61,30 +47,28 @@ void	wait_for_children(t_main *main)
 	while (i < count)
 	{
 		waitpid(-1, &status, 0);
-		if (WIFEXITED(status))
-		{
-			exit_status = WEXITSTATUS(status);
-			main->exit_code = exit_status;
-		}
 		i++;
 	}
 }
 
 bool	builtin_check(t_main *main)
 {
+	int	argc;
+
+	argc = count_arg(main->cmd->args);
 	if (ft_strncmp(main->cmd->cmd, "cd", 2) == 0)
-		return (ft_cd(main), true);
+		return (ft_cd(main, argc), true);
 	else if (ft_strncmp(main->cmd->cmd, "exit", 4) == 0)
 		return (ft_exit(main), true);
 	else if (ft_strncmp(main->cmd->cmd, "export", 6) == 0)
 	{
-		if (!handle_export_error(main->cmd->args))
+		if (!handle_export_error(main->cmd->args, main))
 			ft_export(main, main->cmd->args);
 		return (true);
 	}
 	else if (ft_strncmp(main->cmd->cmd, "unset", 5) == 0)
 	{
-		if (!handle_unset_error(main->cmd->args))
+		if (!handle_unset_error(main->cmd->args, main))
 			ft_unset(main, main->cmd->args);
 		return (true);
 	}
@@ -103,7 +87,7 @@ int	echo_check(t_main *main, t_cmd *own_cmd)
 		{
 			if (!main->parser->n_pipes)
 				calling_redirects(main, own_cmd);
-			ft_echo(own_cmd);
+			ft_echo(own_cmd, main);
 		}
 		return (1);
 	}
@@ -132,7 +116,7 @@ void	parser(t_main *main)
 		own_cmd = main->cmd;
 		calling_redirects(main, own_cmd);
 	}
-	if (!echo_check(main, own_cmd))
+	if (!echo_check(main, own_cmd) && own_cmd->pid == 0)
 		executor(main, own_cmd);
 	if (own_cmd->pid == 0)
 		exit(0);

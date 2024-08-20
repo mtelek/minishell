@@ -3,3 +3,5 @@
 	//error_malloc free ok_malloc free could be the same
 	//still have malloc issues 
 	// use just one env_array in main
+	// check for 'delimeter'
+	//check number_of_words function again

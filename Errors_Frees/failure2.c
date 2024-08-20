@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 21:08:19 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/15 21:45:00 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/20 22:13:15 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	close_failed(t_main *main, int fd)
 	else
 		printf(E_CLOSE_FD, fd, strerror(errno));
 	free_structs(main);
-	perror("");
+	// perror("");
 	exit(EXIT_FAILURE);
 }
 
@@ -36,7 +36,7 @@ void	dup_failed(t_main *main, int old_fd, int new_fd)
 	else
 		printf(E_DUP_FD, old_fd, new_fd, strerror(errno));
 	free_structs(main);
-	perror("");
+	// perror("");
 	exit(EXIT_FAILURE);
 }
 
@@ -51,6 +51,6 @@ void	open_failed(t_main *main, char *file_name)
 	else
 		printf(E_OPEN_FILE, file_name, strerror(errno));
 	free_structs(main);
-	perror("");
+	// perror("");
 	exit(EXIT_FAILURE); // might not be necessary here
 }
