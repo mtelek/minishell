@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/20 21:12:02 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/21 20:43:42 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ void	args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds, int n_args)
 void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 {
 	(void)cmd;
+	
+	printf("ARGS[0]:%s\n", temp->args[0]);
 	temp->cmd = ft_strdup(temp->args[0]);
 	if (!temp->cmd)
 		error_function(6, main);
@@ -61,6 +63,7 @@ void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)
 
 	j = 0;
 	n_args = number_of_args(main->lexer);
+	printf("ARGS:%d\n", n_args);
 	temp = malloc(sizeof(t_cmd));
 	if (!temp)
 		error_function(4, main);
@@ -91,10 +94,11 @@ void	creating_cmd_table(t_main *main)
 	prev_node = NULL;
 	n_cmds = count_cmds(main->lexer);
 	if (!n_cmds)
-		return ;
+		return;
 	while (i < n_cmds)
 	{
 		init_node(main, &main->cmd, &prev_node, n_cmds);
 		i++;
 	}
+	print_cmd_table(main->cmd);
 }

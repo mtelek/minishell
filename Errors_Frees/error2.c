@@ -6,16 +6,16 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:03:45 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/20 21:55:47 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/21 16:45:04 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-void	error_message(t_main *main, int exit_code, char *message)
+void	error_message(t_main *main, int exit_code, char *message, char *path)
 {
-	ft_putstr_fd(message, 2, main);
-	main->exit_code = exit_code;
+	ft_putstrs_fd("minishell> ", path, message, 2, main);
+	exit(exit_code);
 }
 
 void	execve_error(t_main *main, char *path)
@@ -24,22 +24,18 @@ void	execve_error(t_main *main, char *path)
 	int		fd;
 
 	fd = open(path, O_WRONLY);
-	if (fd == -1)
-		open_failed(main, path);
 	dir = opendir(path);
-	ft_putstr_fd("minishell> ", 2, main);
-	ft_putstr_fd(path, 2, main);
 	if (!ft_strchr(path, '/'))
-		error_message(main, 127, NO_CMD);
+		error_message(main, 127, NO_CMD, path);
 	else if (fd == -1)
 	{
 		if (dir)
-			error_message(main, 126, IS_DIR);
+			error_message(main, 126, IS_DIR, path);
 		else
-			error_message(main, 127, NO_DIR);
+			error_message(main, 127, NO_DIR, path);
 	}
 	else
-		error_message(main, 126, NO_PERMISSION);
+		error_message(main, 126, NO_PERMISSION, path);
 	if (dir)
 		if (closedir(dir) == -1)
 			closedir_failed(main, dir);

@@ -75,25 +75,24 @@ void	init_main(t_main *main)
 	main->exit_code = 0;
 	main->hd_content = NULL;
 	main->heredoc_flag = 0;
-	main->printf_flag = 0;
 }
 
 int	minishell(char *input, t_main *main)
 {
 	init_operators(&main->operators, main);
 	if (get_tokens(input, &main->lexer, main) == -1)
-		return (free_operator(main->operators), 0);
+		return (free_operator(main->operators), main->exit_code = 1, 0);
+	print_lexer(main->lexer);
 	if (!syntax_check(main->lexer, main))
 	{
-		ok_free_function(main);
-		main->exit_code = 2;
-		exit(main->exit_code);
+		syntax_free(main);
+		return(main->exit_code = 2, 2);
 	}
 	delete_qoutes(main->lexer);
 	parser(main);
 	main->heredoc_flag = 0;
 	ok_free_function(main);
-	return (0);
+	return (main->exit_code);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -125,30 +124,22 @@ int	main(int argc, char **argv, char **envp)
 					input = NULL;
 				free(line);
 			}
-			if (!input)
-			{
-				if (isatty(fileno(stdin)))
-					printf("exit\n");
-				ok_free_function(&main);
-				exit (main.exit_code);
-			}
-			minishell(input, &main);
-			free(input);
 			// input = readline("minishell> ");
-			// if (input)
-			// {
-			// 	if (*input != '\0')
-			// 		add_history(input);
-			// 	minishell(input, &main);
-			// }
-			// else
-			// {
-			// 	write_history(history_file);
-			// 	return (write(1, "exit\n", 5), free(input), 0);
-			// }
-			// free(input);
+			if (input)
+			{
+				if (*input != '\0')
+					add_history(input);
+				minishell(input, &main);
+			}
+			else
+			{
+				write_history(history_file);
+				return (free(input), main.exit_code);
+				// return (write(1, "exit\n", 5), free(input), 0);
+			}
+			free(input);
 		}
 	}
-	//clear_history();
+	clear_history();
 	return (0);
 }

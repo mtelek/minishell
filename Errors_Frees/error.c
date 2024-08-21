@@ -23,11 +23,16 @@ void	exec_error_function(t_main *main, char *path)
 
 void	free_structs(t_main *main)
 {
-	free_operator(main->operators);
-	free_lexer(main->lexer);
-	free_cmd(main->cmd);
-	free_parser(main->parser);
-	free_exec(main->exec);
+	if (main->operators)
+		free_operator(main->operators);
+	if (main->lexer)
+		free_lexer(main->lexer);
+	if (main->cmd)
+		free_cmd(main->cmd);
+	if (main->parser)
+		free_parser(main->parser);
+	if (main->exec)
+		free_exec(main->exec);
 }
 
 void	error_function(int error_type, t_main *main)

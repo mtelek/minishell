@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 21:08:19 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/20 22:13:15 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/21 16:43:22 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,42 +15,39 @@
 void	close_failed(t_main *main, int fd)
 {
 	if (errno == EBADF)
-		printf(E_INV_FD_CLOSE, fd);
+		ft_putstr_fd(E_INV_FD_CLOSE, fd, main);
 	else if (errno == EINTR)
-		printf(E_INT_SIG, fd);
+		ft_putstr_fd(E_INT_SIG, fd, main);
 	else
-		printf(E_CLOSE_FD, fd, strerror(errno));
+		ft_putstrs_fd(E_CLOSE_FD, strerror(errno), NULL, fd, main);
 	free_structs(main);
-	// perror("");
-	exit(EXIT_FAILURE);
 }
 
 void	dup_failed(t_main *main, int old_fd, int new_fd)
 {
 	if (errno == EBADF)
-		printf(E_INV_FD, old_fd, new_fd);
+		ft_putstrs_fd(E_INV_FD, ft_itoa(old_fd), ft_itoa(new_fd), 2, main);
 	else if (errno == EINTR)
-		printf(E_DUP_SIG, old_fd, new_fd);
+		ft_putstrs_fd(E_DUP_SIG, ft_itoa(old_fd), ft_itoa(new_fd), 2, main);
 	else if (errno == EMFILE)
-		printf(E_TOO_MANY_FD_O, old_fd, new_fd);
+		ft_putstrs_fd(E_TOO_MANY_FD_O, ft_itoa(old_fd), ft_itoa(new_fd), 2, main);
 	else
-		printf(E_DUP_FD, old_fd, new_fd, strerror(errno));
+	{
+		ft_putstrs_fd(E_DUP_FD, ft_itoa(old_fd), ft_itoa(new_fd), 2, main);
+		ft_putstr_fd(strerror(errno), 2, main);
+	}
 	free_structs(main);
-	// perror("");
-	exit(EXIT_FAILURE);
 }
 
 void	open_failed(t_main *main, char *file_name)
 {
 	if (errno == EACCES)
-		printf(E_PERMISSION_D_OPEN, file_name);
+		ft_putstrs_fd(E_PERMISSION_D_OPEN, file_name, NULL, 2, main);
 	else if (errno == ENOENT)
-		printf(E_NO_FILE, file_name);
+		ft_putstrs_fd(E_NO_FILE, file_name, NULL, 2, main);
 	else if (errno == EROFS)
-		printf(E_READ_ONLY, file_name);
+		ft_putstrs_fd(E_READ_ONLY, file_name, NULL, 2, main);
 	else
-		printf(E_OPEN_FILE, file_name, strerror(errno));
+		ft_putstrs_fd(E_OPEN_FILE, file_name, strerror(errno), 2, main);
 	free_structs(main);
-	// perror("");
-	exit(EXIT_FAILURE); // might not be necessary here
 }

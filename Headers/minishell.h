@@ -95,7 +95,6 @@ typedef struct s_main
 	int				exit_code;
 	char			*hd_content;
 	int				heredoc_flag;
-	int				printf_flag;
 	t_lexer			*lexer;
 	t_operator		*operators;
 	t_cmd			*cmd;
@@ -221,7 +220,7 @@ void					error_type20(int error_type, t_main *main);
 void					execve_error(t_main *main, char *path);
 void					exec_error_function(t_main *main, char *path);
 void					error_message(t_main *main, int exit_code,
-							char *message);
+							char *message, char *path);
 void					open_failed(t_main *main, char *file_name);
 void					dup_failed(t_main *main, int old_fd, int new_fd);
 void					close_failed(t_main *main, int fd);
@@ -238,6 +237,7 @@ void					free_cmd(t_cmd *cmd);
 void					free_parser(t_parser *parser);
 void					free_exec(t_exec *exec);
 void					free_structs(t_main *main);
+void					syntax_free(t_main *main);
 
 // CHECKERS
 void					argc_checker(int argc, char **argv);
@@ -267,6 +267,7 @@ int						ft_isalnum(int c);
 int						ft_isalpha(int c);
 void					ft_putstrs_fd(char *one, char *two,
 							char *three, int fd, t_main *main);
+char					*ft_itoa(int n);
 
 // SIG
 void					handle_sigint(int sig);

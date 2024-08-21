@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:31 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/20 22:03:50 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/21 15:51:19 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ void	echo_no_new_line(t_cmd *own_cmd, int argc, int out_fd, t_main *main)
 	while (++i < argc)
 	{
 		ft_putstr_fd(own_cmd->args[i], out_fd, main);
-		if (i < argc - 1 && ft_strlen(own_cmd->args[i + 1]) && !main->printf_flag)
+		if (i < argc - 1 && ft_strlen(own_cmd->args[i + 1]))
 			write(1, " ", 1);
 	}
-	if (argc > 1 && flag && !main->printf_flag)
+	if (argc > 1 && flag)
 		write(out_fd, "\n", 1);
 }
 
@@ -69,9 +69,9 @@ void	ft_echo(t_cmd *own_cmd, t_main *main)
 	while (++i < argc)
 	{
 		ft_putstr_fd(own_cmd->args[i], out_fd, main);
-		if (i < argc - 1 && ft_strlen(own_cmd->args[i + 1]) && !main->printf_flag)
+		if (i < argc - 1 && ft_strlen(own_cmd->args[i + 1]))
 			write(out_fd, " ", 1);
 	}
-	if (argc > 1 && !main->printf_flag)
+	if (argc > 1)
 		write(out_fd, "\n", 1);
 }

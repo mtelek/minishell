@@ -6,14 +6,21 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 20:24:38 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/20 20:34:25 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/21 20:48:46 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-void	handle_redirections(t_lexer **temp_lex, t_cmd **temp_cmd)
+//now assingning it correctly
+
+void	handle_redirections(t_lexer **temp_lex, t_cmd **temp_cmd, int i)
 {
+	if ((i == 0 && (*temp_lex)->type != 6 && (*temp_lex)->next)
+		|| ((*temp_lex)->prev && (*temp_lex)->prev->type == 1 && (*temp_lex)->type != 6 && (*temp_lex)->next))
+	{
+		(*temp_cmd)->args[i] = (*temp_lex)->str;
+	}
 	if ((*temp_lex)->type == INPUT_RED)
 		(*temp_cmd)->n_in++;
 	else if ((*temp_lex)->type == OUTPUT_RED)
@@ -25,7 +32,8 @@ void	handle_redirections(t_lexer **temp_lex, t_cmd **temp_cmd)
 		(*temp_cmd)->n_heredoc++;
 		(*temp_cmd)->hd_indicator = 1;
 	}
-	*temp_lex = (*temp_lex)->next;
+	if (i != 0)
+		*temp_lex = (*temp_lex)->next;
 }
 
 void	assign_argument(t_lexer **temp_lex, t_cmd **temp_cmd, int i)
@@ -40,6 +48,9 @@ void	assign_argument(t_lexer **temp_lex, t_cmd **temp_cmd, int i)
 	{
 		(*temp_cmd)->args[i] = (*temp_lex)->str;
 	}
+	else if (i == 1 && ((*temp_lex)->prev->type == HEREDOC || (*temp_lex)->prev->type == APPEND_OUT
+				|| (*temp_lex)->prev->type == INPUT_RED || (*temp_lex)->prev->type == OUTPUT_RED))
+		(*temp_cmd)->args[i] = (*temp_lex)->str;
 }
 
 int	setting_args(t_lexer **temp_lex, t_cmd **temp_cmd, int n_args)
@@ -53,7 +64,7 @@ int	setting_args(t_lexer **temp_lex, t_cmd **temp_cmd, int n_args)
 		{
 			if ((*temp_lex)->type >= INPUT_RED
 				&& (*temp_lex)->type <= APPEND_OUT)
-				handle_redirections(temp_lex, temp_cmd);
+				handle_redirections(temp_lex, temp_cmd, i);
 			else
 				assign_argument(temp_lex, temp_cmd, i);
 			i++;
@@ -71,11 +82,9 @@ int	count_cmds(t_lexer *lexer)
 	n_cmds = 0;
 	if (lexer)
 		n_cmds++;
-	if (lexer->type != 6 && lexer->next && !lexer->next->next)
-		n_cmds--;
 	while (lexer != NULL && lexer->next != NULL)
 	{
-		if (lexer->type == 1 && lexer->next->type == 6)
+		if (lexer->type == 1)
 			n_cmds++;
 		lexer = lexer->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 21:42:59 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/20 19:24:31 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/21 14:26:49 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,21 @@ void	free_parser(t_parser *parser)
 
 void	ok_free_function(t_main *main)
 {
+	if (main->operators)
+		free_operator(main->operators);
+	if (main->lexer)
+		free_lexer(main->lexer);
+	if (main->cmd)
+		free_cmd(main->cmd);
+	if (main->parser)
+		free_parser(main->parser);
+	if (main->exec)
+		free_exec(main->exec);
+}
+
+
+void	syntax_free(t_main *main)
+{
 	free_operator(main->operators);
 	free_lexer(main->lexer);
-	free_cmd(main->cmd);
-	free_parser(main->parser);
-	free_exec(main->exec);
 }
