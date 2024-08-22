@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/21 18:25:51 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/23 00:20:16 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,22 @@ void	wait_for_children(t_main *main)
 	int	i;
 	int	status;
 	int	count;
+	int	exit_status;
 
 	i = 0;
 	if (main->exec->n_childs)
-		count = main->exec->n_childs; 
+		count = main->exec->n_childs;
 	else
 		count = 1;
 	while (i < count)
 	{
 		waitpid(-1, &status, 0);
 		if (WIFEXITED(status))
-			main->exit_code = WEXITSTATUS(status);
+		{
+			exit_status = WEXITSTATUS(status);
+			if (exit_status != 0)
+				main->exit_code = exit_status;
+		}
 		else if (WIFSIGNALED(status))
 			main->exit_code = 128 + WTERMSIG(status);
 		i++;
@@ -58,36 +63,46 @@ bool	builtin_check(t_main *main)
 
 	argc = count_arg(main->cmd->args);
 	if (ft_strncmp(main->cmd->cmd, "cd", 2) == 0)
-		return (ft_cd(main, argc), main->exit_code = 0, true);
+		return (ft_cd(main, argc), true);
 	else if (ft_strncmp(main->cmd->cmd, "exit", 4) == 0)
 		return (ft_exit(main), true);
 	else if (ft_strncmp(main->cmd->cmd, "export", 6) == 0)
 	{
-		if (!handle_export_error(main->cmd->args, main))
+		if (!handle_export_error(main->cmd->args, main)) //needs exit codes here
 			ft_export(main, main->cmd->args);
-		return (main->exit_code = 0, true);
+		return (true);
 	}
-	else if (ft_strncmp(main->cmd->cmd, "unset", 5) == 0)
+	else if (ft_strncmp(main->cmd->cmd, "unset", 5) == 0) // needs exit codes here
 	{
 		if (!handle_unset_error(main->cmd->args, main))
 			ft_unset(main, main->cmd->args);
-		return (main->exit_code = 0, true);
+		return (true);
 	}
 	else if (ft_strncmp(main->cmd->cmd, "pwd", 3) == 0)
-		return (ft_pwd(main), main->exit_code = 0, true);
+		return (ft_pwd(main), true);
 	else if (ft_strncmp(main->cmd->cmd, "env", 3) == 0)
-		return (ft_env(main), main->exit_code = 0, true);
+		return (ft_env(main), true);
 	return (false);
 }
 
 int	echo_check(t_main *main, t_cmd *own_cmd)
 {
-	if (ft_strncmp(own_cmd->cmd, "echo", 4) == 0)
+	char	*trimmed_str;
+
+	trimmed_str = NULL;
+	if (ft_strcmp(own_cmd->cmd, "echo") == 0)
 	{
 		if (own_cmd->pid == 0)
 		{
-			if (ft_strncmp(own_cmd->args[1], "$?", 2) == 0)
-				ft_putstrs_fd(ft_itoa(main->exit_code), "\n", NULL,  1, main);
+			if (own_cmd->args[1] && ft_strncmp(own_cmd->args[1], "$?", 2) == 0)
+			{
+				trimmed_str = ft_strtrim(own_cmd->args[1], "$?");
+				if (!trimmed_str)
+					error_function(-1, main); //need a proper one here
+				ft_putnbr_fd(main->exit_code, 1);
+				ft_putstrs_fd(trimmed_str, "\n", NULL, 1, main);
+				free(trimmed_str);
+			}
 			else
 			{
 				if (!main->parser->n_pipes)
@@ -95,6 +110,7 @@ int	echo_check(t_main *main, t_cmd *own_cmd)
 				ft_echo(own_cmd, main);
 			}
 		}
+		main->exit_code = 0;
 		return (1);
 	}
 	return (0);

@@ -33,6 +33,8 @@ void	free_structs(t_main *main)
 		free_parser(main->parser);
 	if (main->exec)
 		free_exec(main->exec);
+	if (main->builtin)
+		free_builtin(main->builtin);
 }
 
 void	error_function(int error_type, t_main *main)

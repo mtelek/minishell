@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/21 20:43:42 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/22 22:13:07 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,18 @@ void	args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds, int n_args)
 void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 {
 	(void)cmd;
-	
-	printf("ARGS[0]:%s\n", temp->args[0]);
-	temp->cmd = ft_strdup(temp->args[0]);
-	if (!temp->cmd)
-		error_function(6, main);
+	if (!is_operator(temp->args[0][0], temp->args[0][1], main->operators, main))
+	{
+		temp->cmd = ft_strdup(temp->args[0]);
+		if (!temp->cmd)
+			error_function(6, main);
+	}
+	else
+	{
+		temp->cmd = ft_strdup("true");
+		if (!temp->cmd)
+			error_function(6, main);
+	}
 	temp->in_fd = STDIN_FILENO;
 	temp->out_fd = STDOUT_FILENO;
 	temp->pid = -1;
@@ -63,7 +70,6 @@ void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)
 
 	j = 0;
 	n_args = number_of_args(main->lexer);
-	printf("ARGS:%d\n", n_args);
 	temp = malloc(sizeof(t_cmd));
 	if (!temp)
 		error_function(4, main);
@@ -100,5 +106,5 @@ void	creating_cmd_table(t_main *main)
 		init_node(main, &main->cmd, &prev_node, n_cmds);
 		i++;
 	}
-	print_cmd_table(main->cmd);
+	// print_cmd_table(main->cmd);
 }

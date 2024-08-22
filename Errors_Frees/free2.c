@@ -6,11 +6,30 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 22:45:40 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/17 19:03:40 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/22 23:48:41 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
+
+void	free_builtin(t_builtin *builtin)
+{
+	int	i;
+
+	if (builtin == NULL)
+		return ;
+	if (builtin->export)
+	{
+		i = 0;
+		while (builtin->export[i])
+		{
+			free(builtin->export[i]);
+			i++;
+		}
+		free(builtin->export);
+	}
+	free(builtin);
+}
 
 void	free_array(char **array)
 {
@@ -30,6 +49,8 @@ void	free_cmd(t_cmd *cmd)
 {
 	t_cmd	*temp_cmd;
 
+	if (cmd == NULL)
+		return ;
 	while (cmd != NULL)
 	{
 		temp_cmd = cmd;
@@ -47,6 +68,8 @@ void	free_lexer(t_lexer *lexer)
 {
 	t_lexer	*temp_lexer;
 
+	if (lexer == NULL)
+		return ;
 	while (lexer != NULL)
 	{
 		temp_lexer = lexer;
@@ -62,12 +85,14 @@ void	free_operator(t_operator *operators)
 {
 	t_operator	*temp_operator;
 
+	if (operators == NULL)
+		return ;
 	while (operators != NULL)
 	{
 		temp_operator = operators;
 		operators = operators->next;
 		free(temp_operator->operator);
-		temp_operator->operator = NULL;
+		temp_operator->operator= NULL;
 		free(temp_operator);
 		temp_operator = NULL;
 	}

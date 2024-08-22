@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:06:46 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/20 19:52:10 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/22 18:50:57 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,7 @@ int	fork1(t_main *main)
 	pid = fork();
 	if (pid == -1)
 		fork_failed(main);
+	else if (pid == 0)
+		setup_child_signal_handlers();
 	return (pid);
 }

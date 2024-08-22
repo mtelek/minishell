@@ -103,7 +103,7 @@ typedef struct s_main
 	t_builtin		*builtin;
 }					t_main;
 
-//TESSTER
+//TESTER
 char					*ft_strtrim(char const *s1, char const *set);
 
 //HELPER/PRINTING
@@ -209,7 +209,8 @@ int						handle_unset_error(char **args, t_main *main);
 
 //BUILTINS/HEREDOC
 void					get_hd_content(t_main *main, t_cmd *own_cmd);
-char					*no_echo_but_heredoc(char *delimiter, char *content);
+char					*no_echo_but_heredoc(char *delimiter, char *content,
+							t_main *main);
 int						echo_and_heredoc(char *delimiter);
 void					find_hd_indicator(t_main *main, t_cmd *cmd);
 
@@ -238,6 +239,8 @@ void					free_parser(t_parser *parser);
 void					free_exec(t_exec *exec);
 void					free_structs(t_main *main);
 void					syntax_free(t_main *main);
+void 					free_main(t_main *main);
+void 					free_builtin(t_builtin *builtin);
 
 // CHECKERS
 void					argc_checker(int argc, char **argv);
@@ -267,9 +270,15 @@ int						ft_isalnum(int c);
 int						ft_isalpha(int c);
 void					ft_putstrs_fd(char *one, char *two,
 							char *three, int fd, t_main *main);
-char					*ft_itoa(int n);
+char					*ft_itoa(int n); //dont use it, delete it, check the others as well
+void					ft_putnbr_fd(int n, int fd);
 
 // SIG
-void					handle_sigint(int sig);
+void 					child_signal_handler(int sig);
+void 					setup_child_signal_handlers(void);
+void					setup_parent_signal_handlers(void);
+void					parent_signal_handler(int sig);
+void					setup_heredoc_signal_handlers(void);
+void					heredoc_signal_handler(int sig);
 
 #endif

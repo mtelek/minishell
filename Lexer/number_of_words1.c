@@ -85,6 +85,6 @@ int	number_of_words(char *input, t_main *main)
 			n_words++;
 		i++;
 	}
-	printf("N_WORDS: %d\n", n_words);
+	//printf("N_WORDS: %d\n", n_words);
 	return (n_words);
 }

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:50 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/21 14:38:01 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/22 21:00:10 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ void	executor(t_main *main, t_cmd *own_cmd)
 
 	if (own_cmd->pid == 0)
 	{
-		main->exit_code = 0;
 		path = find_path(main, own_cmd, "PATH=");
 		if (path != NULL)
 			exec(main, own_cmd, path);

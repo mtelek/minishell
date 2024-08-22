@@ -77,22 +77,26 @@ void	init_main(t_main *main)
 	main->heredoc_flag = 0;
 }
 
-int	minishell(char *input, t_main *main)
+void	minishell(char *input, t_main *main)
 {
 	init_operators(&main->operators, main);
 	if (get_tokens(input, &main->lexer, main) == -1)
-		return (free_operator(main->operators), main->exit_code = 1, 0);
-	print_lexer(main->lexer);
+	{
+		free_operator(main->operators);
+		main->exit_code = 1;
+		return ;
+	}
 	if (!syntax_check(main->lexer, main))
 	{
 		syntax_free(main);
-		return(main->exit_code = 2, 2);
+		main->exit_code = 2;
+		return ;
 	}
 	delete_qoutes(main->lexer);
 	parser(main);
 	main->heredoc_flag = 0;
 	ok_free_function(main);
-	return (main->exit_code);
+	return ;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -100,14 +104,19 @@ int	main(int argc, char **argv, char **envp)
 	t_main	main;
 	char	*input;
 	char	*history_file;
+	int		m_exit_code;
 
+	//cat <<hi mf issues
+	//missing heredoc error warning
+	//protect ft_strjoins
+	//echo hi > out > out1 > out2 mf and behavior issues
+	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);
 	history_file = ".minishell_history";
 	read_history(history_file);
 	argc_checker(argc, argv);
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
+	setup_parent_signal_handlers();
 	while (1)
 	{
 		if (!main.heredoc_flag)
@@ -127,19 +136,22 @@ int	main(int argc, char **argv, char **envp)
 			// input = readline("minishell> ");
 			if (input)
 			{
+				m_exit_code = 0;
 				if (*input != '\0')
 					add_history(input);
 				minishell(input, &main);
+				free(input);
+				m_exit_code = main.exit_code;
 			}
-			else
+			else if (input == NULL)
 			{
-				write_history(history_file);
-				return (free(input), main.exit_code);
-				// return (write(1, "exit\n", 5), free(input), 0);
+				clear_history();
+				free_main(&main);
+				free(input);
+				remove(history_file);
+				return (m_exit_code);
 			}
-			free(input);
 		}
 	}
-	clear_history();
-	return (0);
+	return (m_exit_code);
 }
