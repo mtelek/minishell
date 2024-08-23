@@ -45,11 +45,13 @@ int	handle_spaces_and_operators(char *input, int i, int *n_words, t_main *main)
 {
 	if (last_word_check(input, i, main))
 		(*n_words)++;
-	else if ((input[i + 1] == '|' || input[i + 1] == '<' || input[i + 1] == '>'))
+	else if ((input[i + 1] == '|' || input[i + 1] == '<'
+			|| input[i + 1] == '>'))
 		(*n_words)++;
-	else if (input[i + 1] && input[i + 2] && ((input[i + 1] == '|' && input[i + 2] == '|') ||
-			(input[i + 1] == '<' && input[i + 2] == '<') ||
-			(input[i + 1] == '>' && input[i + 2] == '>')))
+	else if (input[i + 1] && input[i + 2] && ((input[i + 1] == '|'
+				&& input[i + 2] == '|')
+			|| (input[i + 1] == '<' && input[i + 2] == '<')
+			|| (input[i + 1] == '>' && input[i + 2] == '>')))
 		(*n_words)++;
 	while (input[i + 1] && ft_isspace(input[i + 1]))
 	{
@@ -57,12 +59,11 @@ int	handle_spaces_and_operators(char *input, int i, int *n_words, t_main *main)
 		if (input[i + 1] == '|' || input[i + 1] == '<' || input[i + 1] == '>')
 		{
 			(*n_words)++;
-			break;
+			break ;
 		}
 	}
 	return (i);
 }
-
 
 int	number_of_words(char *input, t_main *main)
 {
@@ -85,6 +86,5 @@ int	number_of_words(char *input, t_main *main)
 			n_words++;
 		i++;
 	}
-	//printf("N_WORDS: %d\n", n_words);
 	return (n_words);
 }

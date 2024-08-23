@@ -6,28 +6,44 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:44:13 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/15 22:03:13 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/23 22:53:12 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-char	*get_txt_name(t_main *main, int type)
+char	*get_txt_name(t_main *main, int type, int limit)
 {
-	while (main->lexer != NULL)
+	static t_lexer	*stat_lexer;
+	static int		k;
+	t_lexer			*temp;
+
+	if (stat_lexer == NULL)
+		stat_lexer = main->lexer;
+	k++;
+	while (stat_lexer != NULL)
 	{
-		if (main->lexer->next && main->lexer->type == type)
-			return (main->lexer->next->str);
-		main->lexer = main->lexer->next;
+		if (stat_lexer->next && stat_lexer->type == type)
+		{
+			stat_lexer = stat_lexer->next;
+			break ;
+		}
+		stat_lexer = stat_lexer->next;
 	}
-	return (NULL);
+	temp = stat_lexer;
+	if (k == limit)
+	{
+		stat_lexer = NULL;
+		k = 0;
+	}
+	return (temp->str);
 }
 
-void	set_infile_fd(int *input_fd, t_main *main)
+void	set_infile_fd(int *input_fd, t_main *main, t_cmd *own_cmd)
 {
 	char	*file_name;
 
-	file_name = get_txt_name(main, INPUT_RED);
+	file_name = get_txt_name(main, INPUT_RED, own_cmd->n_in);
 	*input_fd = open(file_name, O_RDONLY);
 	if (*input_fd == -1)
 		open_failed(main, file_name);
@@ -43,7 +59,7 @@ void	alloc_input_f(t_main *main, t_cmd *own_cmd)
 		error_function(13, main);
 	while (i < own_cmd->n_in)
 	{
-		set_infile_fd(&main->parser->input_fd[i], main);
+		set_infile_fd(&main->parser->input_fd[i], main, own_cmd);
 		i++;
 	}
 }

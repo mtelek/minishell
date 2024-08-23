@@ -1,33 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   sig2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/16 17:07:35 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/24 00:34:11 by mtelek           ###   ########.fr       */
+/*   Created: 2024/08/24 00:20:29 by mtelek            #+#    #+#             */
+/*   Updated: 2024/08/24 00:21:23 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-void	ft_pwd(t_main *main)
+void	heredoc_signal_handler(int sig)
 {
-	char	cwd[BUF_SIZE];
+	if (sig == SIGINT)
+	{
+		write(1, "\n", 1);
+		exit(130);
+	}
+	else if (sig == SIGQUIT)
+	{
+		(void)sig;
+	}
+}
 
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-	{
-		ft_putstr_fd(cwd, 1);
-		ft_putstr_fd("\n", 1);
-	}
-	else
-	{
-		ft_putstr_fd("bash: pwd: ", 2);
-		ft_putstr_fd(strerror(errno), 2);
-		ft_putstr_fd("\n", 2);
-		main->exit_code = 1;
-		return ;
-	}
-	main->exit_code = 0;
+void	setup_heredoc_signal_handlers(void)
+{
+	signal(SIGINT, heredoc_signal_handler);
+	signal(SIGQUIT, heredoc_signal_handler);
 }

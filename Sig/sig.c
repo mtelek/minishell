@@ -6,30 +6,11 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 17:42:07 by ibaranov          #+#    #+#             */
-/*   Updated: 2024/08/22 22:04:12 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/24 00:20:59 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
-
-void	heredoc_signal_handler(int sig)
-{
-	if (sig == SIGINT)
-	{
-		write(1, "\n", 1);
-		exit(130);
-	}
-	else if (sig == SIGQUIT)
-	{
-		(void)sig;
-	}
-}
-
-void	setup_heredoc_signal_handlers(void)
-{
-	signal(SIGINT, heredoc_signal_handler);
-	signal(SIGQUIT, heredoc_signal_handler);
-}
 
 void	child_signal_handler(int sig)
 {

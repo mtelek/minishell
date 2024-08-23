@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 18:49:08 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/23 00:03:01 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/24 00:40:16 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	set_heredoc_fd(int *heredoc_fd, t_main *main)
 		pipe_failed(main);
 	if (main->hd_content)
 	{
-		ft_putstr_fd(main->hd_content, pipe_fd[1], main);
+		ft_putstr_fd(main->hd_content, pipe_fd[1]);
 		free(main->hd_content);
 		main->hd_content = NULL;
 	}

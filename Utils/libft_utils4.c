@@ -6,20 +6,20 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 20:55:22 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/20 21:53:58 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/24 00:32:22 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-void	ft_putstrs_fd(char *one, char *two, char *three, int fd, t_main *main)
+void	ft_putstrs_fd(char *one, char *two, char *three, int fd)
 {
 	if (one)
-		ft_putstr_fd(one, fd, main);
+		ft_putstr_fd(one, fd);
 	if (two)
-		ft_putstr_fd(two, fd, main);
+		ft_putstr_fd(two, fd);
 	if (three)
-		ft_putstr_fd(three, fd, main);
+		ft_putstr_fd(three, fd);
 }
 
 size_t	ft_strlcpy(char *dest, const char *src, size_t size)

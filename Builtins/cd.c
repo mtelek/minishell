@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:33 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/20 21:48:34 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/24 00:48:01 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	change_dir(t_main *main, char *path)
 	}
 	else
 	{
-		ft_putstrs_fd("bash: cd: ", main->cmd->args[1], ": ", 2, main);
+		ft_putstrs_fd("bash: cd: ", main->cmd->args[1], ": ", 2);
 	}
 }
 
@@ -99,14 +99,14 @@ void	ft_cd(t_main *main, int argc)
 		change_dir(main, path);
 		if (errno > 0)
 		{
-			ft_putstrs_fd(strerror(errno), "\n", NULL, 2, main);
+			ft_putstrs_fd(strerror(errno), "\n", NULL, 2);
 			main->exit_code = 1;
 		}
 	}
 	else
 	{
 		ft_putstrs_fd("bash:  ", main->cmd->args[0],
-			": too many arguments\n", 2, main);
+			": too many arguments\n", 2);
 		main->exit_code = 1;
 	}
 }

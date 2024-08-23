@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:50 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/22 21:00:10 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/23 19:49:08 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	exec(t_main *main, t_cmd *own_cmd, char *path)
 }
 
 char	*check_and_construct_path(char *bin, char *command,
-		struct dirent *entry)
+		struct dirent *entry, t_main *main)
 {
 	char	*path;
 	char	*temp;
@@ -30,7 +30,11 @@ char	*check_and_construct_path(char *bin, char *command,
 	if (ft_strcmp(entry->d_name, command) == 0)
 	{
 		temp = ft_strjoin(bin, "/");
+		if (!temp)
+			error_function(20, main);
 		path = ft_strjoin(temp, entry->d_name);
+		if (!path)
+			error_function(20, main);
 		free(temp);
 		return (path);
 	}
@@ -51,7 +55,7 @@ char	*find_dir(char *bin, char *command, t_main *main)
 	entry = readdir(dir);
 	while (entry != NULL)
 	{
-		path = check_and_construct_path(bin, command, entry);
+		path = check_and_construct_path(bin, command, entry, main);
 		if (path != NULL)
 			break ;
 		entry = readdir(dir);

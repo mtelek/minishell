@@ -75,6 +75,8 @@ void	init_main(t_main *main)
 	main->exit_code = 0;
 	main->hd_content = NULL;
 	main->heredoc_flag = 0;
+	main->count_line = 0;
+	main->count_hd_line = 0;
 }
 
 void	minishell(char *input, t_main *main)
@@ -86,7 +88,7 @@ void	minishell(char *input, t_main *main)
 		main->exit_code = 1;
 		return ;
 	}
-	if (!syntax_check(main->lexer, main))
+	if (!syntax_check(main->lexer))
 	{
 		syntax_free(main);
 		main->exit_code = 2;
@@ -107,9 +109,10 @@ int	main(int argc, char **argv, char **envp)
 	int		m_exit_code;
 
 	//cat <<hi mf issues
-	//missing heredoc error warning
-	//protect ft_strjoins
-	//echo hi > out > out1 > out2 mf and behavior issues
+	//cat << hi <<haha isnt workings
+	//wc | ls exit code wrong after ctrl+c dont know whether its right or not
+	//echo << hi mf errors, still reachables
+	//cmd: kuhjgsdfhsfd -- not freeing correctly with no pipes
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);
@@ -136,6 +139,7 @@ int	main(int argc, char **argv, char **envp)
 			// input = readline("minishell> ");
 			if (input)
 			{
+				main.count_line += 1;
 				m_exit_code = 0;
 				if (*input != '\0')
 					add_history(input);

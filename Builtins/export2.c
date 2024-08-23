@@ -6,13 +6,13 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 17:50:55 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/20 21:54:33 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/24 00:33:50 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-int	handle_export_error(char **args, t_main *main)
+int	export_error(char **args, t_main *main)
 {
 	int	i;
 	int	j;
@@ -22,18 +22,18 @@ int	handle_export_error(char **args, t_main *main)
 	{
 		j = 0;
 		if (!ft_isalpha(args[i][j]) && args[i][j] != '_')
-			return (ft_putstrs_fd("bash: export: `", args[i],
-					"': not a valid identifier\n", 2, main), 1);
+			return (ft_putstrs_fd(NOT_VAILD_ID_1, args[i],
+					NOT_VALID_ID_2, 2), main->exit_code = 1, 1);
 		while (args[i][j] && args[i][j] != '=')
 		{
 			if (!ft_isalnum(args[i][j]) && args[i][j] != '_')
-				return (ft_putstrs_fd("bash: export: `", args[i],
-						"': not a valid identifier\n", 2, main), 1);
+				return (ft_putstrs_fd(NOT_VAILD_ID_1, args[i],
+						NOT_VALID_ID_2, 2), main->exit_code = 1, 1);
 			j++;
 		}
 		if (args[i][j] != '=')
-			return (ft_putstrs_fd("bash: export: `", args[i],
-					"': not a valid identifier\n", 2, main), 1);
+			return (ft_putstrs_fd(NOT_VAILD_ID_1, args[i],
+					NOT_VALID_ID_2, 2), main->exit_code = 1, 1);
 		i++;
 	}
 	return (0);

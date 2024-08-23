@@ -15,7 +15,6 @@
 
 #include "../Headers/minishell.h"
 
-
 char	*ft_strchr(const char *str, int c)
 {
 	while (*str != '\0')
@@ -31,7 +30,7 @@ char	*ft_strchr(const char *str, int c)
 
 int	ft_strcmp(const char *s1, const char *s2)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (s1[i] != '\0' && s1[i] == s2[i])
@@ -44,12 +43,11 @@ void	ft_putchar_fd(char c, int fd)
 	write(fd, &c, 1);
 }
 
-void	ft_putstr_fd(char *s, int fd, t_main *main)
+void	ft_putstr_fd(char *s, int fd)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	(void)main;
 	if (s[i] != '\0')
 	{
 		while (s[i] != '\0')
@@ -62,7 +60,7 @@ void	ft_putstr_fd(char *s, int fd, t_main *main)
 
 int	ft_strncmp(const char *str1, const char *str2, size_t n)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	if (n == 0)

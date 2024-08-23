@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 20:11:18 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/22 23:35:21 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/24 00:40:25 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,28 @@
 
 void	find_hd_indicator(t_main *main, t_cmd *cmd)
 {
-	while (cmd != NULL)
+	t_cmd	*temp_cmd;
+
+	temp_cmd = cmd;
+	while (temp_cmd != NULL)
 	{
-		if (cmd->hd_indicator == 1)
+		if (temp_cmd->hd_indicator == 1)
 		{
-			get_hd_content(main, cmd);
+			get_hd_content(main, temp_cmd);
 			break ;
 		}
-		cmd = cmd->next;
+		temp_cmd = temp_cmd->next;
 	}
 }
 
-int	echo_and_heredoc(char *delimiter)
+int	echo_and_heredoc(char *delimiter, t_main *main)
 {
 	char	*line;
 
 	while (1)
 	{
 		line = readline("> ");
+		main->count_hd_line += 1;
 		if (!line || ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
@@ -46,12 +50,23 @@ char	*no_echo_but_heredoc(char *delimiter, char *content, t_main *main)
 {
 	char	*line;
 	char	*temp;
+	char	*count_line;
 
 	while (1)
 	{
 		line = readline("> ");
+		main->count_hd_line += 1;
 		if (!line || ft_strcmp(line, delimiter) == 0)
 		{
+			if (!line)
+			{
+				main->count_hd_line -= 1;
+				count_line = ft_itoa(main->count_line);
+				ft_putstrs_fd("bash: warning: here-document at line ",
+					count_line, " delimited by end-of-file (wanted `", 2);
+				ft_putstrs_fd(delimiter, "')\n", NULL, 2);
+				free(count_line);
+			}
 			free(line);
 			break ;
 		}
@@ -59,7 +74,7 @@ char	*no_echo_but_heredoc(char *delimiter, char *content, t_main *main)
 		{
 			temp = ft_strjoin(content, line);
 			if (!temp)
-				error_function(-1, main); //proper error message needed
+				error_function(20, main);
 			free(content);
 			content = temp;
 		}
@@ -71,11 +86,13 @@ char	*no_echo_but_heredoc(char *delimiter, char *content, t_main *main)
 		}
 		temp = ft_strjoin(content, "\n");
 		if (!temp)
-			error_function(-1, main); //proper error message needed
+			error_function(20, main);
 		free(content);
 		content = temp;
 		free(line);
 	}
+	main->count_line += main->count_hd_line;
+	main->count_hd_line = 0;
 	return (content);
 }
 
@@ -85,26 +102,18 @@ void	get_hd_content(t_main *main, t_cmd *own_cmd)
 	char	*delimiter;
 
 	content = NULL;
-	delimiter = ft_strdup(get_txt_name(main, HEREDOC));
-	if (!delimiter)
-		error_function(-1, main);
+	delimiter = get_txt_name(main, HEREDOC, own_cmd->n_heredoc);
 	setup_heredoc_signal_handlers();
 	if (ft_strcmp(own_cmd->cmd, "echo") == 0)
 	{
-		if (echo_and_heredoc(delimiter))
-		{
-			free(delimiter);
+		if (echo_and_heredoc(delimiter, main))
 			return ;
-		}
 	}
 	else
 	{
 		content = no_echo_but_heredoc(delimiter, content, main);
 		if (content)
-		{
 			main->hd_content = ft_strdup(content);
-			free(content);
-		}
 	}
-	free(delimiter);
+	free(content);
 }

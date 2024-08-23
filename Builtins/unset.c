@@ -6,13 +6,13 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:40 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/20 21:55:23 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/24 00:34:22 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-int	handle_unset_error(char **args, t_main *main)
+int	unset_error(char **args, t_main *main)
 {
 	int	i;
 	int	j;
@@ -23,12 +23,14 @@ int	handle_unset_error(char **args, t_main *main)
 		j = 0;
 		if (!ft_isalpha(args[i][j]) && args[i][j] != '_')
 			return (ft_putstrs_fd("unset: ", args[i],
-					": invalid parameter name\n", 2, main), 1);
+					": invalid parameter name\n", 2),
+				main->exit_code = 1, 1);
 		while (args[i][j])
 		{
 			if (!ft_isalnum(args[i][j]) && args[i][j] != '_')
 				return (ft_putstrs_fd("unset: ", args[i],
-						": invalid parameter name\n", 2, main), 1);
+						": invalid parameter name\n", 2),
+					main->exit_code = 1, 1);
 			j++;
 		}
 		i++;

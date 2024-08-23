@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/23 00:20:16 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/24 00:49:44 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,13 @@ bool	builtin_check(t_main *main)
 		return (ft_exit(main), true);
 	else if (ft_strncmp(main->cmd->cmd, "export", 6) == 0)
 	{
-		if (!handle_export_error(main->cmd->args, main)) //needs exit codes here
+		if (!export_error(main->cmd->args, main))
 			ft_export(main, main->cmd->args);
 		return (true);
 	}
-	else if (ft_strncmp(main->cmd->cmd, "unset", 5) == 0) // needs exit codes here
+	else if (ft_strncmp(main->cmd->cmd, "unset", 5) == 0)
 	{
-		if (!handle_unset_error(main->cmd->args, main))
+		if (!unset_error(main->cmd->args, main))
 			ft_unset(main, main->cmd->args);
 		return (true);
 	}
@@ -98,17 +98,13 @@ int	echo_check(t_main *main, t_cmd *own_cmd)
 			{
 				trimmed_str = ft_strtrim(own_cmd->args[1], "$?");
 				if (!trimmed_str)
-					error_function(-1, main); //need a proper one here
+					error_function(21, main);
 				ft_putnbr_fd(main->exit_code, 1);
-				ft_putstrs_fd(trimmed_str, "\n", NULL, 1, main);
+				ft_putstrs_fd(trimmed_str, "\n", NULL, 1);
 				free(trimmed_str);
 			}
 			else
-			{
-				if (!main->parser->n_pipes)
-					calling_redirects(main, own_cmd);
-				ft_echo(own_cmd, main);
-			}
+				ft_echo(own_cmd);
 		}
 		main->exit_code = 0;
 		return (1);

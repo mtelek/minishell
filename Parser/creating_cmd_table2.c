@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 20:24:38 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/21 20:48:46 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/24 00:24:17 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@
 void	handle_redirections(t_lexer **temp_lex, t_cmd **temp_cmd, int i)
 {
 	if ((i == 0 && (*temp_lex)->type != 6 && (*temp_lex)->next)
-		|| ((*temp_lex)->prev && (*temp_lex)->prev->type == 1 && (*temp_lex)->type != 6 && (*temp_lex)->next))
+		|| ((*temp_lex)->prev && (*temp_lex)->prev->type == 1
+			&& (*temp_lex)->type != 6 && (*temp_lex)->next))
 	{
-		(*temp_cmd)->args[i] = (*temp_lex)->str;
+		(*temp_cmd)->args[i] = ft_strdup((*temp_lex)->str);
 	}
 	if ((*temp_lex)->type == INPUT_RED)
 		(*temp_cmd)->n_in++;
@@ -48,8 +49,10 @@ void	assign_argument(t_lexer **temp_lex, t_cmd **temp_cmd, int i)
 	{
 		(*temp_cmd)->args[i] = (*temp_lex)->str;
 	}
-	else if (i == 1 && ((*temp_lex)->prev->type == HEREDOC || (*temp_lex)->prev->type == APPEND_OUT
-				|| (*temp_lex)->prev->type == INPUT_RED || (*temp_lex)->prev->type == OUTPUT_RED))
+	else if (i == 1 && ((*temp_lex)->prev->type == HEREDOC
+			|| (*temp_lex)->prev->type == APPEND_OUT
+			|| (*temp_lex)->prev->type == INPUT_RED
+			|| (*temp_lex)->prev->type == OUTPUT_RED))
 		(*temp_cmd)->args[i] = (*temp_lex)->str;
 }
 

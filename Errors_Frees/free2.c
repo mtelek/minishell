@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 22:45:40 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/22 23:48:41 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/24 00:18:22 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ void	free_cmd(t_cmd *cmd)
 	{
 		temp_cmd = cmd;
 		cmd = cmd->next;
-		free(temp_cmd->args);
-		temp_cmd->args = NULL;
 		free(temp_cmd->cmd);
 		temp_cmd->cmd = NULL;
+		free(temp_cmd->args);
+		temp_cmd->args = NULL;
 		free(temp_cmd);
 		temp_cmd = NULL;
 	}
@@ -92,7 +92,7 @@ void	free_operator(t_operator *operators)
 		temp_operator = operators;
 		operators = operators->next;
 		free(temp_operator->operator);
-		temp_operator->operator= NULL;
+		temp_operator->operator = NULL;
 		free(temp_operator);
 		temp_operator = NULL;
 	}

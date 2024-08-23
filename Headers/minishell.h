@@ -95,6 +95,8 @@ typedef struct s_main
 	int				exit_code;
 	char			*hd_content;
 	int				heredoc_flag;
+	int				count_line;
+	int				count_hd_line;
 	t_lexer			*lexer;
 	t_operator		*operators;
 	t_cmd			*cmd;
@@ -143,11 +145,11 @@ int						getting_word_i_start(char *input, int i);
 int						null_terminator_check(char *input, int i, t_main *main);
 
 // SYNTAX_CHECK
-bool					syntax_check(t_lexer *lexer, t_main *main);
-bool					syntax_doubles_same(t_lexer *temp_lex, t_main *main);
-bool					syntax_doubles_diff(t_lexer *lexer, t_main *main);
-bool					checking_combinaton(t_lexer *lexer, t_main *main);
-bool					checking_lex(char *str, t_main *main);
+bool					syntax_check(t_lexer *lexer);
+bool					syntax_doubles_same(t_lexer *temp_lex);
+bool					syntax_doubles_diff(t_lexer *lexer);
+bool					checking_combinaton(t_lexer *lexer);
+bool					checking_lex(char *str);
 
 //PARSER
 void					parser(t_main *main);
@@ -179,7 +181,7 @@ void					init_infile(t_main *main, t_cmd *own_cmd);
 void					init_outfile(t_main *main, t_cmd *own_cmd);
 void					init_append_out(t_main *main, t_cmd *own_cmd);
 void					init_heredoc(t_main *main, t_cmd *own_cmd);
-char					*get_txt_name(t_main *main, int type);
+char					*get_txt_name(t_main *main, int type, int limit);
 
 //PARSER/QUOTES
 void					delete_qoutes(t_lexer *lexer);
@@ -196,32 +198,31 @@ void					free_bin(char **bin);
 int						count_arg(char **args);
 void					free_array(char **array);
 char					**export_cmd(t_main *main, int j);
-void					ft_echo(t_cmd *own_cmd, t_main *main);
+void					ft_echo(t_cmd *own_cmd);
 void					ft_cd(t_main *main, int argc);
 void					ft_exit(t_main *main);
 void					ft_export(t_main *main, char **args);
 char					**ft_cpy_environ(char **env_array, int add);
-int						handle_export_error(char **argv, t_main *main);
+int						export_error(char **argv, t_main *main);
 void					ft_unset(t_main *main, char **args);
 void					ft_pwd(t_main *main);
 void					ft_env(t_main *main);
-int						handle_unset_error(char **args, t_main *main);
+int						unset_error(char **args, t_main *main);
 
 //BUILTINS/HEREDOC
 void					get_hd_content(t_main *main, t_cmd *own_cmd);
 char					*no_echo_but_heredoc(char *delimiter, char *content,
 							t_main *main);
-int						echo_and_heredoc(char *delimiter);
+int						echo_and_heredoc(char *delimiter, t_main *main);
 void					find_hd_indicator(t_main *main, t_cmd *cmd);
 
 // ERRORS
 void					error_function(int error_type, t_main *main);
-void					error_type10(int error_type, t_main *main);
-void					error_type20(int error_type, t_main *main);
+void					error_type10(int error_type);
+void					error_type20(int error_type);
 void					execve_error(t_main *main, char *path);
 void					exec_error_function(t_main *main, char *path);
-void					error_message(t_main *main, int exit_code,
-							char *message, char *path);
+void					error_message(int exit_code, char *message, char *path);
 void					open_failed(t_main *main, char *file_name);
 void					dup_failed(t_main *main, int old_fd, int new_fd);
 void					close_failed(t_main *main, int fd);
@@ -239,8 +240,8 @@ void					free_parser(t_parser *parser);
 void					free_exec(t_exec *exec);
 void					free_structs(t_main *main);
 void					syntax_free(t_main *main);
-void 					free_main(t_main *main);
-void 					free_builtin(t_builtin *builtin);
+void					free_main(t_main *main);
+void					free_builtin(t_builtin *builtin);
 
 // CHECKERS
 void					argc_checker(int argc, char **argv);
@@ -254,7 +255,7 @@ size_t					ft_strlen(const char *str);
 int						ft_strncmp(const char *str1, const char *str2,
 							size_t n);
 void					ft_putchar_fd(char c, int fd);
-void					ft_putstr_fd(char *s, int fd, t_main *main);
+void					ft_putstr_fd(char *s, int fd);
 int						ft_strcmp(const char *s1, const char *s2);
 char					**ft_split(char const *s, char c);
 char					*ft_strchr(const char *str, int c);
@@ -269,13 +270,13 @@ int						ft_atoi(const char *str);
 int						ft_isalnum(int c);
 int						ft_isalpha(int c);
 void					ft_putstrs_fd(char *one, char *two,
-							char *three, int fd, t_main *main);
-char					*ft_itoa(int n); //dont use it, delete it, check the others as well
+							char *three, int fd);
+char					*ft_itoa(int n);
 void					ft_putnbr_fd(int n, int fd);
 
 // SIG
-void 					child_signal_handler(int sig);
-void 					setup_child_signal_handlers(void);
+void					child_signal_handler(int sig);
+void					setup_child_signal_handlers(void);
 void					setup_parent_signal_handlers(void);
 void					parent_signal_handler(int sig);
 void					setup_heredoc_signal_handlers(void);

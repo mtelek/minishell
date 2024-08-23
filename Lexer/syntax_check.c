@@ -12,7 +12,7 @@
 
 #include "../Headers/minishell.h"
 
-bool	checking_lex(char *str, t_main *main)
+bool	checking_lex(char *str)
 {
 	int	i;
 	int	temp_i;
@@ -26,7 +26,7 @@ bool	checking_lex(char *str, t_main *main)
 			if (temp_i != -1)
 				i = temp_i;
 			if (temp_i == -1)
-				return (ft_putstr_fd(ERR_QUOTE2, 2, main), false);
+				return (ft_putstr_fd(ERR_QUOTE2, 2), false);
 		}
 		else if (str[i] == 39)
 		{
@@ -34,62 +34,62 @@ bool	checking_lex(char *str, t_main *main)
 			if (temp_i != -1)
 				i = temp_i;
 			if (temp_i == -1)
-				return (ft_putstr_fd(ERR_QUOTE1, 2, main), false);
+				return (ft_putstr_fd(ERR_QUOTE1, 2), false);
 		}
 		i++;
 	}
 	return (true);
 }
 
-bool	checking_combinaton(t_lexer *lexer, t_main *main)
+bool	checking_combinaton(t_lexer *lexer)
 {
 	if ((lexer->type == 3 && lexer->next->type == 2))
-		return (ft_putstr_fd(ERROR_M_LESSER, 2, main), false);
+		return (ft_putstr_fd(ERROR_M_LESSER, 2), false);
 	else if ((lexer->type == 2 && lexer->next->type == 1)
 		|| (lexer->type == 3 && lexer->next->type == 1))
-		return (ft_putstr_fd(ERROR_M_PIPE, 2, main), false);
+		return (ft_putstr_fd(ERROR_M_PIPE, 2), false);
 	return (true);
 }
 
-bool	syntax_doubles_diff(t_lexer *lexer, t_main *main)
+bool	syntax_doubles_diff(t_lexer *lexer)
 {
 	while (lexer != NULL)
 	{
 		if (lexer->next && lexer->type < 6 && lexer->next->type < 6)
-			if (checking_combinaton(lexer, main) == false)
+			if (checking_combinaton(lexer) == false)
 				return (false);
 		if (lexer->type < 6 && !lexer->next)
-			return (ft_putstr_fd(ERROR_M_NEWLINE, 2, main), false);
+			return (ft_putstr_fd(ERROR_M_NEWLINE, 2), false);
 		lexer = lexer->next;
 	}
 	return (true);
 }
 
-bool	syntax_doubles_same(t_lexer *lexer, t_main *main)
+bool	syntax_doubles_same(t_lexer *lexer)
 {
 	while (lexer != NULL)
 	{
 		if (lexer->type == 7)
-			return (ft_putstr_fd(ERROR_M_PIPE, 2, main), false);
+			return (ft_putstr_fd(ERROR_M_PIPE, 2), false);
 		if (lexer->type < 6 && lexer->next == NULL)
-			return (ft_putstr_fd(ERROR_M_NEWLINE, 2, main), false);
-		if (checking_lex(lexer->str, main) == false)
+			return (ft_putstr_fd(ERROR_M_NEWLINE, 2), false);
+		if (checking_lex(lexer->str) == false)
 			return (false);
 		lexer = lexer->next;
 	}
 	return (true);
 }
 
-bool	syntax_check(t_lexer *lexer, t_main *main)
+bool	syntax_check(t_lexer *lexer)
 {
 	if (lexer->type == 1)
-		return (ft_putstr_fd(ERROR_M_PIPE, 2, main), false);
+		return (ft_putstr_fd(ERROR_M_PIPE, 2), false);
 	if (lexer != NULL && lexer->next == NULL)
 		if (lexer->type < 6)
-			return (ft_putstr_fd(ERROR_M_NEWLINE, 2, main), false);
-	if (syntax_doubles_diff(lexer, main) == false)
+			return (ft_putstr_fd(ERROR_M_NEWLINE, 2), false);
+	if (syntax_doubles_diff(lexer) == false)
 		return (false);
-	if (syntax_doubles_same(lexer, main) == false)
+	if (syntax_doubles_same(lexer) == false)
 		return (false);
 	return (true);
 }
