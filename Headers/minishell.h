@@ -85,6 +85,7 @@ typedef struct s_lexer
 {
 	char				*str;
 	int					type;
+	bool				to_expand;
 	struct s_lexer		*next;
 	struct s_lexer		*prev;
 }						t_lexer;
@@ -97,6 +98,7 @@ typedef struct s_main
 	int				heredoc_flag;
 	int				count_line;
 	int				count_hd_line;
+	bool			quotes_removed;
 	t_lexer			*lexer;
 	t_operator		*operators;
 	t_cmd			*cmd;
@@ -184,7 +186,7 @@ void					init_heredoc(t_main *main, t_cmd *own_cmd);
 char					*get_txt_name(t_main *main, int type, int limit);
 
 //PARSER/QUOTES
-void					delete_qoutes(t_lexer *lexer);
+int						delete_qoutes(t_lexer *lexer, t_main *main);
 void					remove_quotes(char *str, int start, int end);
 
 //Executor
@@ -215,6 +217,14 @@ char					*no_echo_but_heredoc(char *delimiter, char *content,
 							t_main *main);
 int						echo_and_heredoc(char *delimiter, t_main *main);
 void					find_hd_indicator(t_main *main, t_cmd *cmd);
+
+//EXPANDER
+bool					expander_check(char *str);
+int    					expander(t_lexer *lexer, t_main *main);
+int 					find_character(char *str, char c);
+void 					remove_dollar_sign(int dollar_sign_index, t_lexer *lexer, t_main *main);
+void					pinpoint_dollar_sign(t_lexer *lexer, t_main *main);
+
 
 // ERRORS
 void					error_function(int error_type, t_main *main);
@@ -273,6 +283,7 @@ void					ft_putstrs_fd(char *one, char *two,
 							char *three, int fd);
 char					*ft_itoa(int n);
 void					ft_putnbr_fd(int n, int fd);
+size_t					ft_strlcpy(char *dest, const char *src, size_t size);
 
 // SIG
 void					child_signal_handler(int sig);

@@ -77,6 +77,7 @@ void	init_main(t_main *main)
 	main->heredoc_flag = 0;
 	main->count_line = 0;
 	main->count_hd_line = 0;
+	main->quotes_removed = false;
 }
 
 void	minishell(char *input, t_main *main)
@@ -94,7 +95,8 @@ void	minishell(char *input, t_main *main)
 		main->exit_code = 2;
 		return ;
 	}
-	delete_qoutes(main->lexer);
+	if (delete_qoutes(main->lexer, main) == 1)
+		return ;
 	parser(main);
 	main->heredoc_flag = 0;
 	ok_free_function(main);
@@ -113,6 +115,7 @@ int	main(int argc, char **argv, char **envp)
 	//wc | ls exit code wrong after ctrl+c dont know whether its right or not
 	//echo << hi mf errors, still reachables
 	//cmd: kuhjgsdfhsfd -- not freeing correctly with no pipes
+	//handle . and .. as input
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:04:41 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/06 17:41:49 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/25 20:54:55 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ void	remove_quotes(char *str, int start, int end)
 	return ;
 }
 
-void	delete_qoutes(t_lexer *lexer)
+
+
+int	delete_qoutes(t_lexer *lexer, t_main *main)
 {
 	int	start;
 	int	end;
@@ -42,17 +44,31 @@ void	delete_qoutes(t_lexer *lexer)
 
 	while (lexer != NULL)
 	{
-		start = 0;
-		s_double = qoutes_checker(lexer->str, 34, -1);
-		s_single = qoutes_checker(lexer->str, 39, -1);
-		if ((s_double < s_single && s_double != 0) || lexer->str[0] == 34)
-			start = s_double;
-		else if ((s_single < s_double && s_single != 0) || lexer->str[0] == 39)
-			start = s_single;
-		if (start != -1)
-			end = qoutes_handler(lexer->str, start) - 1;
-		if (end != 0)
-			remove_quotes(lexer->str, start, end);
+		lexer->to_expand = expander_check(lexer->str);
+		if (lexer->to_expand == true)
+		{
+			if(expander(lexer, main) == 1)
+				return (1);
+		}
+		else if (lexer->to_expand == false)
+			pinpoint_dollar_sign(lexer, main);
+		if (main->quotes_removed == false)
+		{
+			start = 0;
+			s_double = qoutes_checker(lexer->str, 34, -1);
+			s_single = qoutes_checker(lexer->str, 39, -1);
+			if ((s_double < s_single && s_double != 0) || lexer->str[0] == 34)
+				start = s_double;
+			else if ((s_single < s_double && s_single != 0)
+				|| lexer->str[0] == 39)
+				start = s_single;
+			if (start != -1)
+				end = qoutes_handler(lexer->str, start) - 1;
+			if (end != 0)
+				remove_quotes(lexer->str, start, end);
+		}
 		lexer = lexer->next;
+		main->quotes_removed = false;
 	}
+	return (0);
 }

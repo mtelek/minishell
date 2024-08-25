@@ -41,6 +41,7 @@ void	current_check(t_lexer *current, t_main *main)
 {
 	if (!current)
 		error_function(2, main);
+	current->to_expand = false;
 }
 
 int	get_tokens(char *input, t_lexer **lexer, t_main *main)

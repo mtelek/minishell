@@ -42,7 +42,7 @@ void	error_function(int error_type, t_main *main)
 	free_structs(main);
 	if (error_type <= 10)
 		error_type10(error_type);
-	else if (error_type <= 21 && error_type > 10)
+	else if (error_type <= 23 && error_type > 10)
 		error_type20(error_type);
 	exit(1);
 }
