@@ -121,8 +121,6 @@ int	main(int argc, char **argv, char **envp)
 	creating_env_array(&main, envp);
 	history_file = ".minishell_history";
 	read_history(history_file);
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
 	argc_checker(argc, argv);
 	setup_parent_signal_handlers();
 	while (1)

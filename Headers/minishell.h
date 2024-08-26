@@ -224,8 +224,18 @@ int    					expander(t_lexer *lexer, t_main *main);
 int 					find_character(char *str, char c);
 void 					remove_dollar_sign(int dollar_sign_index, t_lexer *lexer, t_main *main);
 void					pinpoint_dollar_sign(t_lexer *lexer, t_main *main);
-
-
+int						count_character_till_dollar(char *str, char c);
+int						check_quote_type(char *str, char c1, char c2);
+int						decide_to_expand(t_lexer *lexer, t_main *main);
+void					unused_quotes_removal(t_lexer *lexer, t_main *main);
+void					remove_two_char(t_lexer *lexer, t_main *main, int j);
+void					remove_all_quotes(t_lexer *lexer, t_main *main);
+void					cross_out_quotes(t_lexer *lexer, t_main *main, char c);
+int						count_character(char *str, char c);
+int						count_character_till_dollar(char *str, char c);
+void					remove_one_char(t_lexer *lexer, t_main *main, int j);
+void					delete_all_doubles(t_lexer *lexer, t_main *main);
+char					*find_var_name(char *str, t_main *main);
 // ERRORS
 void					error_function(int error_type, t_main *main);
 void					error_type10(int error_type);

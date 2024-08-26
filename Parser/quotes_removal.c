@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:04:41 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/25 20:54:55 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/26 22:02:59 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ void	remove_quotes(char *str, int start, int end)
 	return ;
 }
 
-
-
 int	delete_qoutes(t_lexer *lexer, t_main *main)
 {
 	int	start;
@@ -44,14 +42,8 @@ int	delete_qoutes(t_lexer *lexer, t_main *main)
 
 	while (lexer != NULL)
 	{
-		lexer->to_expand = expander_check(lexer->str);
-		if (lexer->to_expand == true)
-		{
-			if(expander(lexer, main) == 1)
-				return (1);
-		}
-		else if (lexer->to_expand == false)
-			pinpoint_dollar_sign(lexer, main);
+		if (decide_to_expand(lexer, main))
+			return (1);
 		if (main->quotes_removed == false)
 		{
 			start = 0;

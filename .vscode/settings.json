@@ -3,6 +3,8 @@
         "get_next_line.h": "c",
         "errno.h": "c",
         "minishell.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "sstream": "c",
+        "readline.h": "c"
     }
 }
