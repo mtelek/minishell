@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:04:41 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/26 22:02:59 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/27 16:05:00 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ int	delete_qoutes(t_lexer *lexer, t_main *main)
 
 	while (lexer != NULL)
 	{
+		if (ft_strcmp(lexer->str, "echo") == 0 && ft_strcmp(lexer->next->str, "$?") == 0)
+			return (0);
 		if (decide_to_expand(lexer, main))
 			return (1);
 		if (main->quotes_removed == false)

@@ -6,30 +6,16 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 13:56:44 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/26 22:03:09 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/27 16:08:55 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-// check with valgrind
-
-// what bout null value attached to variable
-
-// tester> echo haha$VAR1
-// Value
-// tester>
-
-// tester> echo '''$VAR1"''
-// ^C
-// ^C
-// ^C
-// ^C
-// ^C
+// what about null value attached to variable
 
 // mtelek@c1r2p5:~/CommonCore/minishell$ echo "'"$VAR1"'"
 // 'value'
-// mtelek@c1r2p5:~/CommonCore/minishell$
 
 char	*get_value(char *env, char *var_equal, t_main *main)
 {
@@ -85,51 +71,62 @@ char	*find_var_name(char *str, t_main *main)
 	return (var_name);
 }
 
-
-
-int expander(t_lexer *lexer, t_main *main)
+int expander(t_expand_node *expand, t_main *main)
 {
 	char	*value;
 	char	*var_name;
 	int		s_double;
 	int		e_double;
 
-	delete_all_doubles(lexer, main);
-	s_double = qoutes_checker(lexer->str, 34, -1);
-	e_double = qoutes_checker(lexer->str, 34, s_double);
+	delete_all_doubles(expand, main);
+	s_double = qoutes_checker(expand->str, 34, -1);
+	e_double = qoutes_checker(expand->str, 34, s_double);
 	if (e_double)
 	{
 		if (!s_double)
-			remove_quotes(lexer->str, s_double, e_double);
-		else if (lexer->str[0] == 34)
-			remove_quotes(lexer->str, 0, e_double);
+			remove_quotes(expand->str, s_double, e_double);
+		else if (expand->str[0] == 34)
+			remove_quotes(expand->str, 0, e_double);
 		main->quotes_removed = true;
 	}
-	var_name = find_var_name(lexer->str, main);
+	var_name = find_var_name(expand->str, main);
 	value = find_env_row(main->env_array, var_name, main);
 	if (!value)
-		return (ft_putstr_fd("\n", 1), free(var_name), 1);
-	free(lexer->str);
-	lexer->str = ft_strdup(value);
-	if (!lexer->str)
+		return (free(var_name), 1);
+	free(expand->str);
+	expand->str = ft_strdup(value);
+	if (!expand->str)
 		error_function(-1, main);
     return (free(value), free(var_name), 0);
 }
 
-int	decide_to_expand(t_lexer *lexer, t_main *main)
+int decide_to_expand(t_lexer *lexer, t_main *main)
 {
-	lexer->to_expand = expander_check(lexer->str);
-	if (lexer->to_expand == true)
-	{
-		if (expander(lexer, main) == 1)
-			return (1);
-	}
-	else if (lexer->to_expand == false)
-	{
-		unused_quotes_removal(lexer, main);
-		pinpoint_dollar_sign(lexer, main);
-		if (!check_quote_type(lexer->str, 34, 39))
-			remove_all_quotes(lexer, main);
-	}
-	return (0);
+    t_expand_node *expand;
+    t_expand_node *current;
+	
+    expand = NULL;
+    if (find_character(lexer->str, '$') == -1)
+        return (0);
+    cutting_up_lexer_str(&expand, lexer, main);
+    current = expand;
+    while (current != NULL)
+    {
+        current->to_expand = expander_check(current->str);
+        if (current->to_expand == true)
+        {
+            if (expander(current, main) == 1)
+                return (1);
+        }
+        else
+        {
+            unused_quotes_removal(current, main);
+            pinpoint_dollar_sign(current, main);
+            if (!check_quote_type(current->str, 34, 39))
+                remove_all_quotes(current, main);
+        }
+        current = current->next;
+    }
+    join_expand_node(expand, main, lexer);
+    return (0);
 }

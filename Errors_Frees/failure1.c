@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 21:08:22 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/24 00:36:27 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/27 15:32:54 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	fork_failed(t_main *main)
 	else
 		ft_putstrs_fd(E_CREATING_PROCESS, strerror(errno), "\n", 2);
 	free_structs(main);
+	exit (EXIT_FAILURE);
 }
 
 void	pipe_failed(t_main *main)
@@ -34,6 +35,7 @@ void	pipe_failed(t_main *main)
 	else
 		ft_putstrs_fd(E_PIPE_CREATION, strerror(errno), "\n", 2);
 	free_structs(main);
+	exit (EXIT_FAILURE);
 }
 
 void	readdir_failed(t_main *main, DIR *dir)
@@ -46,6 +48,7 @@ void	readdir_failed(t_main *main, DIR *dir)
 		ft_putstr_fd("\n", 2);
 	}
 	free_structs(main);
+	exit (EXIT_FAILURE);
 }
 
 void	closedir_failed(t_main *main, DIR *dir)
@@ -58,4 +61,5 @@ void	closedir_failed(t_main *main, DIR *dir)
 		ft_putstr_fd("\n", 2);
 	}
 	free_structs(main);
+	exit (EXIT_FAILURE);
 }

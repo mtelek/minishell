@@ -68,12 +68,11 @@
 # define E_INV_FD_CLOSE "Error: Invalid file descriptor (fd: %d)\n"
 # define E_INT_SIG "Error: Close operation interrupted by signal (fd: %d)\n"
 # define E_CLOSE_FD "Error closing file descriptor (fd: %d): %s"
-# define E_INV_FD "Error: Invalid file descriptor (old_fd: %d, new_fd: %d)"
+# define E_INV_FD "Error: Invalid file descriptor (old_fd: %d, new_fd: %d)" //
 # define E_DUP_SIG "Error: Duplication interrupted (old_fd: %d, new_fd: %d)"
 # define E_TOO_MANY_FD_O "Error: Too many open fds (old_fd: %d, new_fd: %d)"
 # define E_DUP_FD "Error duplicating fd (old: %d, new: %d): %s"
 # define E_PERMISSION_D_OPEN "Error: Permission denied opening '%s'"
-# define E_NO_FILE "Error: No such file or directory '%s'"
 # define E_READ_ONLY "Error: Read-only file system '%s'"
 # define E_OPEN_FILE "Error opening file '%s': %s"
 # define NO_CMD ": command not found\n"

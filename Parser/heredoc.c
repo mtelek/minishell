@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 18:49:08 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/24 00:40:16 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/27 15:15:55 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,5 @@ void	init_heredoc(t_main *main, t_cmd *own_cmd)
 		if (close(main->parser->heredoc_fd[i]) == -1)
 			close_failed(main, main->parser->heredoc_fd[i]);
 	}
+	free(main->parser->heredoc_fd);
 }

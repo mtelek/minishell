@@ -36,6 +36,13 @@
 
 # define BUF_SIZE 4096
 
+typedef struct s_expand_node
+{
+	char				*str;
+	bool				to_expand;
+	struct s_expand_node *next;
+}						t_expand_node;
+
 typedef struct s_builtin
 {
 	char		**export;
@@ -85,7 +92,6 @@ typedef struct s_lexer
 {
 	char				*str;
 	int					type;
-	bool				to_expand;
 	struct s_lexer		*next;
 	struct s_lexer		*prev;
 }						t_lexer;
@@ -114,6 +120,7 @@ char					*ft_strtrim(char const *s1, char const *set);
 void					print_cmd_table(t_cmd *cmd);
 void					print_lexer(t_lexer *lexer);
 void					print_env(char **envp);
+void					print_expand(t_expand_node *expand);
 
 // ENV
 int						creating_env_array(t_main *main, char **envp);
@@ -218,23 +225,31 @@ char					*no_echo_but_heredoc(char *delimiter, char *content,
 int						echo_and_heredoc(char *delimiter, t_main *main);
 void					find_hd_indicator(t_main *main, t_cmd *cmd);
 
+//EXPANDER/INIT
+int 					cutting_up_lexer_str(t_expand_node **head, t_lexer *lexer, t_main *main);
+int 					decide_to_expand(t_lexer *lexer, t_main *main);
+void   					join_expand_node(t_expand_node *expand, t_main *main, t_lexer *lexer);
+void					free_list(t_expand_node *expand);
+char					*join_list(t_expand_node *expand, t_main *main);
+void					add_node(t_expand_node **head, char *str, t_main *main);
+
 //EXPANDER
 bool					expander_check(char *str);
-int    					expander(t_lexer *lexer, t_main *main);
+int 					expander(t_expand_node *expand, t_main *main);
 int 					find_character(char *str, char c);
-void 					remove_dollar_sign(int dollar_sign_index, t_lexer *lexer, t_main *main);
-void					pinpoint_dollar_sign(t_lexer *lexer, t_main *main);
+void 					remove_dollar_sign(int dollar_sign_index, t_expand_node *expand, t_main *main);
+void					pinpoint_dollar_sign(t_expand_node *expand, t_main *main);
 int						count_character_till_dollar(char *str, char c);
 int						check_quote_type(char *str, char c1, char c2);
 int						decide_to_expand(t_lexer *lexer, t_main *main);
-void					unused_quotes_removal(t_lexer *lexer, t_main *main);
-void					remove_two_char(t_lexer *lexer, t_main *main, int j);
-void					remove_all_quotes(t_lexer *lexer, t_main *main);
-void					cross_out_quotes(t_lexer *lexer, t_main *main, char c);
+void					unused_quotes_removal(t_expand_node *expand, t_main *main);
+void					remove_two_char(t_expand_node *expand, t_main *main, int j);
+void					remove_all_quotes(t_expand_node *expand, t_main *main);
+void					cross_out_quotes(t_expand_node *expand, t_main *main, char c);
 int						count_character(char *str, char c);
 int						count_character_till_dollar(char *str, char c);
-void					remove_one_char(t_lexer *lexer, t_main *main, int j);
-void					delete_all_doubles(t_lexer *lexer, t_main *main);
+void					remove_one_char(t_expand_node *expand, t_main *main, int j);
+void					delete_all_doubles(t_expand_node *expand, t_main *main);
 char					*find_var_name(char *str, t_main *main);
 // ERRORS
 void					error_function(int error_type, t_main *main);

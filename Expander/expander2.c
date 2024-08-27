@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:46:49 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/26 21:59:02 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/27 16:09:41 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,37 +26,37 @@
 // 'value'
 // mtelek@c1r2p5:~/CommonCore/minishell$ echo "'"$VAR1"'"
 
-void	remove_dollar_sign(int dollar_sign_index, t_lexer *lexer, t_main *main)
+void	remove_dollar_sign(int dollar_sign_index, t_expand_node *expand, t_main *main)
 {
 	char	*new_str;
 	int		len;
 
-	len = ft_strlen(lexer->str);
+	len = ft_strlen(expand->str);
 	new_str = malloc(len - 1);
 	if (!new_str)
 		error_function(23, main);
-	ft_strlcpy(new_str, lexer->str, dollar_sign_index + 1);
-	ft_strlcpy(new_str + dollar_sign_index, lexer->str + dollar_sign_index + 1,
+	ft_strlcpy(new_str, expand->str, dollar_sign_index + 1);
+	ft_strlcpy(new_str + dollar_sign_index, expand->str + dollar_sign_index + 1,
 		len - dollar_sign_index);
-	free(lexer->str);
-	lexer->str = new_str;
+	free(expand->str);
+	expand->str = new_str;
 }
 
-void	pinpoint_dollar_sign(t_lexer *lexer, t_main *main)
+void	pinpoint_dollar_sign(t_expand_node *expand, t_main *main)
 {
 	int	s_single;
 	int	dollar_sign;
 	int s_double;
 	int s_joint;
 
-	dollar_sign = find_character(lexer->str, '$');
+	dollar_sign = find_character(expand->str, '$');
 	if (dollar_sign == -1)
 		return ;
-	s_single = qoutes_checker(lexer->str, 39, -1);
-	s_double = qoutes_checker(lexer->str, 34, -1);
-	if (!s_single && lexer->str[0] != 39)
+	s_single = qoutes_checker(expand->str, 39, -1);
+	s_double = qoutes_checker(expand->str, 34, -1);
+	if (!s_single && expand->str[0] != 39)
 		s_single = -1;
-	if (!s_double && lexer->str[0] != 34)
+	if (!s_double && expand->str[0] != 34)
 		s_double = -1;
 	if (s_single == -1)
         s_joint = s_double;	
@@ -67,7 +67,7 @@ void	pinpoint_dollar_sign(t_lexer *lexer, t_main *main)
 		s_joint = (s_single < s_double) ? s_single : s_double;
 	}
 	if (s_joint > dollar_sign)
-		remove_dollar_sign(dollar_sign, lexer, main);
+		remove_dollar_sign(dollar_sign, expand, main);
 }
 
 int	find_character(char *str, char c)

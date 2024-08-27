@@ -51,6 +51,19 @@ void	print_lexer(t_lexer *lexer)
 	}
 }
 
+void	print_expand(t_expand_node *expand)
+{
+	t_expand_node *temp_expand;
+
+	temp_expand = expand;
+	printf("EXPAND\n");
+	while (temp_expand != NULL)
+	{
+		printf("EXPAND_STR: %s\n", temp_expand->str);
+		temp_expand = temp_expand->next;
+	}
+}
+
 void	print_env(char **envp)
 {
 	int	i;
@@ -110,12 +123,14 @@ int	main(int argc, char **argv, char **envp)
 	char	*history_file;
 	int		m_exit_code;
 
-	//cat <<hi mf issues
 	//cat << hi <<haha isnt workings
-	//wc | ls exit code wrong after ctrl+c dont know whether its right or not
-	//echo << hi mf errors, still reachables
 	//cmd: kuhjgsdfhsfd -- not freeing correctly with no pipes
 	//handle . and .. as input
+	// should not remove $ here, tester> echo $
+	// quotes check missing, should implement it , for example '''$VAR1"''
+	// EXPAND_STR: haha$VAR1 //still wrong
+	// value
+	// tester> cat < file.txt | grep "pattern" | sort | uniq | wc -l | tee output.txt --memory issues
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);

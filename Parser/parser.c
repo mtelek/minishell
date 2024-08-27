@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/24 00:49:44 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/27 16:13:59 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,9 @@ void	parser(t_main *main)
 	if (!echo_check(main, own_cmd) && own_cmd->pid == 0)
 		executor(main, own_cmd);
 	if (own_cmd->pid == 0)
+	{
+		ok_free_function(main);
 		exit(0);
+	}
 	wait_for_children(main);
 }

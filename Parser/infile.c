@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:44:13 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/23 22:53:12 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/27 15:16:38 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	alloc_input_f(t_main *main, t_cmd *own_cmd)
 		set_infile_fd(&main->parser->input_fd[i], main, own_cmd);
 		i++;
 	}
+	free(main->parser->input_fd);
 }
 
 void	switch_fd_infile(t_main *main, t_cmd *own_cmd)

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 22:56:11 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/20 20:40:24 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/27 15:13:49 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,10 @@ void	alloc_parser(t_main *main)
 		error_function(7, main);
 	main->parser->n_pipes = count_cmds(main->lexer) - 1;
 	main->parser->pipes = 0;
+	main->parser->output_fd = 0;
+	main->parser->append_out_fd = 0;
+	main->parser->heredoc_fd = 0;
+	main->parser->input_fd = 0;
 }
 
 void	alloc_exec(t_main *main)
