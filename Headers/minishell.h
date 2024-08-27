@@ -226,7 +226,7 @@ int						echo_and_heredoc(char *delimiter, t_main *main);
 void					find_hd_indicator(t_main *main, t_cmd *cmd);
 
 //EXPANDER/INIT
-int 					cutting_up_lexer_str(t_expand_node **head, t_lexer *lexer, t_main *main);
+void					cutting_up_lexer_str(t_expand_node **head, t_lexer *lexer, t_main *main);
 int 					decide_to_expand(t_lexer *lexer, t_main *main);
 void   					join_expand_node(t_expand_node *expand, t_main *main, t_lexer *lexer);
 void					free_list(t_expand_node *expand);

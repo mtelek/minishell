@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 13:56:44 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/27 16:08:55 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 00:01:25 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ int decide_to_expand(t_lexer *lexer, t_main *main)
     if (find_character(lexer->str, '$') == -1)
         return (0);
     cutting_up_lexer_str(&expand, lexer, main);
+	print_expand(expand);
     current = expand;
     while (current != NULL)
     {

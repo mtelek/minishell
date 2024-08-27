@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_node.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 10:50:14 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/27 20:34:21 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 00:24:00 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,88 +94,91 @@ void	join_expand_node(t_expand_node *expand, t_main *main, t_lexer *lexer)
 	}
 }
 
-int	find_var_ending(t_lexer *lexer, int i)
+void	split_up_by_dollar(t_expand_node **head, t_lexer *lexer, t_main *main)
 {
-	while (lexer->str[i] && lexer->str[i] != '$' && lexer->str[i] != 34
-		&& lexer->str[i] != 39)
-		i++;
-	return (i);
-}
+    int i = 0;
+    int start = 0;
 
-int	real_first_word_check(t_lexer *lexer, int start)
-{
-	while (lexer->str[start] == 34 || lexer->str[start] == 39)
-		start++;
-    if (lexer->str[start] == '$')
-        return (0);
-    else
-        return (1);
-}
-
-int	cutting_up_lexer_str(t_expand_node **head, t_lexer *lexer, t_main *main)
-{
-	char	*part;
-	int		i;
-	int		start;
-	int		q;
-	int		quote_type;
-    int     first_word;
-
-	*head = NULL;
-	i = 0;
-	start = 0;
-    first_word = 0;
-	while (lexer->str[i])
-	{
-		if (lexer->str[i] == '$')
+    while (lexer->str[i]) {
+        if (lexer->str[i] == '$')
 		{
-			if (i > start)
-			{
-				if (real_first_word_check(lexer, start) == 1)
-                    first_word = 1;
-                if (first_word)
-                {
-                    part = ft_substr(lexer->str, start, i - start);
-				    if (!part)
-					    error_function(-1, main);
-				    add_node(head, part, main);
-				    i++;
-                }
-			}
-			if (i - 1 < 0)
-				start = i;
-			else
-				start = i - 1;
-			q = find_var_ending(lexer, i);
-			quote_type = 0;
-			if (lexer->str[start] == 34 && lexer->str[q] == 34)
-				quote_type = 34;
-			else if (lexer->str[start] == 39 && lexer->str[q] == 39)
-				quote_type = 39;
-			while (quote_type && start > 0 && q < (int)ft_strlen(lexer->str))
-			{
-				if (lexer->str[start - 1] == quote_type && lexer->str[q
-					+ 1] == quote_type)
-				{
-					start--;
-					q++;
-				}
-				else
-					break ;
-			}
-			i = q + 1;
-            first_word = 1;
-		}
-		else
-			i++;
-	}
-	if (i > start)
+            if (i > start) {
+                char *substr = strndup(lexer->str + start, i - start);
+                add_node(head, substr, main);
+            }
+            start = i;
+        }
+        i++;
+    }
+    if (i > start)
 	{
-		part = ft_substr(lexer->str, start, i - start);
-		if (!part)
-			error_function(-1, main);
-		add_node(head, part, main);
-	}
+        char *substr = strndup(lexer->str + start, i - start);
+        add_node(head, substr, main);
+    }
+}
+
+void split_up_by_quotes(t_expand_node **head, t_lexer *lexer, t_main *main)
+{
+    int i = 0;
+    int start = 0;
+    bool in_quotes = false;
+    char quote_char = '\0';
+
+    while (lexer->str[i]) 
+	{
+        if (lexer->str[i] == '"' || lexer->str[i] == '\'') 
+		{
+            if (in_quotes && lexer->str[i] == quote_char) 
+			{
+                in_quotes = false;
+                char *substr = strndup(lexer->str + start, i - start + 1);
+                add_node(head, substr, main);
+                start = i + 1; 
+            } 
+			else if (!in_quotes) 
+			{
+                if (i > start) 
+				{
+                    char *substr = strndup(lexer->str + start, i - start);
+                    add_node(head, substr, main);
+                }
+                in_quotes = true;
+                quote_char = lexer->str[i];
+                start = i;
+            }
+        } 
+		else if (lexer->str[i] == '$' && !in_quotes) 
+		{
+            if (i > start) 
+			{
+                char *substr = strndup(lexer->str + start, i - start);
+                add_node(head, substr, main);
+            }
+            start = i;
+        } 
+		else if (lexer->str[i] == ' ' && !in_quotes) 
+		{
+            if (i > start) 
+			{
+                char *substr = strndup(lexer->str + start, i - start);
+                add_node(head, substr, main);
+            }
+            start = i + 1;
+        }
+        i++;
+    }
+    if (i > start) 
+	{
+        char *substr = strndup(lexer->str + start, i - start);
+        add_node(head, substr, main);
+    }
+}
+
+void	cutting_up_lexer_str(t_expand_node **head, t_lexer *lexer, t_main *main)
+{
+	if (find_character(lexer->str, 34) == -1 && find_character(lexer->str, 39) == -1)
+		split_up_by_dollar(head, lexer, main);
+	else
+		split_up_by_quotes(head, lexer, main);
 	print_expand(*head);
-	return (0);
 }
