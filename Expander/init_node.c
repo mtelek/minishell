@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 10:50:14 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/27 16:09:35 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/27 20:34:21 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ char	*join_list(t_expand_node *expand, t_main *main)
 	return (joined_str);
 }
 
-
 void	free_list(t_expand_node *expand)
 {
 	t_expand_node	*temp;
@@ -78,74 +77,105 @@ void	free_list(t_expand_node *expand)
 }
 void	join_expand_node(t_expand_node *expand, t_main *main, t_lexer *lexer)
 {
-    if (expand == NULL)
-    {
-        lexer->str = ft_strdup("");
-        if (!lexer->str)
-            error_function(-1, main);
-        return;
-    }
-    free(lexer->str);
-    lexer->str = join_list(expand, main);
-    free_list(expand);
-    if (!lexer->str)
-    {
-        ft_putstr_fd("\n", 1);
-        return;
-    }
+	if (expand == NULL)
+	{
+		lexer->str = ft_strdup("");
+		if (!lexer->str)
+			error_function(-1, main);
+		return ;
+	}
+	free(lexer->str);
+	lexer->str = join_list(expand, main);
+	free_list(expand);
+	if (!lexer->str)
+	{
+		ft_putstr_fd("\n", 1);
+		return ;
+	}
 }
 
-int cutting_up_lexer_str(t_expand_node **head, t_lexer *lexer, t_main *main)
+int	find_var_ending(t_lexer *lexer, int i)
 {
-    char    *part;
-    int     i;
-    int     start;
-    int     first_dollar;
+	while (lexer->str[i] && lexer->str[i] != '$' && lexer->str[i] != 34
+		&& lexer->str[i] != 39)
+		i++;
+	return (i);
+}
 
-    *head = NULL;
-    i = 0;
-    start = 0;
-    first_dollar = 0;
-    while (lexer->str[i])
-    {
-        if (lexer->str[i] == '$')
-        {
-            if (!first_dollar)
-            {
-                first_dollar = 1;
-                i++;
-            }
-            else
-            {
-                if (i > start)
+int	real_first_word_check(t_lexer *lexer, int start)
+{
+	while (lexer->str[start] == 34 || lexer->str[start] == 39)
+		start++;
+    if (lexer->str[start] == '$')
+        return (0);
+    else
+        return (1);
+}
+
+int	cutting_up_lexer_str(t_expand_node **head, t_lexer *lexer, t_main *main)
+{
+	char	*part;
+	int		i;
+	int		start;
+	int		q;
+	int		quote_type;
+    int     first_word;
+
+	*head = NULL;
+	i = 0;
+	start = 0;
+    first_word = 0;
+	while (lexer->str[i])
+	{
+		if (lexer->str[i] == '$')
+		{
+			if (i > start)
+			{
+				if (real_first_word_check(lexer, start) == 1)
+                    first_word = 1;
+                if (first_word)
                 {
                     part = ft_substr(lexer->str, start, i - start);
-                    if (!part)
-                        error_function(-1, main);
-                    add_node(head, part, main);
-                    i++;
+				    if (!part)
+					    error_function(-1, main);
+				    add_node(head, part, main);
+				    i++;
                 }
-                if (i - 1 < 0)
-                    start = i;
-                else 
-                    start = i - 1;
-                if (lexer->str[start - 1] == 34 || lexer->str[start - 1] == 39)
-                    start = start - 1;
-                if (lexer->str[start - 1] == 34 || lexer->str[start - 1] == 39)
-                    start = start - 1;
-                i++;
-            }
-        }
-        else
-            i++;
-    }
-    if (i > start)
-    {
-        part = ft_substr(lexer->str, start, i - start);
-        if (!part)
-            error_function(-1, main);
-        add_node(head, part, main);
-    }
-    print_expand(*head);
-    return (0);
+			}
+			if (i - 1 < 0)
+				start = i;
+			else
+				start = i - 1;
+			q = find_var_ending(lexer, i);
+			quote_type = 0;
+			if (lexer->str[start] == 34 && lexer->str[q] == 34)
+				quote_type = 34;
+			else if (lexer->str[start] == 39 && lexer->str[q] == 39)
+				quote_type = 39;
+			while (quote_type && start > 0 && q < (int)ft_strlen(lexer->str))
+			{
+				if (lexer->str[start - 1] == quote_type && lexer->str[q
+					+ 1] == quote_type)
+				{
+					start--;
+					q++;
+				}
+				else
+					break ;
+			}
+			i = q + 1;
+            first_word = 1;
+		}
+		else
+			i++;
+	}
+	if (i > start)
+	{
+		part = ft_substr(lexer->str, start, i - start);
+		if (!part)
+			error_function(-1, main);
+		add_node(head, part, main);
+	}
+	print_expand(*head);
+	return (0);
 }

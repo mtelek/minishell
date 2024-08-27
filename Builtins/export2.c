@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 17:50:55 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/24 00:33:50 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/27 17:53:35 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	arranging_new_array(t_main *main, int i, int j, char **args)
 		new_env_array[k] = main->env_array[k];
 		k++;
 	}
-	new_env_array[i] = strdup(args[j]);
+	new_env_array[i] = ft_strdup(args[j]);
 	if (!new_env_array[i])
 		error_function(-1, main);
 	new_env_array[i + 1] = NULL;

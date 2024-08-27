@@ -5,3 +5,6 @@ valgrind --leak-check=full --show-leak-kinds=all --suppressions=suppressions.sup
 //Without PIPE check
 
 valgrind --leak-check=full --show-leak-kinds=all --suppressions=suppressions.supp --track-origins=yes ./minishell
+
+
+export VAR1=value VAR2=value

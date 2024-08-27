@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 16:15:24 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/20 19:39:43 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/27 17:55:22 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	creating_env_array(t_main *main, char **envp)
 		return (-1);
 	while (++i < env_count)
 	{
-		main->env_array[i] = strdup(envp[i]);
+		main->env_array[i] = ft_strdup(envp[i]);
 		if (!main->env_array[i])
 		{
 			while (i > 0)
