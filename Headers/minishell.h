@@ -193,7 +193,7 @@ void					init_heredoc(t_main *main, t_cmd *own_cmd);
 char					*get_txt_name(t_main *main, int type, int limit);
 
 //PARSER/QUOTES
-int						delete_qoutes(t_lexer *lexer, t_main *main);
+void					delete_qoutes(t_expand_node *current);
 void					remove_quotes(char *str, int start, int end);
 
 //Executor
@@ -227,30 +227,25 @@ void					find_hd_indicator(t_main *main, t_cmd *cmd);
 
 //EXPANDER/INIT
 void					cutting_up_lexer_str(t_expand_node **head, t_lexer *lexer, t_main *main);
-int 					decide_to_expand(t_lexer *lexer, t_main *main);
 void   					join_expand_node(t_expand_node *expand, t_main *main, t_lexer *lexer);
 void					free_list(t_expand_node *expand);
 char					*join_list(t_expand_node *expand, t_main *main);
 void					add_node(t_expand_node **head, char *str, t_main *main);
 
 //EXPANDER
+void 					quotes_and_expander(t_lexer *lexer, t_main *main);
+void 					decide_to_expand(t_lexer *lexer, t_main *main);
 bool					expander_check(char *str);
 int 					expander(t_expand_node *expand, t_main *main);
+char					*find_var_name(char *str, t_main *main);
 int 					find_character(char *str, char c);
-void 					remove_dollar_sign(int dollar_sign_index, t_expand_node *expand, t_main *main);
-void					pinpoint_dollar_sign(t_expand_node *expand, t_main *main);
-int						count_character_till_dollar(char *str, char c);
-int						check_quote_type(char *str, char c1, char c2);
-int						decide_to_expand(t_lexer *lexer, t_main *main);
-void					unused_quotes_removal(t_expand_node *expand, t_main *main);
-void					remove_two_char(t_expand_node *expand, t_main *main, int j);
+void 					remove_dollar_sign(t_expand_node *expand, t_main *main);
 void					remove_all_quotes(t_expand_node *expand, t_main *main);
 void					cross_out_quotes(t_expand_node *expand, t_main *main, char c);
 int						count_character(char *str, char c);
-int						count_character_till_dollar(char *str, char c);
-void					remove_one_char(t_expand_node *expand, t_main *main, int j);
-void					delete_all_doubles(t_expand_node *expand, t_main *main);
-char					*find_var_name(char *str, t_main *main);
+void					split_up_by_dollar(t_expand_node **head, t_lexer *lexer, t_main *main);
+void 					split_up_by_quotes(t_expand_node **head, t_lexer *lexer, t_main *main);
+
 // ERRORS
 void					error_function(int error_type, t_main *main);
 void					error_type10(int error_type);

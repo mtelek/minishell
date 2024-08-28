@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 17:50:55 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/27 17:53:35 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 13:08:04 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,25 +65,28 @@ void	ft_export(t_main *main, char **args)
 {
 	int	i;
 	int	j;
+	int	updated;
 
 	j = 1;
 	while (args[j])
 	{
-		i = 0;
-		while (main->env_array[i])
+		i = -1;
+		updated = 0;
+		while (main->env_array[++i])
 		{
-			if (ft_strncmp(main->env_array[i], args[j], ft_strchr(args[j], '=')
-					- args[j]) == 0)
+			if (ft_strncmp(main->env_array[i], args[j], ft_strchr(args[j], '=') - args[j]) == 0)
 			{
 				free(main->env_array[i]);
 				main->env_array[i] = ft_strdup(args[j]);
 				if (!main->env_array[i])
 					error_function(-1, main);
-				return ;
+				updated = 1;
+				break;
 			}
-			i++;
 		}
-		arranging_new_array(main, i, j, args);
+		if (!updated)
+			arranging_new_array(main, i, j, args);
 		j++;
 	}
 }
+

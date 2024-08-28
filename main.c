@@ -108,8 +108,7 @@ void	minishell(char *input, t_main *main)
 		main->exit_code = 2;
 		return ;
 	}
-	if (delete_qoutes(main->lexer, main) == 1)
-		return ;
+	quotes_and_expander(main->lexer, main);
 	parser(main);
 	main->heredoc_flag = 0;
 	ok_free_function(main);
@@ -128,9 +127,9 @@ int	main(int argc, char **argv, char **envp)
 	//handle . and .. as input
 	// should not remove $ here, tester> echo $
 	// quotes check missing, should implement it , for example '''$VAR1"''
-	// EXPAND_STR: haha$VAR1 //still wrong
 	// value
 	// tester> cat < file.txt | grep "pattern" | sort | uniq | wc -l | tee output.txt --memory issues
+	//echo $, wrong, should print out $
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);

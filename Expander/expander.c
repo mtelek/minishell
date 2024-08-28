@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 13:56:44 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 00:01:25 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 16:21:29 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
-
-// what about null value attached to variable
-
-// mtelek@c1r2p5:~/CommonCore/minishell$ echo "'"$VAR1"'"
-// 'value'
 
 char	*get_value(char *env, char *var_equal, t_main *main)
 {
@@ -78,7 +73,6 @@ int expander(t_expand_node *expand, t_main *main)
 	int		s_double;
 	int		e_double;
 
-	delete_all_doubles(expand, main);
 	s_double = qoutes_checker(expand->str, 34, -1);
 	e_double = qoutes_checker(expand->str, 34, s_double);
 	if (e_double)
@@ -100,34 +94,35 @@ int expander(t_expand_node *expand, t_main *main)
     return (free(value), free(var_name), 0);
 }
 
-int decide_to_expand(t_lexer *lexer, t_main *main)
+void 	decide_to_expand(t_lexer *lexer, t_main *main)
 {
     t_expand_node *expand;
     t_expand_node *current;
 	
     expand = NULL;
-    if (find_character(lexer->str, '$') == -1)
-        return (0);
     cutting_up_lexer_str(&expand, lexer, main);
-	print_expand(expand);
     current = expand;
     while (current != NULL)
     {
         current->to_expand = expander_check(current->str);
         if (current->to_expand == true)
-        {
             if (expander(current, main) == 1)
-                return (1);
-        }
-        else
+            {
+				free(current->str);
+				current->str = ft_strdup("");
+				if (!current->str)
+					error_function(-1, main);
+			}
+        if (current->to_expand == false)
         {
-            unused_quotes_removal(current, main);
-            pinpoint_dollar_sign(current, main);
-            if (!check_quote_type(current->str, 34, 39))
-                remove_all_quotes(current, main);
-        }
+			if (!ft_strcmp(current->str, "$"))
+				remove_dollar_sign(expand, main);
+            if ((current->str[0] == 34 && current->str[1] == 34)
+				|| (current->str[0] == 39 && current->str[1] == 39))
+					remove_all_quotes(current, main);
+			delete_qoutes(current);
+		}
         current = current->next;
     }
     join_expand_node(expand, main, lexer);
-    return (0);
 }

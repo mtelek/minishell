@@ -5,6 +5,7 @@
         "minishell.h": "c",
         "unistd.h": "c",
         "sstream": "c",
-        "readline.h": "c"
+        "readline.h": "c",
+        "history.h": "c"
     }
 }

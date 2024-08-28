@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:03:45 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/27 14:49:41 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 16:25:44 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,6 @@ void	error_type20(int error_type)
 		ft_putstr_fd(MF_STRING, 2);
 	else if (error_type == 24)
 		ft_putstr_fd(MF_NEW_STR, 2);
+	else if (error_type == 25)
+		ft_putstr_fd(MF_EXPNAD_NODE, 2);
 }

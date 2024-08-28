@@ -49,6 +49,7 @@
 # define MF_SUBSTR "Error, malloc for creating substring failed\n"
 # define MF_STRING "Error_malloc for creating string failed\n"
 # define MF_NEW_STR "Error, malloc for creating new string failed\n"
+# define MF_EXPNAD_NODE "Error- malloc for creating expand node failed\n"
 
 //ERRORS FOR FAILURES
 # define E_LIMIT_INSUF "Error: System process limit reached\n"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_node.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 10:50:14 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 00:24:00 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 17:17:33 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	add_node(t_expand_node **head, char *str, t_main *main)
 
 	new_node = malloc(sizeof(t_expand_node));
 	if (!new_node)
-		error_function(-1, main); // proper one needed
+		error_function(25, main);
 	new_node->str = str;
 	new_node->next = NULL;
 	new_node->to_expand = false;
@@ -117,68 +117,60 @@ void	split_up_by_dollar(t_expand_node **head, t_lexer *lexer, t_main *main)
     }
 }
 
-void split_up_by_quotes(t_expand_node **head, t_lexer *lexer, t_main *main)
-{
-    int i = 0;
-    int start = 0;
-    bool in_quotes = false;
-    char quote_char = '\0';
+// void split_up_by_quotes(t_expand_node **head, t_lexer *lexer, t_main *main)
+// {
+//     int i = 0;
+//     int start = 0;
+//     bool in_quotes = false;
+//     char quote_char = '\0';
 
-    while (lexer->str[i]) 
-	{
-        if (lexer->str[i] == '"' || lexer->str[i] == '\'') 
-		{
-            if (in_quotes && lexer->str[i] == quote_char) 
-			{
-                in_quotes = false;
-                char *substr = strndup(lexer->str + start, i - start + 1);
-                add_node(head, substr, main);
-                start = i + 1; 
-            } 
-			else if (!in_quotes) 
-			{
-                if (i > start) 
-				{
-                    char *substr = strndup(lexer->str + start, i - start);
-                    add_node(head, substr, main);
-                }
-                in_quotes = true;
-                quote_char = lexer->str[i];
-                start = i;
-            }
-        } 
-		else if (lexer->str[i] == '$' && !in_quotes) 
-		{
-            if (i > start) 
-			{
-                char *substr = strndup(lexer->str + start, i - start);
-                add_node(head, substr, main);
-            }
-            start = i;
-        } 
-		else if (lexer->str[i] == ' ' && !in_quotes) 
-		{
-            if (i > start) 
-			{
-                char *substr = strndup(lexer->str + start, i - start);
-                add_node(head, substr, main);
-            }
-            start = i + 1;
-        }
-        i++;
-    }
-    if (i > start) 
-	{
-        char *substr = strndup(lexer->str + start, i - start);
-        add_node(head, substr, main);
-    }
-}
+//     while (lexer->str[i]) 
+// 	{
+//         if (lexer->str[i] == '"' || lexer->str[i] == '\'') 
+// 		{
+//             if (in_quotes && lexer->str[i] == quote_char) 
+// 			{
+//                 in_quotes = false;
+//                 char *substr = strndup(lexer->str + start, i - start + 1);
+//                 add_node(head, substr, main);
+//                 start = i + 1; 
+//             } 
+// 			else if (!in_quotes) 
+// 			{
+//                 if (i > start) 
+// 				{
+//                     char *substr = strndup(lexer->str + start, i - start);
+//                     add_node(head, substr, main);
+//                 }
+//                 in_quotes = true;
+//                 quote_char = lexer->str[i];
+//                 start = i;
+//             }
+//         } 
+// 		else if (lexer->str[i] == '$' && !in_quotes) 
+// 		{
+//             if (i > start) 
+// 			{
+//                 char *substr = strndup(lexer->str + start, i - start);
+//                 add_node(head, substr, main);
+//             }
+//             start = i;
+//         } 
+// 		else if (lexer->str[i] == ' ' && !in_quotes) 
+// 		{
+//             if (i > start) 
+// 			{
+//                 char *substr = strndup(lexer->str + start, i - start);
+//                 add_node(head, substr, main);
+//             }
+//             start = i + 1;
+//         }
+//         i++;
+//     }
+//     if (i > start) 
+// 	{
+//         char *substr = strndup(lexer->str + start, i - start);
+//         add_node(head, substr, main);
+//     }
+// }
 
-void	cutting_up_lexer_str(t_expand_node **head, t_lexer *lexer, t_main *main)
-{
-	if (find_character(lexer->str, 34) == -1 && find_character(lexer->str, 39) == -1)
-		split_up_by_dollar(head, lexer, main);
-	else
-		split_up_by_quotes(head, lexer, main);
-	print_expand(*head);
-}
