@@ -18,7 +18,6 @@
 void	exec_error_function(t_main *main, char *path)
 {
 	execve_error(main, path);
-	free_structs(main);
 }
 
 void	free_structs(t_main *main)

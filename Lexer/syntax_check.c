@@ -80,7 +80,7 @@ bool	syntax_doubles_same(t_lexer *lexer)
 	return (true);
 }
 
-bool	syntax_check(t_lexer *lexer)
+bool	syntax_check(t_lexer *lexer, t_main *main)
 {
 	if (lexer->type == 1)
 		return (ft_putstr_fd(ERROR_M_PIPE, 2), false);
@@ -90,6 +90,8 @@ bool	syntax_check(t_lexer *lexer)
 	if (syntax_doubles_diff(lexer) == false)
 		return (false);
 	if (syntax_doubles_same(lexer) == false)
+		return (false);
+	if (dot_check(lexer, main) == false)
 		return (false);
 	return (true);
 }

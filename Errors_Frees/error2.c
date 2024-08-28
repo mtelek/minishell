@@ -6,15 +6,16 @@
 /*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:03:45 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 18:39:42 by ibaranov         ###   ########.fr       */
+/*   Updated: 2024/08/28 20:10:30 by ibaranov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-void	error_message(int exit_code, char *message, char *path)
+void	error_message(int exit_code, char *message, char *path, t_main *main)
 {
 	ft_putstrs_fd(NULL, path, message, 2);
+	free_structs(main);
 	exit(exit_code);
 }
 
@@ -26,16 +27,16 @@ void	execve_error(t_main *main, char *path)
 	fd = open(path, O_WRONLY);
 	dir = opendir(path);
 	if (!ft_strchr(path, '/'))
-		error_message(127, NO_CMD, path);
+		error_message(127, NO_CMD, path, main);
 	else if (fd == -1)
 	{
 		if (dir)
-			error_message(126, IS_DIR, path);
+			error_message(126, IS_DIR, path, main);
 		else
-			error_message(127, NO_DIR, path);
+			error_message(127, NO_DIR, path, main);
 	}
 	else
-		error_message(126, NO_PERMISSION, path);
+		error_message(126, NO_PERMISSION, path, main);
 	if (dir)
 		if (closedir(dir) == -1)
 			closedir_failed(main, dir);

@@ -102,7 +102,7 @@ void	minishell(char *input, t_main *main)
 		main->exit_code = 1;
 		return ;
 	}
-	if (!syntax_check(main->lexer))
+	if (!syntax_check(main->lexer, main))
 	{
 		syntax_free(main);
 		main->exit_code = 2;

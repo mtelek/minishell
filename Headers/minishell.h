@@ -154,11 +154,12 @@ int						getting_word_i_start(char *input, int i);
 int						null_terminator_check(char *input, int i, t_main *main);
 
 // SYNTAX_CHECK
-bool					syntax_check(t_lexer *lexer);
+bool					syntax_check(t_lexer *lexer, t_main *main);
 bool					syntax_doubles_same(t_lexer *temp_lex);
 bool					syntax_doubles_diff(t_lexer *lexer);
 bool					checking_combinaton(t_lexer *lexer);
 bool					checking_lex(char *str);
+bool					dot_check(t_lexer *lexer, t_main *main);
 
 //PARSER
 void					parser(t_main *main);
@@ -256,7 +257,7 @@ void					error_type10(int error_type);
 void					error_type20(int error_type);
 void					execve_error(t_main *main, char *path);
 void					exec_error_function(t_main *main, char *path);
-void					error_message(int exit_code, char *message, char *path);
+void					error_message(int exit_code, char *message, char *path, t_main *main);
 void					open_failed(t_main *main, char *file_name);
 void					dup_failed(t_main *main, int old_fd, int new_fd);
 void					close_failed(t_main *main, int fd);
