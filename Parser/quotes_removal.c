@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_removal.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:04:41 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 17:02:37 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 18:44:44 by ibaranov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../Headers/minishell.h"
 
@@ -56,11 +55,12 @@ void	delete_qoutes(t_expand_node *current)
 		remove_quotes(current->str, start, end);
 }
 
-void quotes_and_expander(t_lexer *lexer, t_main *main)
+void	quotes_and_expander(t_lexer *lexer, t_main *main)
 {
 	while (lexer != NULL)
 	{
-		if (ft_strcmp(lexer->str, "echo") == 0 && lexer->next && ft_strcmp(lexer->next->str, "$?") == 0)
+		if (ft_strcmp(lexer->str, "echo") == 0 && lexer->next
+			&& ft_strcmp(lexer->next->str, "$?") == 0)
 			return ;
 		decide_to_expand(lexer, main);
 		lexer = lexer->next;

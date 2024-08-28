@@ -41,9 +41,11 @@ void	error_function(int error_type, t_main *main)
 {
 	free_structs(main);
 	free_env_array(main->env_array);
-	if (error_type <= 10)
+	if (error_type < 10)
 		error_type10(error_type);
-	else if (error_type <= 24 && error_type > 10)
+	if (error_type <= 15 && error_type >= 10)
 		error_type20(error_type);
+	if (error_type <= 25 && error_type >= 16)
+		error_type30(error_type);
 	exit(1);
 }

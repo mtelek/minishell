@@ -130,6 +130,7 @@ int	main(int argc, char **argv, char **envp)
 	// value
 	// tester> cat < file.txt | grep "pattern" | sort | uniq | wc -l | tee output.txt --memory issues
 	//echo $, wrong, should print out $
+	// cd / should print ~/foldername  its becuse of cd / then cd -
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:03:45 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 16:25:44 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 18:39:42 by ibaranov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,11 @@ void	error_type20(int error_type)
 		ft_putstr_fd(MF_EXEC, 2);
 	else if (error_type == 15)
 		ft_putstr_fd(MF_OUPUT_FD, 2);
-	else if (error_type == 16)
+}
+
+void	error_type30(int error_type)
+{
+	if (error_type == 16)
 		ft_putstr_fd(MF_APPEND_OUT, 2);
 	else if (error_type == 18)
 		ft_putstr_fd(MF_ENV_ARRAY, 2);

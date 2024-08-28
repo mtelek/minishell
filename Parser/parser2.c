@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 22:56:11 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/27 15:13:49 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 19:04:56 by ibaranov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,13 @@ void	alloc_exec(t_main *main)
 	if (!main->exec)
 		error_function(14, main);
 	main->exec->n_childs = count_cmds(main->lexer);
+}
+
+void	parser_helper(t_main *main)
+{
+	creating_cmd_table(main);
+	alloc_parser(main);
+	find_hd_indicator(main, main->cmd);
+	alloc_exec(main);
+	alloc_builtin(main);
 }

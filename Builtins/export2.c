@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 17:50:55 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 13:08:04 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 18:29:45 by ibaranov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,26 +67,25 @@ void	ft_export(t_main *main, char **args)
 	int	j;
 	int	updated;
 
-	j = 1;
-	while (args[j])
+	j = 0;
+	while (args[++j])
 	{
 		i = -1;
 		updated = 0;
 		while (main->env_array[++i])
 		{
-			if (ft_strncmp(main->env_array[i], args[j], ft_strchr(args[j], '=') - args[j]) == 0)
+			if (ft_strncmp(main->env_array[i],
+					args[j], ft_strchr(args[j], '=') - args[j]) == 0)
 			{
 				free(main->env_array[i]);
 				main->env_array[i] = ft_strdup(args[j]);
 				if (!main->env_array[i])
 					error_function(-1, main);
 				updated = 1;
-				break;
+				break ;
 			}
 		}
 		if (!updated)
 			arranging_new_array(main, i, j, args);
-		j++;
 	}
 }
-

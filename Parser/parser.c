@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/27 18:27:38 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 19:07:49 by ibaranov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,11 +118,7 @@ void	parser(t_main *main)
 	__pid_t	pid;
 
 	own_cmd = NULL;
-	creating_cmd_table(main);
-	alloc_parser(main);
-	find_hd_indicator(main, main->cmd);
-	alloc_exec(main);
-	alloc_builtin(main);
+	parser_helper(main);
 	if (builtin_check(main) == true)
 		return ;
 	if (main->parser->n_pipes)
