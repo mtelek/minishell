@@ -161,11 +161,12 @@ int							null_terminator_check(char *input, int i,
 								t_main *main);
 
 // SYNTAX_CHECK
-bool						syntax_check(t_lexer *lexer);
+bool						syntax_check(t_lexer *lexer, t_main *main);
 bool						syntax_doubles_same(t_lexer *temp_lex);
 bool						syntax_doubles_diff(t_lexer *lexer);
 bool						checking_combinaton(t_lexer *lexer);
 bool						checking_lex(char *str);
+bool						dot_check(t_lexer *lexer, t_main *main);
 
 //PARSER
 void						parser(t_main *main);
@@ -176,6 +177,7 @@ void						calling_redirects(t_main *main, t_cmd *own_cmd);
 void						wait_for_children(t_main *main);
 void						find_hd_indicator(t_main *main, t_cmd *cmd);
 void						get_hd_content(t_main *main, t_cmd *own_cmd);
+void						parser_helper(t_main *main);
 
 // PARSER/CMD_TABLE
 int							count_cmds(t_lexer *lexer);
@@ -224,6 +226,7 @@ void						ft_unset(t_main *main, char **args);
 void						ft_pwd(t_main *main);
 void						ft_env(t_main *main);
 int							unset_error(char **args, t_main *main);
+char						*get_env_path(char **env_array, char *env);
 
 //BUILTINS/HEREDOC
 void						get_hd_content(t_main *main, t_cmd *own_cmd);
@@ -271,7 +274,7 @@ void						error_type20(int error_type);
 void						execve_error(t_main *main, char *path);
 void						exec_error_function(t_main *main, char *path);
 void						error_message(int exit_code, char *message,
-								char *path);
+								char *path, t_main *main);
 void						open_failed(t_main *main, char *file_name);
 void						dup_failed(t_main *main, int old_fd, int new_fd);
 void						close_failed(t_main *main, int fd);
@@ -279,6 +282,7 @@ void						closedir_failed(t_main *main, DIR *dir);
 void						readdir_failed(t_main *main, DIR *dir);
 void						pipe_failed(t_main *main);
 void						fork_failed(t_main *main);
+void						error_type30(int error_type);
 
 // FREE
 void						ok_free_function(t_main *main);
