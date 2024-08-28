@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 21:42:59 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/27 15:33:08 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 23:18:47 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,6 @@ void	free_main(t_main *main)
 	i = 0;
 	if (main == NULL)
 		return ;
-	if (main->hd_content)
-	{
-		free(main->hd_content);
-		main->hd_content = NULL;
-	}
 	if (main->env_array)
 	{
 		while (main->env_array[i] != NULL)

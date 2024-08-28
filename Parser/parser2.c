@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 22:56:11 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 19:04:56 by ibaranov         ###   ########.fr       */
+/*   Updated: 2024/08/28 23:40:29 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	alloc_parser(t_main *main)
 	main->parser->append_out_fd = 0;
 	main->parser->heredoc_fd = 0;
 	main->parser->input_fd = 0;
-}
+} 
 
 void	alloc_exec(t_main *main)
 {

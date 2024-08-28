@@ -86,7 +86,6 @@ void	init_main(t_main *main)
 	main->exec = NULL;
 	main->builtin = NULL;
 	main->exit_code = 0;
-	main->hd_content = NULL;
 	main->heredoc_flag = 0;
 	main->count_line = 0;
 	main->count_hd_line = 0;
@@ -123,14 +122,8 @@ int	main(int argc, char **argv, char **envp)
 	int		m_exit_code;
 
 	//cat << hi <<haha isnt workings
-	//cmd: kuhjgsdfhsfd -- not freeing correctly with no pipes
-	//handle . and .. as input
-	// should not remove $ here, tester> echo $
-	// quotes check missing, should implement it , for example '''$VAR1"''
-	// value
+	// quotes check missing
 	// tester> cat < file.txt | grep "pattern" | sort | uniq | wc -l | tee output.txt --memory issues
-	//echo $, wrong, should print out $
-	// cd / should print ~/foldername  its becuse of cd / then cd -
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);
@@ -142,19 +135,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		if (!main.heredoc_flag)
 		{
-			if (isatty(fileno(stdin)))
-				input = readline("tester> ");
-			else
-			{
-				char	*line;
-				line = get_next_line(fileno(stdin));
-				if (!line)
-					input = ft_strtrim(line, "\n");
-				else
-					input = NULL;
-				free(line);
-			}
-			// input = readline("minishell> ");
+			input = readline("minishell> ");
 			if (input)
 			{
 				main.count_line += 1;

@@ -6,21 +6,11 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 17:04:52 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 17:17:45 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 18:32:02 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
-
-// tester> echo haha"$VAR1"$'VAR2'
-// EXPAND
-// EXPAND_STR: echo
-// EXPAND
-// EXPAND_STR: haha
-// EXPAND_STR: "$VAR1"
-// EXPAND_STR: $
-// EXPAND_STR: 'VAR2'
-// val$VAR2
 
 void handle_quote(t_expand_node **head, t_lexer *lexer, t_main *main, int *i, int *start, bool *in_quotes, char *quote_char) 
 {

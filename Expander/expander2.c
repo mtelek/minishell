@@ -6,25 +6,19 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:46:49 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 16:18:19 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 18:26:10 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-// mtelek@c1r2p5:~/CommonCore/minishell$ echo "'"'"'$VAR1'"'"'"
-// '"value"'
-// mtelek@c1r2p5:~/CommonCore/minishell$ echo ""'"'"'$VAR1'"'"'""
-// "'value'"
-// mtelek@c1r2p5:~/CommonCore/minishell$ echo """'"'"'$VAR1'"'"'"""
-// '"value"'
-// mtelek@c1r2p5:~/CommonCore/minishell$ echo """""'"'"'$VAR1'"'"'"""""
-// '"value"'
-// mtelek@c1r2p5:~/CommonCore/minishell$ echo '"$VAR1"'
-// "$VAR1"
-// mtelek@c1r2p5:~/CommonCore/minishell$ echo "'"$VAR1"'"
-// 'value'
-// mtelek@c1r2p5:~/CommonCore/minishell$ echo "'"$VAR1"'"
+void	no_var_name_found(t_expand_node *current, t_main *main)
+{
+	free(current->str);
+	current->str = ft_strdup("");
+	if (!current->str)
+		error_function(-1, main);
+}
 
 void	remove_dollar_sign(t_expand_node *expand, t_main *main)
 {

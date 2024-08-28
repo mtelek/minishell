@@ -6,6 +6,7 @@
         "unistd.h": "c",
         "sstream": "c",
         "readline.h": "c",
-        "history.h": "c"
+        "history.h": "c",
+        "functional": "c"
     }
 }

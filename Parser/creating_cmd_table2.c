@@ -6,13 +6,11 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 20:24:38 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/27 14:20:29 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 22:41:36 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
-
-//now assingning it correctly
 
 void	handle_redirections(t_lexer **temp_lex, t_cmd **temp_cmd, int i)
 {

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/24 00:23:15 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 22:39:51 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 	temp->out_fd = STDOUT_FILENO;
 	temp->pid = -1;
 	temp->heredoc_delimiter = NULL;
+	temp->delimiter = NULL;
+	temp->hd_content = NULL;
 }
 
 void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 13:56:44 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 16:21:29 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/28 18:32:38 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,16 +107,11 @@ void 	decide_to_expand(t_lexer *lexer, t_main *main)
         current->to_expand = expander_check(current->str);
         if (current->to_expand == true)
             if (expander(current, main) == 1)
-            {
-				free(current->str);
-				current->str = ft_strdup("");
-				if (!current->str)
-					error_function(-1, main);
-			}
+				no_var_name_found(current, main);
         if (current->to_expand == false)
         {
-			if (!ft_strcmp(current->str, "$"))
-				remove_dollar_sign(expand, main);
+			if (!ft_strncmp(current->str, "$", 1) && current->str[1] == '\0' && current->next)
+				remove_dollar_sign(current, main);
             if ((current->str[0] == 34 && current->str[1] == 34)
 				|| (current->str[0] == 39 && current->str[1] == 39))
 					remove_all_quotes(current, main);
