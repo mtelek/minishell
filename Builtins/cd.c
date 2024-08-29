@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 18:26:03 by ibaranov          #+#    #+#             */
-/*   Updated: 2024/08/29 15:23:21 by ibaranov         ###   ########.fr       */
+/*   Updated: 2024/08/29 16:55:11 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ void	ft_cd(t_main *main, int argc)
 				main->exit_code = 1;
 				return ;
 			}
+			change_dir(main, path);
 			ft_pwd(main);
 		}
 		else
@@ -124,6 +125,6 @@ void	ft_cd(t_main *main, int argc)
 	{
 		ft_putstrs_fd("bash:  ",
 			main->cmd->args[0], ": too many arguments\n", 2);
-		main->exit_code = 1;
+		main->exit_code = 1; 
 	}
 }

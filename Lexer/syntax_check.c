@@ -93,5 +93,7 @@ bool	syntax_check(t_lexer *lexer, t_main *main)
 		return (false);
 	if (dot_check(lexer, main) == false)
 		return (false);
+	if (quote_check(lexer) == false)
+		return (false);
 	return (true);
 }

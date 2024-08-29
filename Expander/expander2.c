@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:46:49 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 18:26:10 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 16:21:33 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,4 @@ void	cutting_up_lexer_str(t_expand_node **head, t_lexer *lexer, t_main *main)
 		split_up_by_dollar(head, lexer, main);
 	else
 		split_up_by_quotes(head, lexer, main);
-	print_expand(*head);
 }

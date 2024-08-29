@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 19:16:55 by ibaranov          #+#    #+#             */
-/*   Updated: 2024/08/28 19:58:26 by ibaranov         ###   ########.fr       */
+/*   Updated: 2024/08/29 15:58:28 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,58 @@ bool	dot_check(t_lexer *lexer, t_main *main)
 		return (false);
 	}
 	return (true);
+}
+
+int	find_next_character(char *str, int i, char c)
+{
+	if (str[i+1])
+		i++;
+	else
+		return (-1);
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+int	inside_quote_check(t_lexer *lexer, int i, char c)
+{
+	int next_quote;
+	
+	next_quote = find_next_character(lexer->str, i, c);
+    if (next_quote == -1)
+    {
+		if (c == 34)
+       		ft_putstr_fd(ERR_QUOTE2, 2);
+		else if (c == 39)
+			ft_putstr_fd(ERR_QUOTE1, 2);
+        return (-1);
+    }
+    i = next_quote;
+	return (i);
+}
+
+bool quote_check(t_lexer *lexer)
+{
+    int i;
+
+    while (lexer != NULL)
+    {
+        i = 0;
+        while (lexer->str[i])
+        {
+            if (lexer->str[i] == 39)
+				i = inside_quote_check(lexer, i, 39);
+            else if (lexer->str[i] == 34)
+				i = inside_quote_check(lexer, i, 34);
+			if (i == -1)
+				return (false);
+            i++;
+        }
+        lexer = lexer->next;
+    }
+    return (true);
 }

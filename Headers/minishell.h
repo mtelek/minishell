@@ -167,6 +167,7 @@ bool						syntax_doubles_diff(t_lexer *lexer);
 bool						checking_combinaton(t_lexer *lexer);
 bool						checking_lex(char *str);
 bool						dot_check(t_lexer *lexer, t_main *main);
+bool						quote_check(t_lexer *lexer);
 
 //PARSER
 void						parser(t_main *main);

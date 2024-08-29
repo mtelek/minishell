@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 20:11:18 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 13:30:17 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 16:16:45 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,8 @@ void delimiter_check(char *delimiter, t_cmd *own_cmd)
 	{
 		len = ft_strlen(delimiter);
 		if (len > 1 && delimiter[0] == 39 && delimiter[len - 1] == 39)
+			own_cmd->expander_decider = false;
+		else if (len > 1 && delimiter[0] == 34 && delimiter[len - 1] == 34)
 			own_cmd->expander_decider = false;
 	}
 }
