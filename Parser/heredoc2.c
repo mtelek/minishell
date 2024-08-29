@@ -3,14 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 20:11:18 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 23:41:31 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 02:39:16 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
+
+char *expand(char *str, t_main *main)
+{
+    t_expand_node expand_node;
+    char *value;
+    char *var_name;
+    int s_double;
+    int e_double;
+
+    expand_node.str = str;
+    s_double = qoutes_checker(expand_node.str, 34, -1);
+    e_double = qoutes_checker(expand_node.str, 34, s_double);
+    if (e_double)
+    {
+        if (!s_double)
+            remove_quotes(expand_node.str, s_double, e_double);
+        else if (expand_node.str[0] == 34)
+            remove_quotes(expand_node.str, 0, e_double);
+        main->quotes_removed = true;
+    }
+    var_name = find_var_name(expand_node.str, main);
+    value = find_env_row(main->env_array, var_name, main);
+    if (!value)
+    {
+        free(var_name);
+        return (ft_strdup(str));
+    }
+    free(expand_node.str);
+    expand_node.str = ft_strdup(value);
+    free(var_name);
+    free(value);
+    return (expand_node.str);
+}
+
 
 void	find_hd_indicator(t_main *main, t_cmd *cmd)
 {
@@ -55,6 +89,7 @@ char	*no_echo_but_heredoc(char **delimiter, char *content, t_main *main, t_cmd *
 	char	*temp;
 	char	*count_line;
 	int		i;
+	char 	*expanded_str;
 
 	i = 0;
 	while (1)
@@ -82,7 +117,12 @@ char	*no_echo_but_heredoc(char **delimiter, char *content, t_main *main, t_cmd *
 		{
 			if (content != NULL)
 			{
-				temp = ft_strjoin(content, line);
+				printf("EXPANDER_DECIDER: %d\n", own_cmd->expander_decider);
+				if (own_cmd->expander_decider == true)
+					expanded_str = expand(line, main);
+				else
+					expanded_str = line;
+				temp = ft_strjoin(content, expanded_str);
 				if (!temp)
 					error_function(20, main);
 				free(content);
@@ -90,7 +130,11 @@ char	*no_echo_but_heredoc(char **delimiter, char *content, t_main *main, t_cmd *
 			}
 			else
 			{
-				content = ft_strdup(line);
+				if (own_cmd->expander_decider == true)
+					expanded_str = expand(line, main);
+				else
+					expanded_str = line;
+				content = ft_strdup(expanded_str);
 				if (!content)
 					error_function(-1, main);
 			}

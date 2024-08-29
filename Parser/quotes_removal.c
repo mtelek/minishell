@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_removal.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:04:41 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 18:44:44 by ibaranov         ###   ########.fr       */
+/*   Updated: 2024/08/29 02:09:01 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,13 @@ void	quotes_and_expander(t_lexer *lexer, t_main *main)
 {
 	while (lexer != NULL)
 	{
+		if (lexer->prev && lexer->prev->type == HEREDOC && !check_for_another_heredoc(lexer))
+		{
+			if (lexer->next)
+				lexer = lexer->next;
+			else
+				return ;
+		}
 		if (ft_strcmp(lexer->str, "echo") == 0 && lexer->next
 			&& ft_strcmp(lexer->next->str, "$?") == 0)
 			return ;

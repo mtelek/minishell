@@ -80,6 +80,7 @@ typedef struct s_cmd
 	int						hd_indicator;
 	char					**delimiter;
 	char					*hd_content;
+	bool					expander_decider;
 }							t_cmd;
 
 typedef struct s_operator
@@ -252,6 +253,7 @@ void						decide_to_expand(t_lexer *lexer, t_main *main);
 bool						expander_check(char *str);
 int							expander(t_expand_node *expand, t_main *main);
 char						*find_var_name(char *str, t_main *main);
+char						*find_env_row(char **env_array, char *var, t_main *main);
 int							find_character(char *str, char c);
 void						remove_dollar_sign(t_expand_node *expand,
 								t_main *main);
@@ -266,6 +268,8 @@ void						split_up_by_quotes(t_expand_node **head,
 								t_lexer *lexer, t_main *main);
 void						no_var_name_found(t_expand_node *current,
 								t_main *main);
+int							check_for_another_heredoc(t_lexer *temp_lex);
+void						delimiter_check(t_cmd **cmd, t_lexer *temp_lex);
 
 // ERRORS
 void						error_function(int error_type, t_main *main);

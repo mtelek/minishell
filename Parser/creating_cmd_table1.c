@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   creating_cmd_table1.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 22:39:51 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 01:35:05 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds, int n_args)
 	cmd->n_out = 0;
 	cmd->n_append = 0;
 	cmd->n_heredoc = 0;
+	cmd->expander_decider = true;
 	if (temp_cmd == NULL)
 		temp_cmd = cmd;
 	if (temp_lex == NULL)
