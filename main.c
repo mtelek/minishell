@@ -121,12 +121,24 @@ int	main(int argc, char **argv, char **envp)
 	char	*history_file;
 	int		m_exit_code;
 
-	//cat << hi <<haha isnt workings
-	// quotes check missing
-	// tester> cat < file.txt | grep "pattern" | sort | uniq | wc -l | tee output.txt --memory issues
-	//cat <<"'haha'" also syntax error
-	//ft_pwd wrong if tilda is present after cd /
-	//heredoc malloc issues
+
+// quotes check missing
+//ft_pwd wrong if tilda is present after cd /
+//heredoc malloc issues
+// 	minishell> echo hi > out
+// EXPAND
+// EXPAND_STR: echo
+// EXPAND
+// EXPAND_STR: hi
+// EXPAND
+// EXPAND_STR: >
+// EXPAND
+// EXPAND_STR: out
+// Error opening file '%s': %soutSuccess
+// cd leaks.
+// unset invalid read.
+// ctrl + d inside hd invalid read.
+
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);

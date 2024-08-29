@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   append_out.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 23:04:24 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/27 14:50:11 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 14:42:16 by ibaranov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	switch_fd_append_out(t_main *main, t_cmd *own_cmd)
 			dup_failed(main, main->parser->append_out_fd[i], STDOUT_FILENO);
 		if (close(main->parser->append_out_fd[i]) == -1)
 			close_failed(main, main->parser->append_out_fd[i]);
+		free(main->parser->append_out_fd);
 		i++;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   infile.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:44:13 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/27 15:16:38 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 14:46:12 by ibaranov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ void	set_infile_fd(int *input_fd, t_main *main, t_cmd *own_cmd)
 	file_name = get_txt_name(main, INPUT_RED, own_cmd->n_in);
 	*input_fd = open(file_name, O_RDONLY);
 	if (*input_fd == -1)
+	{
+		free(input_fd);
 		open_failed(main, file_name);
+	}
 }
 
 void	alloc_input_f(t_main *main, t_cmd *own_cmd)
@@ -62,7 +65,6 @@ void	alloc_input_f(t_main *main, t_cmd *own_cmd)
 		set_infile_fd(&main->parser->input_fd[i], main, own_cmd);
 		i++;
 	}
-	free(main->parser->input_fd);
 }
 
 void	switch_fd_infile(t_main *main, t_cmd *own_cmd)
@@ -76,6 +78,7 @@ void	switch_fd_infile(t_main *main, t_cmd *own_cmd)
 			dup_failed(main, main->parser->input_fd[i], STDIN_FILENO);
 		if (close(main->parser->input_fd[i]) == -1)
 			close_failed(main, main->parser->input_fd[i]);
+		free(main->parser->input_fd);
 		i++;
 	}
 }
