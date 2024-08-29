@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 21:08:19 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/27 15:47:34 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 19:12:11 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,7 @@ void	open_failed(t_main *main, char *file_name)
 	else if (errno == EROFS)
 		ft_putstrs_fd(E_READ_ONLY, file_name, "\n", 2);
 	else
-	{
-		ft_putstrs_fd(E_OPEN_FILE, file_name, strerror(errno), 2);
-		ft_putstr_fd("\n", 2);
-	}
+		ft_putstrs_fd(E_OPEN_FILE, file_name, "\n", 2);
 	free_structs(main);
 	exit (EXIT_FAILURE);
 }

@@ -19,8 +19,7 @@ SRCS = main.c Utils/checker.c Utils/libft_utils1.c Utils/libft_utils2.c Utils/ft
 		Builtins/cd.c Builtins/echo.c Builtins/exit.c Builtins/export.c Builtins/export2.c Builtins/unset.c \
 		Builtins/pwd.c Builtins/env.c \
 		Expander/expander.c Expander/expander2.c Expander/expander3.c Expander/init_node.c Expander/init_node2.c \
-		get_next_line/get_next_line.c get_next_line/get_next_line_utils.c \
-		Builtins/cd2.c Lexer/syntax_check2.c \
+		Lexer/syntax_check2.c \
 
 
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)

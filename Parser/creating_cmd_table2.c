@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 20:24:38 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 12:07:45 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 21:24:40 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	handle_redirections(t_lexer **temp_lex, t_cmd **temp_cmd, int i)
 		|| ((*temp_lex)->prev && (*temp_lex)->prev->type == 1
 			&& (*temp_lex)->type != 6 && (*temp_lex)->next))
 	{
-		(*temp_cmd)->args[i] = ((*temp_lex)->str); // error message missing
+		(*temp_cmd)->args[i] = ((*temp_lex)->str); // removed ft_strdup here
 	}
 	if ((*temp_lex)->type == INPUT_RED)
 		(*temp_cmd)->n_in++;

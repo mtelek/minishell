@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 18:26:03 by ibaranov          #+#    #+#             */
-/*   Updated: 2024/08/29 16:55:11 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 22:58:47 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,9 @@ void	set_pwd_export(t_main *main, const char *cwd)
 	if (!main->cmd->args[2])
 		error_function(-1, main);
 	main->env_array = export_cmd(main, 1);
+	free(main->cmd->args[2]);
+    free(main->cmd->args[1]);
+    free(main->cmd->cmd);
 }
 
 void	set_oldpwd_export(t_main *main, const char *oldpwd)
@@ -68,6 +71,10 @@ void	set_oldpwd_export(t_main *main, const char *oldpwd)
 	if (!main->cmd->args[2])
 		error_function(-1, main);
 	main->env_array = export_cmd(main, 1);
+	free(main->cmd->args[2]);
+    free(main->cmd->args[1]);
+    free(main->cmd->cmd);
+	free(main->cmd->args);
 }
 
 void	change_dir(t_main *main, const char *path)
@@ -86,34 +93,48 @@ void	change_dir(t_main *main, const char *path)
 	}
 }
 
+int	path_helper(int error_type, char *path, t_main *main)
+{
+	if (!path && error_type == 1)
+	{
+		ft_putstrs_fd("bash: cd: HOME not set\n", NULL, NULL, 2);
+		main->exit_code = 1;
+		return (1);
+	}
+	else if (!path && error_type == 2)
+	{
+		ft_putstrs_fd("bash: cd: OLDPWD not set\n", NULL, NULL, 2);
+		main->exit_code = 1;
+		return (1);
+	}
+	return (0);
+}
+
+void	too_many_args(t_main *main)
+{
+	ft_putstrs_fd("bash:  ",
+		main->cmd->args[0], ": too many arguments\n", 2);
+	main->exit_code = 1;
+}
+
 void	ft_cd(t_main *main, int argc)
 {
 	char	*path;
 
-	path = NULL;
 	if (argc < 3)
 	{
 		if (!main->cmd->args[1] || !ft_strcmp(main->cmd->args[1], "--")
 			|| !ft_strcmp(main->cmd->args[1], "~"))
 		{
 			path = get_env_path(main->env_array, "HOME");
-			if (!path)
-			{
-				ft_putstrs_fd("bash: cd: HOME not set\n", NULL, NULL, 2);
-				main->exit_code = 1;
+			if (path_helper(1, path, main) == 1)
 				return ;
-			}
 		}
 		else if (!ft_strcmp(main->cmd->args[1], "-"))
 		{
 			path = get_env_path(main->env_array, "OLDPWD");
-			if (!path)
-			{
-				ft_putstrs_fd("bash: cd: OLDPWD not set\n", NULL, NULL, 2);
-				main->exit_code = 1;
+			if (path_helper(2, path, main) == 1)
 				return ;
-			}
-			change_dir(main, path);
 			ft_pwd(main);
 		}
 		else
@@ -122,9 +143,5 @@ void	ft_cd(t_main *main, int argc)
 			change_dir(main, path);
 	}
 	else
-	{
-		ft_putstrs_fd("bash:  ",
-			main->cmd->args[0], ": too many arguments\n", 2);
-		main->exit_code = 1; 
-	}
+		too_many_args(main);
 }

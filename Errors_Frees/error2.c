@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:03:45 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 23:44:31 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 22:06:11 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	error_message(int exit_code, char *message, char *path, t_main *main)
 {
-	ft_putstrs_fd(NULL, path, message, 2);
+	ft_putstrs_fd(NULL, path, message, STDERR_FILENO);
 	free_structs(main);
 	exit(exit_code);
 }
@@ -47,63 +47,63 @@ void	execve_error(t_main *main, char *path)
 void	error_type10(int error_type)
 {
 	if (error_type == -1)
-		ft_putstr_fd(ERROR_STRDUP, 2);
+		ft_putstr_fd(ERROR_STRDUP, STDERR_FILENO);
 	else if (error_type == 0)
-		ft_putstr_fd(MF_ENV_LIST, 2);
+		ft_putstr_fd(MF_ENV_LIST, STDERR_FILENO);
 	else if (error_type == 1)
-		ft_putstr_fd(MF_OPERATOR, 2);
+		ft_putstr_fd(MF_OPERATOR, STDERR_FILENO);
 	else if (error_type == 2)
-		ft_putstr_fd(MF_LEXER, 2);
+		ft_putstr_fd(MF_LEXER, STDERR_FILENO);
 	else if (error_type == 3)
-		ft_putstr_fd(MF_WORD, 2);
+		ft_putstr_fd(MF_WORD, STDERR_FILENO);
 	else if (error_type == 4)
-		ft_putstr_fd(MF_CMD_TABLE, 2);
+		ft_putstr_fd(MF_CMD_TABLE, STDERR_FILENO);
 	else if (error_type == 5)
-		ft_putstr_fd(MF_CMD_ARGS, 2);
+		ft_putstr_fd(MF_CMD_ARGS, STDERR_FILENO);
 	else if (error_type == 6)
-		ft_putstr_fd(MF_CMD_CMD, 2);
+		ft_putstr_fd(MF_CMD_CMD, STDERR_FILENO);
 	else if (error_type == 7)
-		ft_putstr_fd(MF_PARSER, 2);
+		ft_putstr_fd(MF_PARSER, STDERR_FILENO);
 	else if (error_type == 8)
-		ft_putstr_fd(MF_PIPES, 2);
+		ft_putstr_fd(MF_PIPES, STDERR_FILENO);
 	else if (error_type == 9)
-		ft_putstr_fd(MF_ONE_PIPE, 2);
+		ft_putstr_fd(MF_ONE_PIPE, STDERR_FILENO);
 }
 
 void	error_type20(int error_type)
 {
 	if (error_type == 10)
-		ft_putstr_fd(MF_N_ENV_ARRAY, 2);
+		ft_putstr_fd(MF_N_ENV_ARRAY, STDERR_FILENO);
 	else if (error_type == 11)
-		ft_putstr_fd(MF_HEREDOC, 2);
+		ft_putstr_fd(MF_HEREDOC, STDERR_FILENO);
 	else if (error_type == 12)
-		ft_putstr_fd(MF_BUILTIN, 2);
+		ft_putstr_fd(MF_BUILTIN, STDERR_FILENO);
 	else if (error_type == 13)
-		ft_putstr_fd(MF_INPUT_FD, 2);
+		ft_putstr_fd(MF_INPUT_FD, STDERR_FILENO);
 	else if (error_type == 14)
 		ft_putstr_fd(MF_EXEC, 2);
 	else if (error_type == 15)
-		ft_putstr_fd(MF_OUPUT_FD, 2);
+		ft_putstr_fd(MF_OUPUT_FD, STDERR_FILENO);
 }
 
 void	error_type30(int error_type)
 {
 	if (error_type == 16)
-		ft_putstr_fd(MF_APPEND_OUT, 2);
+		ft_putstr_fd(MF_APPEND_OUT, STDERR_FILENO);
 	else if (error_type == 18)
-		ft_putstr_fd(MF_ENV_ARRAY, 2);
+		ft_putstr_fd(MF_ENV_ARRAY, STDERR_FILENO);
 	else if (error_type == 19)
-		ft_putstr_fd(ERROR_STRDUP, 2);
+		ft_putstr_fd(ERROR_STRDUP, STDERR_FILENO);
 	else if (error_type == 20)
-		ft_putstr_fd(MF_STRJOIN, 2);
+		ft_putstr_fd(MF_STRJOIN, STDERR_FILENO);
 	else if (error_type == 21)
-		ft_putstr_fd(MF_STRTRIM, 2);
+		ft_putstr_fd(MF_STRTRIM, STDERR_FILENO);
 	else if (error_type == 22)
-		ft_putstr_fd(MF_SUBSTR, 2);
+		ft_putstr_fd(MF_SUBSTR, STDERR_FILENO);
 	else if (error_type == 23)
-		ft_putstr_fd(MF_STRING, 2);
+		ft_putstr_fd(MF_STRING, STDERR_FILENO);
 	else if (error_type == 24)
-		ft_putstr_fd(MF_NEW_STR, 2);
+		ft_putstr_fd(MF_NEW_STR, STDERR_FILENO);
 	else if (error_type == 25)
-		ft_putstr_fd(MF_EXPNAD_NODE, 2);
+		ft_putstr_fd(MF_EXPNAD_NODE, STDERR_FILENO);
 }

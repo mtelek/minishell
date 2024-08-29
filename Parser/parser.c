@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 14:00:09 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 22:29:35 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,9 @@ void	parser(t_main *main)
 	own_cmd = NULL;
 	parser_helper(main);
 	if (builtin_check(main) == true)
+	{
 		return ;
+	}
 	if (main->parser->n_pipes)
 		own_cmd = init_pipes(main);
 	else if (main->parser->n_pipes == 0)

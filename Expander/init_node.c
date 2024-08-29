@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 10:50:14 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 12:52:30 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 18:02:46 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	free_list(t_expand_node *expand)
 		free(temp);
 	}
 }
+
 void	join_expand_node(t_expand_node *expand, t_main *main, t_lexer *lexer)
 {
 	if (expand == NULL)
@@ -97,23 +98,28 @@ void	join_expand_node(t_expand_node *expand, t_main *main, t_lexer *lexer)
 
 void	split_up_by_dollar(t_expand_node **head, t_lexer *lexer, t_main *main)
 {
-    int i = 0;
-    int start = 0;
+	int		i;
+	int		start;
+	char	*substr;
 
-    while (lexer->str[i]) {
-        if (lexer->str[i] == '$')
-		{
-            if (i > start) {
-                char *substr = strndup(lexer->str + start, i - start);
-                add_node(head, substr, main);
-            }
-            start = i;
-        }
-        i++;
-    }
-    if (i > start)
+	i = 0;
+	start = 0;
+	while (lexer->str[i])
 	{
-        char *substr = strndup(lexer->str + start, i - start);
-        add_node(head, substr, main);
-    }
+		if (lexer->str[i] == '$')
+		{
+			if (i > start)
+			{
+				substr = strndup(lexer->str + start, i - start);
+				add_node(head, substr, main);
+			}
+			start = i;
+		}
+		i++;
+	}
+	if (i > start)
+	{
+		substr = strndup(lexer->str + start, i - start);
+		add_node(head, substr, main);
+	}
 }

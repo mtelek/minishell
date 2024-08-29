@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:46:49 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 16:21:33 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 17:49:35 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ bool	expander_check(char *str)
 
 void	cutting_up_lexer_str(t_expand_node **head, t_lexer *lexer, t_main *main)
 {
-	if (find_character(lexer->str, 34) == -1 && find_character(lexer->str, 39) == -1)
+	if (find_character(lexer->str, 34) == -1
+		&& find_character(lexer->str, 39) == -1)
 		split_up_by_dollar(head, lexer, main);
 	else
 		split_up_by_quotes(head, lexer, main);

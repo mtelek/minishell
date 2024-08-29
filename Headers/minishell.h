@@ -26,7 +26,6 @@
 # include <fcntl.h>
 # include <dirent.h>
 # include <errno.h>
-# include "../get_next_line/get_next_line.h"
 
 # define PIPE 1
 # define INPUT_RED 2
@@ -80,6 +79,7 @@ typedef struct s_cmd
 	char					**delimiter;
 	char					*hd_content;
 	bool					expander_decider;
+	bool					true_command;
 }							t_cmd;
 
 typedef struct s_operator
@@ -333,6 +333,7 @@ void						ft_putnbr_fd(int n, int fd);
 size_t						ft_strlcpy(char *dest, const char *src,
 								size_t size);
 char						*ft_strncpy(char *dest, char *src, unsigned int n);
+char						*ft_strldup(char *str, int len);
 
 // SIG
 void						child_signal_handler(int sig);

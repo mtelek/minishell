@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 13:24:00 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 22:24:33 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,10 @@ void	args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds, int n_args)
 void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 {
 	(void)cmd;
+	temp->true_command = false;
 	if (!is_operator(temp->args[0][0], temp->args[0][1], main->operators, main))
 	{
-		temp->cmd = ft_strdup(temp->args[0]);
+		temp->cmd = temp->args[0];
 		if (!temp->cmd)
 			error_function(6, main);
 	}
@@ -55,6 +56,7 @@ void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 		temp->cmd = ft_strdup("true");
 		if (!temp->cmd)
 			error_function(6, main);
+		temp->true_command = true;
 	}
 	temp->in_fd = STDIN_FILENO;
 	temp->out_fd = STDOUT_FILENO;

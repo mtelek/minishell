@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 13:56:44 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 02:20:49 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 17:56:36 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ char	*find_var_name(char *str, t_main *main)
 	start = i + 1;
 	if (str[start] == '\'')
 		return (ft_substr(str, start + 1, ft_strlen(str) - start - 2));
-	while (str[i] && str[i] != '=' && str[i] != ' ' && str[i] != '\0' && str[i] != 39 && str[i] != 34)
+	while (str[i] && str[i] != '=' && str[i] != ' ' && str[i] != '\0'
+		&& str[i] != 39 && str[i] != 34)
 		i++;
 	var_name = ft_substr(str, start, i - start);
 	if (!var_name)
@@ -66,7 +67,7 @@ char	*find_var_name(char *str, t_main *main)
 	return (var_name);
 }
 
-int expander(t_expand_node *expand, t_main *main)
+int	expander(t_expand_node *expand, t_main *main)
 {
 	char	*value;
 	char	*var_name;
@@ -91,33 +92,34 @@ int expander(t_expand_node *expand, t_main *main)
 	expand->str = ft_strdup(value);
 	if (!expand->str)
 		error_function(-1, main);
-    return (free(value), free(var_name), 0);
+	return (free(value), free(var_name), 0);
 }
 
-void 	decide_to_expand(t_lexer *lexer, t_main *main)
+void	decide_to_expand(t_lexer *lexer, t_main *main)
 {
-    t_expand_node *expand;
-    t_expand_node *current;
-	
-    expand = NULL;
-    cutting_up_lexer_str(&expand, lexer, main);
-    current = expand;
-    while (current != NULL)
-    {
-        current->to_expand = expander_check(current->str);
-        if (current->to_expand == true)
-            if (expander(current, main) == 1)
+	t_expand_node	*expand;
+	t_expand_node	*current;
+
+	expand = NULL;
+	cutting_up_lexer_str(&expand, lexer, main);
+	current = expand;
+	while (current != NULL)
+	{
+		current->to_expand = expander_check(current->str);
+		if (current->to_expand == true)
+			if (expander(current, main) == 1)
 				no_var_name_found(current, main);
-        if (current->to_expand == false)
-        {
-			if (!ft_strncmp(current->str, "$", 1) && current->str[1] == '\0' && current->next)
+		if (current->to_expand == false)
+		{
+			if (!ft_strncmp(current->str, "$", 1) && current->str[1] == '\0'
+				&& current->next)
 				remove_dollar_sign(current, main);
-            if ((current->str[0] == 34 && current->str[1] == 34)
+			if ((current->str[0] == 34 && current->str[1] == 34)
 				|| (current->str[0] == 39 && current->str[1] == 39))
-					remove_all_quotes(current, main);
+				remove_all_quotes(current, main);
 			delete_qoutes(current);
 		}
-        current = current->next;
-    }
-    join_expand_node(expand, main, lexer);
+		current = current->next;
+	}
+	join_expand_node(expand, main, lexer);
 }

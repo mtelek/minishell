@@ -122,23 +122,9 @@ int	main(int argc, char **argv, char **envp)
 	int		m_exit_code;
 
 
-// quotes check missing
-//ft_pwd wrong if tilda is present after cd /
 //heredoc malloc issues
-// 	minishell> echo hi > out
-// EXPAND
-// EXPAND_STR: echo
-// EXPAND
-// EXPAND_STR: hi
-// EXPAND
-// EXPAND_STR: >
-// EXPAND
-// EXPAND_STR: out
-// Error opening file '%s': %soutSuccess
 // cd leaks.
-// unset invalid read.
-// ctrl + d inside hd invalid read.
-
+// check for true command with << 
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);

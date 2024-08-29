@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 22:45:40 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 13:22:49 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 22:50:16 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,18 @@ void	free_array(char **array)
 
 void	free_cmd(t_cmd *cmd)
 {
+	int 	i;
 	t_cmd	*temp_cmd;
 
+	i = -1;
 	if (cmd == NULL)
 		return ;
 	while (cmd != NULL)
 	{
 		temp_cmd = cmd;
 		cmd = cmd->next;
-		free(temp_cmd->cmd);
-		temp_cmd->cmd = NULL;
+		if (temp_cmd->true_command == true)
+			free(temp_cmd->cmd);
 		free(temp_cmd->args);
 		temp_cmd->args = NULL;
 		free(temp_cmd->hd_content);

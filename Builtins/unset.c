@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:40 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 18:30:34 by ibaranov         ###   ########.fr       */
+/*   Updated: 2024/08/29 19:04:15 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,13 @@ int	unset_error(char **args, t_main *main)
 		j = 0;
 		if (!ft_isalpha(args[i][j]) && args[i][j] != '_')
 			return (ft_putstrs_fd("unset: ", args[i],
-					": invalid parameter name\n", 2),
-				main->exit_code = 1, 1);
+					": invalid parameter name\n", 2), main->exit_code = 1, 1);
 		while (args[i][j])
 		{
 			if (!ft_isalnum(args[i][j]) && args[i][j] != '_')
 				return (ft_putstrs_fd("unset: ", args[i],
-						": invalid parameter name\n", 2),
-					main->exit_code = 1, 1);
+						": invalid parameter name\n", 2), main->exit_code = 1,
+					1);
 			j++;
 		}
 		i++;
@@ -38,48 +37,49 @@ int	unset_error(char **args, t_main *main)
 	return (0);
 }
 
-void	remove_env_var_from_array(t_main *main, int i, int k, char **args)
+void	init_values(int *i, int *j, int *env_count)
 {
-	int		j;
-	int		var_len;
-	char	**new_env_array;
+	*i = -1;
+	*j = 0;
+	*env_count = 0;
+}
 
-	var_len = ft_strlen(args[k]);
-	if (ft_strncmp(main->env_array[i], args[k], var_len) == 0
-		&& main->env_array[i][var_len] == '=')
-	{
-		new_env_array = (char **)malloc(sizeof(char *) * (i + 1));
-		if (!new_env_array)
-			error_function(10, main);
-		j = -1;
-		while (++j < i)
-			new_env_array[j] = main->env_array[j];
-		while (main->env_array[i + 1])
-		{
-			new_env_array[i] = main->env_array[i + 1];
-			i++;
-		}
-		new_env_array[i] = NULL;
-		free(main->env_array[j]);
-		free(main->env_array);
-		main->env_array = new_env_array;
-	}
+void remove_env_var_from_array(t_main *main, int k, char **args)
+{
+    int i;;
+    int j;
+    int var_len;
+    int env_count;
+    char **new_env_array;
+
+	init_values(&i, &j,  &env_count);
+    var_len = ft_strlen(args[k]);
+    while (main->env_array[env_count] != NULL)
+        env_count++;
+    new_env_array = (char **)malloc(sizeof(char *) * env_count);
+    if (!new_env_array)
+        error_function(10, main);
+    while (main->env_array[++i] != NULL)
+    {
+        if (!(ft_strncmp(main->env_array[i], args[k], var_len) == 0
+			&& main->env_array[i][var_len] == '='))
+            new_env_array[j++] = main->env_array[i];
+        else
+            free(main->env_array[i]);
+    }
+    new_env_array[j] = NULL;
+    free(main->env_array);
+    main->env_array = new_env_array;
 }
 
 void	ft_unset(t_main *main, char **args)
 {
-	int	i;
 	int	k;
 
 	k = 1;
-	while (args[k])
+	while (args[k] != NULL)
 	{
-		i = 0;
-		while (main->env_array[i])
-		{
-			remove_env_var_from_array(main, i, k, args);
-			i++;
-		}
+		remove_env_var_from_array(main, k, args);
 		k++;
 	}
 }

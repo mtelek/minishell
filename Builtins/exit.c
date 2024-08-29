@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:44 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/24 01:04:29 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 22:12:08 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,14 @@ void	ft_exit(t_main *main)
 		}
 		else if (main->cmd->args[2])
 		{
-			ft_putstr_fd(TOO_MANY_ARGS, 2);
+			ft_putstr_fd(TOO_MANY_ARGS, STDERR_FILENO);
 			main->exit_code = 1;
 			return ;
 		}
 		else
 			main->exit_code = ft_atoi(main->cmd->args[1]);
 	}
-	else
-		ft_putstr_fd(EXIT, 2);
+	ft_putstr_fd(EXIT, STDERR_FILENO);
 	free_at_exit(main);
 	exit(main->exit_code);
 }
