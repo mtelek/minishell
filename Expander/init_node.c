@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 10:50:14 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 18:32:11 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 12:52:30 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	join_expand_node(t_expand_node *expand, t_main *main, t_lexer *lexer)
 {
 	if (expand == NULL)
 	{
+		free(lexer->str);
 		lexer->str = ft_strdup("");
 		if (!lexer->str)
 			error_function(-1, main);

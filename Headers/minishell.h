@@ -76,7 +76,6 @@ typedef struct s_cmd
 	int						n_out;
 	int						n_append;
 	int						n_heredoc;
-	char					*heredoc_delimiter;
 	int						hd_indicator;
 	char					**delimiter;
 	char					*hd_content;
@@ -269,7 +268,7 @@ void						split_up_by_quotes(t_expand_node **head,
 void						no_var_name_found(t_expand_node *current,
 								t_main *main);
 int							check_for_another_heredoc(t_lexer *temp_lex);
-void						delimiter_check(t_cmd **cmd, t_lexer *temp_lex);
+void 						delimiter_check(char *delimiter, t_cmd *own_cmd);
 
 // ERRORS
 void						error_function(int error_type, t_main *main);
@@ -332,6 +331,7 @@ char						*ft_itoa(int n);
 void						ft_putnbr_fd(int n, int fd);
 size_t						ft_strlcpy(char *dest, const char *src,
 								size_t size);
+char						*ft_strncpy(char *dest, char *src, unsigned int n);
 
 // SIG
 void						child_signal_handler(int sig);

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 22:45:40 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/28 23:29:00 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 13:22:49 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void	free_cmd(t_cmd *cmd)
 		temp_cmd->cmd = NULL;
 		free(temp_cmd->args);
 		temp_cmd->args = NULL;
+		free(temp_cmd->hd_content);
+		temp_cmd->hd_content = NULL;
 		free(temp_cmd);
 		temp_cmd = NULL;
 		

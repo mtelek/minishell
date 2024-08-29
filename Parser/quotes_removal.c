@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_removal.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:04:41 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 02:09:01 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 12:09:54 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,19 @@ void	delete_qoutes(t_expand_node *current)
 		end = qoutes_handler(current->str, start) - 1;
 	if (end != 0)
 		remove_quotes(current->str, start, end);
+}
+
+int check_for_another_heredoc(t_lexer *temp_lex)
+{
+    if (temp_lex && temp_lex->next)
+        temp_lex = temp_lex->next;
+    while (temp_lex != NULL && temp_lex->type != PIPE)
+    {
+        if (temp_lex->type == HEREDOC)
+            return (1);
+        temp_lex = temp_lex->next;
+    }
+    return (0);
 }
 
 void	quotes_and_expander(t_lexer *lexer, t_main *main)

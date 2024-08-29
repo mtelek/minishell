@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   creating_cmd_table1.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 01:35:05 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 13:24:00 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds, int n_args)
 	cmd->n_out = 0;
 	cmd->n_append = 0;
 	cmd->n_heredoc = 0;
-	cmd->expander_decider = true;
 	if (temp_cmd == NULL)
 		temp_cmd = cmd;
 	if (temp_lex == NULL)
@@ -60,9 +59,9 @@ void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 	temp->in_fd = STDIN_FILENO;
 	temp->out_fd = STDOUT_FILENO;
 	temp->pid = -1;
-	temp->heredoc_delimiter = NULL;
 	temp->delimiter = NULL;
 	temp->hd_content = NULL;
+	temp->expander_decider = true;
 }
 
 void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)

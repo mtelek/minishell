@@ -126,6 +126,7 @@ int	main(int argc, char **argv, char **envp)
 	// tester> cat < file.txt | grep "pattern" | sort | uniq | wc -l | tee output.txt --memory issues
 	//cat <<"'haha'" also syntax error
 	//ft_pwd wrong if tilda is present after cd /
+	//heredoc malloc issues
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);

@@ -3,40 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   creating_cmd_table2.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 20:24:38 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 02:17:03 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/29 12:07:45 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
-
-void delimiter_check(t_cmd **cmd, t_lexer *temp_lex)
-{
-	int len;
-
-	if (temp_lex && temp_lex->str)
-	{
-		len = ft_strlen(temp_lex->str);
-		if (len > 1 && temp_lex->str[0] == 39 && temp_lex->str[len] == 39)
-			(*cmd)->expander_decider = false;
-	}
-}
-
-int check_for_another_heredoc(t_lexer *temp_lex)
-{
-    if (temp_lex && temp_lex->next)
-        temp_lex = temp_lex->next;
-    while (temp_lex != NULL && temp_lex->type != PIPE)
-    {
-        if (temp_lex->type == HEREDOC)
-            return (1);
-        temp_lex = temp_lex->next;
-    }
-    return (0);
-}
-
 
 void	handle_redirections(t_lexer **temp_lex, t_cmd **temp_cmd, int i)
 {
@@ -56,8 +30,6 @@ void	handle_redirections(t_lexer **temp_lex, t_cmd **temp_cmd, int i)
 	{
 		(*temp_cmd)->n_heredoc++;
 		(*temp_cmd)->hd_indicator = 1;
-		if (!check_for_another_heredoc((*temp_lex)))
-			delimiter_check(temp_cmd, *temp_lex);
 	}
 	if (i != 0)
 		*temp_lex = (*temp_lex)->next;
