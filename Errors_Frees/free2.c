@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 22:45:40 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 22:50:16 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/30 00:55:44 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,8 @@ void	free_array(char **array)
 
 void	free_cmd(t_cmd *cmd)
 {
-	int 	i;
 	t_cmd	*temp_cmd;
 
-	i = -1;
 	if (cmd == NULL)
 		return ;
 	while (cmd != NULL)
@@ -61,8 +59,8 @@ void	free_cmd(t_cmd *cmd)
 			free(temp_cmd->cmd);
 		free(temp_cmd->args);
 		temp_cmd->args = NULL;
-		free(temp_cmd->hd_content);
-		temp_cmd->hd_content = NULL;
+		if (temp_cmd->hd_content)
+            free(temp_cmd->hd_content);
 		free(temp_cmd);
 		temp_cmd = NULL;
 		
