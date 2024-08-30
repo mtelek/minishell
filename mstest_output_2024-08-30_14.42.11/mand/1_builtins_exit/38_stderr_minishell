@@ -1,0 +1,3 @@
+exit
+: exit: something: numeric argument required
+exit

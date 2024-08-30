@@ -1,0 +1,30 @@
+.git/                              Sig/
+.objs/                             Utils/
+.vscode/                           in.txt
+42_minishell_tester-master/        in2.txt
+<                                  main.c
+Builtins/                          minishell
+Env/                               mstest_output_2024-08-30_13.34.52/
+Errors_Frees/                      mstest_output_2024-08-30_13.37.10/
+Executor/                          mstest_output_2024-08-30_13.41.43/
+Expander/                          suppressions.supp
+HELPERS/                           test_cases.txt
+Headers/                           tmp_redir_out
+Lexer/                             valgrind_check.txt
+Makefile                           |
+Parser/                            
+.git/                              Sig/
+.objs/                             Utils/
+.vscode/                           in.txt
+42_minishell_tester-master/        in2.txt
+<                                  main.c
+Builtins/                          minishell
+Env/                               mstest_output_2024-08-30_13.34.52/
+Errors_Frees/                      mstest_output_2024-08-30_13.37.10/
+Executor/                          mstest_output_2024-08-30_13.41.43/
+Expander/                          suppressions.supp
+HELPERS/                           test_cases.txt
+Headers/                           tmp_redir_out
+Lexer/                             valgrind_check.txt
+Makefile                           |
+Parser/                            

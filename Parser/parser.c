@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 22:29:35 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/30 15:01:03 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ bool	builtin_check(t_main *main)
 	else if (ft_strncmp(main->cmd->cmd, "pwd", 3) == 0)
 		return (ft_pwd(main), true);
 	else if (ft_strncmp(main->cmd->cmd, "env", 3) == 0)
-		return (ft_env(main), true);
+		return (ft_env(main), false);
 	return (false);
 }
 

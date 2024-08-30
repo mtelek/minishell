@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_node.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 10:50:14 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/30 00:32:50 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/30 14:51:23 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ void	free_list(t_expand_node *expand)
 		temp = expand;
 		expand = expand->next;
 		free(temp->str);
-		free(temp);
+		if (temp)
+			free(temp); //made changes
 	}
 }
 

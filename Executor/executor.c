@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:50 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/23 19:49:08 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/30 14:52:07 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ char	*check_and_construct_path(char *bin, char *command,
 		path = ft_strjoin(temp, entry->d_name);
 		if (!path)
 			error_function(20, main);
-		free(temp);
+		if (temp)
+			free(temp); //made changes
 		return (path);
 	}
 	return (NULL);
@@ -79,14 +80,14 @@ char	*find_path(t_main *main, t_cmd *own_cmd, char *dir)
 	while (main->env_array[i] && ft_strncmp(main->env_array[i], dir,
 			len_dir) != 0)
 		i++;
-	if (main->env_array[i] == NULL)
+	if (main->env_array[i] == NULL || ft_strlen(main->env_array[i] + len_dir + 1) == 0)
 		exec(main, own_cmd, own_cmd->cmd);
 	bin = ft_split(main->env_array[i] + len_dir + 1, ':');
 	if (!bin[0] && !own_cmd->cmd)
 		exec(main, own_cmd, own_cmd->cmd);
 	path = find_dir(bin[0], own_cmd->cmd, main);
 	i = 1;
-	while (bin[i] && path == NULL)
+	while (bin[i] && bin[i+1] && path == NULL)
 		path = find_dir(bin[i++], own_cmd->cmd, main);
 	free_array(bin);
 	return (path);

@@ -1,0 +1,13 @@
+.git/                              Parser/
+.objs/                             Sig/
+.vscode/                           Utils/
+42_minishell_tester-master/        in.txt
+Builtins/                          in2.txt
+Env/                               main.c
+Errors_Frees/                      minishell
+Executor/                          mstest_output_2024-08-30_13.34.52/
+Expander/                          mstest_output_2024-08-30_13.37.10/
+HELPERS/                           suppressions.supp
+Headers/                           test_cases.txt
+Lexer/                             tmp_redir_out
+Makefile                           valgrind_check.txt

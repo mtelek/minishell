@@ -121,10 +121,15 @@ int	main(int argc, char **argv, char **envp)
 	char	*history_file;
 	int		m_exit_code;
 
-
 //heredoc malloc issues
 // cd leaks.
-// check for true command with << 
+// check for true command with <<
+// echo seg <<> echo segf parsing error
+// mtelek@c3r9p8:~/CommonCore/minishell$ ls
+// bash: ls: No such file or directory
+// mtelek@c3r9p8:~/CommonCore/minishell$ 
+// export a="asd" b="de" o= c="hellomi" X
+
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);

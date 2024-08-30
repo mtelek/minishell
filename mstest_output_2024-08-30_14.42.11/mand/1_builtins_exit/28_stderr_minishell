@@ -1,0 +1,3 @@
+exit
+: exit: A: numeric argument required
+exit

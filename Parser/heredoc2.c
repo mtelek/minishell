@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 20:11:18 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/30 12:27:41 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/30 13:54:47 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,9 +194,9 @@ void	get_hd_content(t_main *main, t_cmd *own_cmd)
 	own_cmd->delimiter = (char **)malloc(sizeof(char *) * (own_cmd->n_heredoc + 1));
 	if (!own_cmd->delimiter)
 		error_function(-1, main); //own error fucntion needed
-	  while (++i < own_cmd->n_heredoc)
+	while (++i < own_cmd->n_heredoc)
     {
-        own_cmd->delimiter[i] = ft_strdup(get_txt_name(main, HEREDOC, own_cmd->n_heredoc));
+        own_cmd->delimiter[i] = get_txt_name(main, HEREDOC, own_cmd->n_heredoc);
         delimiter_check(own_cmd->delimiter[i], own_cmd);
         remove_surrounding_quotes(own_cmd, main, i);
     }
@@ -209,13 +209,13 @@ void	get_hd_content(t_main *main, t_cmd *own_cmd)
 	}
 	else
 	{
+		content = NULL;
 		content = no_echo_but_heredoc(own_cmd->delimiter, content, main, own_cmd);
 		if (content)
 		{
-			own_cmd->hd_content = ft_strdup(content);
+			own_cmd->hd_content = content;
 			if (!own_cmd->hd_content)
 				error_function(-1, main);
-			free(content);
 			
 		}
 	}

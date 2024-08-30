@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:42 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 22:04:22 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/30 14:55:57 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void	ft_env(t_main *main)
 			main->exit_code = 1;
 			return ;
 		}
-		ft_putstr_fd(main->env_array[i], 1);
-		ft_putstr_fd("\n", 1);
+		ft_putstr_fd(main->env_array[i], STDIN_FILENO);
+		ft_putstr_fd("\n", STDIN_FILENO);
 		i++;
 	}
 	main->exit_code = 0;

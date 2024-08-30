@@ -1,0 +1,2 @@
+jexport: command not found
+/home/mtelek/42_minishell_tester/tester.sh: line 527: 570733 Segmentation fault      (core dumped) .//minishell
