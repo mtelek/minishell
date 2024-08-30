@@ -1,3 +1,0 @@
-exit
-: exit: echo: numeric argument required
-exit

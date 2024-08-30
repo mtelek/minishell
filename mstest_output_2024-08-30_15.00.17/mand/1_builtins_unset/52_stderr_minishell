@@ -1,2 +1,0 @@
-unset: /bin:/usr/bin:/usr/sbin:/home/mtelek/.local/funcheck/host:/home/mtelek/bin:/home/mtelek/.local/funcheck/host:/home/mtelek/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/share/rust/cargo/bin: invalid parameter name
-EcHO: command not found

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:50 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/30 14:52:07 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/30 23:16:12 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	exec(t_main *main, t_cmd *own_cmd, char *path)
 	{
 		if (execve(path, own_cmd->args, main->env_array) == -1)
 			exec_error_function(main, path);
+		exit(0);
 	}
 }
 

@@ -106,6 +106,7 @@ typedef struct s_main
 	int						count_line;
 	int						count_hd_line;
 	bool					quotes_removed;
+	__pid_t 				last_pid;
 	t_lexer					*lexer;
 	t_operator				*operators;
 	t_cmd					*cmd;
@@ -175,7 +176,7 @@ void						alloc_parser(t_main *main);
 void						alloc_exec(t_main *main);
 void						alloc_builtin(t_main *main);
 void						calling_redirects(t_main *main, t_cmd *own_cmd);
-void						wait_for_children(t_main *main);
+void						wait_for_children(t_main *main, int last_pid);
 void						find_hd_indicator(t_main *main, t_cmd *cmd);
 void						get_hd_content(t_main *main, t_cmd *own_cmd);
 void						parser_helper(t_main *main);
@@ -183,11 +184,11 @@ void						parser_helper(t_main *main);
 // PARSER/CMD_TABLE
 int							count_cmds(t_lexer *lexer);
 int							number_of_args(t_lexer *lexer);
-void						args_maker(t_lexer *lexer, t_cmd *cmd,
-								int n_cmds, int n_args);
+void						args_maker(t_cmd *cmd, int n_cmds,
+								int n_args, t_main *main);
 void						creating_cmd_table(t_main *main);
 int							setting_args(t_lexer **temp_lex, t_cmd **temp_cmd,
-								int n_args);
+								int n_args, t_main *main);
 
 //PARSER/PIPES
 t_cmd						*init_pipes(t_main *main);
@@ -219,7 +220,7 @@ void						free_array(char **array);
 char						**export_cmd(t_main *main, int j);
 void						ft_echo(t_cmd *own_cmd);
 void						ft_cd(t_main *main, int argc);
-void						ft_exit(t_main *main);
+void						ft_exit(t_cmd *own_cmd, t_main *main);
 void						ft_export(t_main *main, char **args);
 char						**ft_cpy_environ(char **env_array, int add);
 int							export_error(char **argv, t_main *main);

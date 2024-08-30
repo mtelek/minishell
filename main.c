@@ -90,6 +90,7 @@ void	init_main(t_main *main)
 	main->count_line = 0;
 	main->count_hd_line = 0;
 	main->quotes_removed = false;
+	main->last_pid = -1; //might not even be necessary
 }
 
 void	minishell(char *input, t_main *main)
@@ -124,12 +125,20 @@ int	main(int argc, char **argv, char **envp)
 //heredoc malloc issues
 // cd leaks.
 // check for true command with <<
-// echo seg <<> echo segf parsing error
-// mtelek@c3r9p8:~/CommonCore/minishell$ ls
+// mtelek@c3r9p8:~/CommonCore/minishell$ ls after deleting path
 // bash: ls: No such file or directory
-// mtelek@c3r9p8:~/CommonCore/minishell$ 
+// ctrl c and d in heredoc
+// export should print env with declare -x
+// export t=" -l"  -> ls$t does expand but not run the expanded version ls -l
 // export a="asd" b="de" o= c="hellomi" X
-
+// "." also error message missing for this, or the implemtation rather
+// mtelek@c3r9p8:~/CommonCore/minishell$ echo $=
+// $=
+// mtelek@c3r9p8:~/CommonCore/minishell$ echo $?
+// 0
+// mtelek@c3r9p8:~/CommonCore/minishell$   if after $ not alphabetical it just prints
+//Yes, in many shells, including those that follow the POSIX standard or are similar to bash, variable expansion typically requires that the character
+// following $ be a letter or underscore. This rule helps distinguish environment variables from other tokens and prevent ambiguity.
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);

@@ -8,3 +8,7 @@ valgrind --leak-check=full --show-leak-kinds=all --suppressions=suppressions.sup
 
 
 export VAR1=value VAR2=value
+
+-fsanitize=address
+
+-fsanitize=address

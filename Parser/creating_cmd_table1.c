@@ -6,13 +6,13 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 22:24:33 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/30 16:20:38 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-void	args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds, int n_args)
+void	args_maker(t_cmd *cmd, int n_cmds, int n_args, t_main *main)
 {
 	int				i;
 	static int		k;
@@ -26,8 +26,8 @@ void	args_maker(t_lexer *lexer, t_cmd *cmd, int n_cmds, int n_args)
 	if (temp_cmd == NULL)
 		temp_cmd = cmd;
 	if (temp_lex == NULL)
-		temp_lex = lexer;
-	i = setting_args(&temp_lex, &temp_cmd, n_args);
+		temp_lex = main->lexer;
+	i = setting_args(&temp_lex, &temp_cmd, n_args, main);
 	cmd->args[i] = NULL;
 	if (temp_lex != NULL)
 		temp_lex = temp_lex->next;
@@ -84,7 +84,7 @@ void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)
 		temp->args[j++] = NULL;
 	temp->next = NULL;
 	temp->hd_indicator = 0;
-	args_maker(main->lexer, temp, n_cmds, n_args);
+	args_maker(temp, n_cmds, n_args, main);
 	init_cmd_fd(main, temp, cmd);
 	temp->prev = *prev_node;
 	if (*prev_node)

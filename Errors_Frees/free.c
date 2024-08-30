@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 21:42:59 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 19:10:40 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/30 22:27:59 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ void	free_main(t_main *main)
 		free(main->env_array);
 		main->env_array = NULL;
 	}
-	main->exit_code = 0;
-	main->heredoc_flag = 0;
 }
 
 void	free_exec(t_exec *exec)
@@ -56,6 +54,13 @@ void	free_parser(t_parser *parser)
 			parser->pipes[i] = NULL;
 		}
 	}
+	//currently cause double free, should specify if n_append_out exitst freee append_out_fd
+	// free(parser->append_out_fd);
+	// parser->append_out_fd = NULL;
+	// free(parser->output_fd);
+	// parser->output_fd = NULL;
+	// free(parser->input_fd);
+	// parser->input_fd = NULL;
 	free(parser->pipes);
 	parser->pipes = NULL;
 	free(parser);
@@ -66,10 +71,10 @@ void	ok_free_function(t_main *main)
 {
 	if (main->operators)
 		free_operator(main->operators);
-	if (main->lexer)
-		free_lexer(main->lexer);
 	if (main->cmd)
 		free_cmd(main->cmd);
+	if (main->lexer)
+		free_lexer(main->lexer);
 	if (main->parser)
 		free_parser(main->parser);
 	if (main->exec)

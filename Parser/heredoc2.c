@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 20:11:18 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/30 13:54:47 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/30 20:48:19 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	echo_and_heredoc(char **delimiter, t_main *main, t_cmd *own_cmd)
 {
 	char	*line;
 	int		i;
+	char 	*count_line;
 
 	i = 0;
 	while (1)
@@ -61,16 +62,30 @@ int	echo_and_heredoc(char **delimiter, t_main *main, t_cmd *own_cmd)
 		line = readline("> ");
 		main->count_hd_line += 1;
 		if (!line || ft_strcmp(line, delimiter[i]) == 0)
+		{
+			if (!line)
+			{
+				main->count_hd_line -= 1;
+				count_line = ft_itoa(main->count_line);
+				ft_putstrs_fd("bash: warning: here-document at line ",
+					count_line, " delimited by end-of-file (wanted `", 2);
+				ft_putstrs_fd(delimiter[i], "')\n", NULL, 2);
+				free(count_line);
+				free(line);
+				main->heredoc_flag = 0;
+				break;
+			}
+		}
 			i++;
 		if (i == own_cmd->n_heredoc)
-		{
-			free(line);
 			break ;
-		}
 		free(line);
+		line = NULL;
 	}
 	if (i == own_cmd->n_heredoc)
-			return (1);
+	{
+		return (1);
+	}
 	return (0);
 }
 
@@ -90,10 +105,6 @@ char	*no_echo_but_heredoc(char **delimiter, char *content, t_main *main, t_cmd *
 		if (!line || ft_strcmp(line, delimiter[i]) == 0)
 		{
 			i++;
-			if (i == own_cmd->n_heredoc)
-			{
-				break;
-			}
 			if (!line)
 			{
 				main->count_hd_line -= 1;
@@ -103,8 +114,11 @@ char	*no_echo_but_heredoc(char **delimiter, char *content, t_main *main, t_cmd *
 				ft_putstrs_fd(delimiter[i], "')\n", NULL, 2);
 				free(count_line);
 				free(line);
+				main->heredoc_flag = 0;
 				break;
 			}
+			if (i == own_cmd->n_heredoc)
+				break;
 			continue; 
 		}
 		if (i == own_cmd->n_heredoc - 1)
@@ -157,29 +171,43 @@ void delimiter_check(char *delimiter, t_cmd *own_cmd)
 			own_cmd->expander_decider = false;
 		else if (len > 1 && delimiter[0] == 34 && delimiter[len - 1] == 34)
 			own_cmd->expander_decider = false;
+		else if (len > 1 && delimiter[0] == 39 && delimiter[1] == 39)
+			own_cmd->expander_decider = false;
+		else if (len > 1 && delimiter[0] == 34 && delimiter[1] == 34)
+			own_cmd->expander_decider = false;
+		else if (len > 1 && delimiter[len - 2] == 39 && delimiter[len - 1] == 39)
+			own_cmd->expander_decider = false;
+		else if (len > 1 && delimiter[len - 2] == 34 && delimiter[len - 1] == 34)
+			own_cmd->expander_decider = false;
 	}
 }
 
-void	remove_surrounding_quotes(t_cmd *own_cmd, t_main *main, int i)
+void	remove_surrounding_quotes(t_cmd *own_cmd, int i)
 {
     int len;
-    char *new_str;
-	int k;
 	int j;
 
     len = ft_strlen(own_cmd->delimiter[i]);
-    if (len > 1 && ((own_cmd->delimiter[i][0] == '"' && own_cmd->delimiter[i][len - 1] == '"')
-		|| (own_cmd->delimiter[i][0] == '\'' && own_cmd->delimiter[i][len - 1] == '\'')))
+    if (len > 1 && ((own_cmd->delimiter[i][0] == '"' && own_cmd->delimiter[i][1] == '"') ||
+                    (own_cmd->delimiter[i][0] == '\'' && own_cmd->delimiter[i][1] == '\'')))
+	{
+        for (j = 2; j < len; j++)
+            own_cmd->delimiter[i][j - 2] = own_cmd->delimiter[i][j];
+        len -= 2;
+        own_cmd->delimiter[i][len] = '\0';
+	}
+    else if (len > 1 && ((own_cmd->delimiter[i][len - 2] == '"' && own_cmd->delimiter[i][len - 1] == '"') ||
+                    (own_cmd->delimiter[i][len - 2] == '\'' && own_cmd->delimiter[i][len - 1] == '\'')))
+	{
+        own_cmd->delimiter[i][len - 2] = '\0';
+        len -= 2;
+	}
+    else if (len > 1 && ((own_cmd->delimiter[i][0] == '"' && own_cmd->delimiter[i][len - 1] == '"') ||
+                    (own_cmd->delimiter[i][0] == '\'' && own_cmd->delimiter[i][len - 1] == '\'')))
     {
-        new_str = (char *)malloc(len - 1);
-		if (!new_str)
-			error_function(-1, main); //proper error function
-		j = 0;
-        for (k = 1; k < len - 1; k++) 
-            new_str[j++] = own_cmd->delimiter[i][k];
-		new_str[len - 2] = '\0';
-		free(own_cmd->delimiter[i]);
-		own_cmd->delimiter[i] = new_str;
+        for (j = 1; j < len - 1; j++)
+            own_cmd->delimiter[i][j - 1] = own_cmd->delimiter[i][j];
+        own_cmd->delimiter[i][len - 2] = '\0';
     }
 }
 
@@ -197,8 +225,8 @@ void	get_hd_content(t_main *main, t_cmd *own_cmd)
 	while (++i < own_cmd->n_heredoc)
     {
         own_cmd->delimiter[i] = get_txt_name(main, HEREDOC, own_cmd->n_heredoc);
-        delimiter_check(own_cmd->delimiter[i], own_cmd);
-        remove_surrounding_quotes(own_cmd, main, i);
+    	delimiter_check(own_cmd->delimiter[i], own_cmd);
+        remove_surrounding_quotes(own_cmd, i);
     }
     own_cmd->delimiter[i] = NULL;
 	setup_heredoc_signal_handlers();
@@ -216,7 +244,6 @@ void	get_hd_content(t_main *main, t_cmd *own_cmd)
 			own_cmd->hd_content = content;
 			if (!own_cmd->hd_content)
 				error_function(-1, main);
-			
 		}
 	}
 }

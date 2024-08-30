@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   infile.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:44:13 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 14:46:12 by ibaranov         ###   ########.fr       */
+/*   Updated: 2024/08/30 19:09:44 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ char	*get_txt_name(t_main *main, int type, int limit)
 	static int		k;
 	t_lexer			*temp;
 
+	temp = NULL;
 	if (stat_lexer == NULL)
 		stat_lexer = main->lexer;
 	k++;
@@ -78,7 +79,6 @@ void	switch_fd_infile(t_main *main, t_cmd *own_cmd)
 			dup_failed(main, main->parser->input_fd[i], STDIN_FILENO);
 		if (close(main->parser->input_fd[i]) == -1)
 			close_failed(main, main->parser->input_fd[i]);
-		free(main->parser->input_fd);
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:44 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/30 13:54:41 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/30 22:31:38 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +18,36 @@ void	free_at_exit(t_main *main)
 	free_main(main);
 }
 
-void	ft_exit(t_main *main)
+void	ft_exit(t_cmd *own_cmd, t_main *main)
 {
 	int	i;
 
 	i = 0;
-	if (main->cmd->args[1])
+	if (own_cmd->args[1])
 	{
-		while (main->cmd->args[1][i] && ft_isdigit(main->cmd->args[1][i]))
+		while (own_cmd->args[1][i] && ft_isdigit(own_cmd->args[1][i]))
 			i++;
-		if (main->cmd->args[1][i])
+		if (own_cmd->args[1][i])
 		{
-			ft_putstrs_fd(E_NUM_ARG_P1, main->cmd->args[1], E_NUM_ARG_P2, 2);
-			main->exit_code = 2;
+			ft_putstrs_fd(E_NUM_ARG_P1, own_cmd->args[1], E_NUM_ARG_P2, 2);
+			if (main->cmd->next == NULL)
+				free_at_exit(main);
+			exit(2);
 		}
-		else if (main->cmd->args[2])
+		else if (own_cmd->args[2])
 		{
 			ft_putstr_fd(TOO_MANY_ARGS, STDERR_FILENO);
-			main->exit_code = 1;
-			return ;
+			if (main->cmd->next == NULL)
+				free_at_exit(main);
+			exit(1);
 		}
 		else
-			main->exit_code = ft_atoi(main->cmd->args[1]);
+			main->exit_code = ft_atoi(own_cmd->args[1]);
 	}
-	ft_putstr_fd(EXIT, STDERR_FILENO);
-	free_at_exit(main);
+	if (main->cmd->next == NULL)
+	{
+		free_at_exit(main);
+		ft_putstr_fd(EXIT, STDERR_FILENO);
+	}
 	exit(main->exit_code);
 }

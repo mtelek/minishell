@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 18:49:08 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/30 01:12:40 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/30 18:32:33 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 void	init_heredoc(t_main *main, t_cmd *own_cmd)
 {
 	int	pipe_fd[2];
+	int	j;
 
+	j = 0;
 	if (pipe(pipe_fd) == -1)
 		pipe_failed(main);
 	if (own_cmd->hd_content)
@@ -28,14 +30,13 @@ void	init_heredoc(t_main *main, t_cmd *own_cmd)
 	if (dup2(pipe_fd[0], STDIN_FILENO) < 0)
 		dup_failed(main, pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);
-	if (own_cmd->n_heredoc)
+	if (own_cmd->n_heredoc && !ft_strncmp(own_cmd->args[0], "echo", 4))
 	{
-		for (int j = 0; j < own_cmd->n_heredoc; j++)
+		while (j < own_cmd->n_heredoc)
 		{
 			free(own_cmd->delimiter[j]);
-			own_cmd->delimiter[j] = NULL; 
+			j++;
 		}
 		free(own_cmd->delimiter);
-		own_cmd->delimiter = NULL;
 	}
 }

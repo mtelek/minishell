@@ -1,2 +1,0 @@
-free(): invalid pointer
-/home/mtelek/42_minishell_tester/tester.sh: line 527: 555828 Aborted                 (core dumped) .//minishell
