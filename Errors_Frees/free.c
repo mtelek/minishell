@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 21:42:59 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/30 22:27:59 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/01 00:32:30 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,6 @@ void	free_parser(t_parser *parser)
 			parser->pipes[i] = NULL;
 		}
 	}
-	//currently cause double free, should specify if n_append_out exitst freee append_out_fd
-	// free(parser->append_out_fd);
-	// parser->append_out_fd = NULL;
-	// free(parser->output_fd);
-	// parser->output_fd = NULL;
-	// free(parser->input_fd);
-	// parser->input_fd = NULL;
 	free(parser->pipes);
 	parser->pipes = NULL;
 	free(parser);

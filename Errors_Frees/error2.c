@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:03:45 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/30 14:06:30 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 20:45:14 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,4 +106,6 @@ void	error_type30(int error_type)
 		ft_putstr_fd(MF_NEW_STR, STDERR_FILENO);
 	else if (error_type == 25)
 		ft_putstr_fd(MF_EXPNAD_NODE, STDERR_FILENO);
+	else if (error_type == 26)
+		ft_putstr_fd(MF_DELIMITER, STDERR_FILENO);
 }

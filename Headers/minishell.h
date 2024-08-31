@@ -122,9 +122,6 @@ typedef struct s_main
 	t_builtin				*builtin;
 }							t_main;
 
-//TESTER
-char						*ft_strtrim(char const *s1, char const *set);
-
 //HELPER/PRINTING
 void						print_cmd_table(t_cmd *cmd);
 void						print_lexer(t_lexer *lexer);
@@ -248,6 +245,13 @@ char						*no_echo_but_heredoc(char **delimiter,
 int							echo_and_heredoc(char **delimiter, t_main *main,
 								t_cmd *own_cmd);
 void						find_hd_indicator(t_main *main, t_cmd *cmd);
+char						*expand(char *str, t_main *main);
+void						update_count(t_main *main, char *line);
+char						*join_empty_and_full(t_main *main, char *content);
+char						*full_content_fill(t_main *main, t_cmd *own_cmd,
+								char *content, char *line);
+char						*empty_content_fill(t_main *main, t_cmd *own_cmd, char *content,
+								char *line);
 
 //EXPANDER/INIT
 void						cutting_up_lexer_str(t_expand_node **head,
@@ -348,6 +352,8 @@ size_t						ft_strlcpy(char *dest, const char *src,
 								size_t size);
 char						*ft_strncpy(char *dest, char *src, unsigned int n);
 char						*ft_strldup(char *str, int len);
+char						*ft_strtrim(char const *s1, char const *set);
+char						*ft_strndup(const char *s, size_t n);
 
 // SIG
 void						child_signal_handler(int sig);

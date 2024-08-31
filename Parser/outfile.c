@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:44:10 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 02:04:20 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 22:57:14 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	switch_fd_outfile(t_main *main, t_cmd *own_cmd)
 			dup_failed(main, main->parser->output_fd[i], STDOUT_FILENO);
 		if (close(main->parser->output_fd[i]) == -1)
 			close_failed(main, main->parser->output_fd[i]);
+		free(main->parser->output_fd);
 		i++;
 	}
 }

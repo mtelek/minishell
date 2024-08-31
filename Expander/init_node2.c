@@ -20,8 +20,10 @@ void	handle_quote(t_expand_node **head, t_lexer *lexer, t_main *main,
 	if (state->in_quotes && lexer->str[state->i] == state->quote_char)
 	{
 		state->in_quotes = false;
-		substr = strndup(lexer->str + state->start,
+		substr = ft_strndup(lexer->str + state->start,
 				state->i - state->start + 1);
+		if (!substr)
+			error_function(-1, main);
 		add_node(head, substr, main);
 		state->start = state->i + 1;
 	}
@@ -29,8 +31,10 @@ void	handle_quote(t_expand_node **head, t_lexer *lexer, t_main *main,
 	{
 		if (state->i > state->start)
 		{
-			substr = strndup(lexer->str + state->start,
+			substr = ft_strndup(lexer->str + state->start,
 					state->i - state->start);
+			if (!substr)
+					error_function(-1, main);
 			add_node(head, substr, main);
 		}
 		state->in_quotes = true;
@@ -46,7 +50,9 @@ void	handle_special_char(t_expand_node **head, t_lexer *lexer, t_main *main,
 
 	if (state->i > state->start)
 	{
-		substr = strndup(lexer->str + state->start, state->i - state->start);
+		substr = ft_strndup(lexer->str + state->start, state->i - state->start);
+		if (!substr)
+			error_function(-1, main);
 		add_node(head, substr, main);
 	}
 	state->start = state->i;
@@ -59,7 +65,9 @@ void	handle_space(t_expand_node **head, t_lexer *lexer, t_main *main,
 
 	if (state->i > state->start)
 	{
-		substr = strndup(lexer->str + state->start, state->i - state->start);
+		substr = ft_strndup(lexer->str + state->start, state->i - state->start);
+		if (!substr)
+			error_function(-1, main);
 		add_node(head, substr, main);
 	}
 	state->start = state->i + 1;
@@ -72,7 +80,9 @@ void	add_remaining_substring(t_expand_node **head, t_lexer *lexer,
 
 	if (state->i > state->start)
 	{
-		substr = strndup(lexer->str + state->start, state->i - state->start);
+		substr = ft_strndup(lexer->str + state->start, state->i - state->start);
+		if (!substr)
+			error_function(-1, main);
 		add_node(head, substr, main);
 	}
 }

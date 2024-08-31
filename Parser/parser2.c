@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 22:56:11 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 02:04:13 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 22:51:58 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void	parser_helper(t_main *main)
 {
 	creating_cmd_table(main);
 	alloc_parser(main);
-	find_hd_indicator(main, main->cmd);
 	alloc_exec(main);
 	alloc_builtin(main);
 }

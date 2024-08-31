@@ -44,7 +44,7 @@ void	error_function(int error_type, t_main *main)
 		error_type10(error_type);
 	if (error_type <= 15 && error_type >= 10)
 		error_type20(error_type);
-	if (error_type <= 25 && error_type >= 16)
+	if (error_type <= 30 && error_type >= 16)
 		error_type30(error_type);
 	exit(1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sig2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 00:20:29 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 20:05:36 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 20:42:35 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	heredoc_signal_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		(void)sig;
+		exit(130);
 	}
 	else if (sig == SIGQUIT)
 	{

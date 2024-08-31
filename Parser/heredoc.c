@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 18:49:08 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/30 18:32:33 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 21:00:53 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	init_heredoc(t_main *main, t_cmd *own_cmd)
 	if (dup2(pipe_fd[0], STDIN_FILENO) < 0)
 		dup_failed(main, pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);
-	if (own_cmd->n_heredoc && !ft_strncmp(own_cmd->args[0], "echo", 4))
+	if (own_cmd->n_heredoc)
 	{
 		while (j < own_cmd->n_heredoc)
 		{

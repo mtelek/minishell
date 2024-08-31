@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 02:05:41 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 22:53:00 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,4 +113,5 @@ void	parser(t_main *main)
 		exit(main->exit_code);
 	}
 	wait_for_children(main);
+	setup_parent_signal_handlers();
 }

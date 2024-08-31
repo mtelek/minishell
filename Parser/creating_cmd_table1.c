@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   creating_cmd_table1.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/30 16:20:38 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 23:19:34 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 {
 	(void)cmd;
 	temp->true_command = false;
-	if (!is_operator(temp->args[0][0], temp->args[0][1], main->operators, main))
+	if (temp->args[0] && !is_operator(temp->args[0][0], temp->args[0][1], main->operators, main))
 	{
 		temp->cmd = temp->args[0];
 		if (!temp->cmd)
