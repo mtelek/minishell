@@ -230,6 +230,9 @@ int							unset_error(char **args, t_main *main);
 char						*get_env_path(char **env_array, char *env);
 void						bubble_sort_env(char **env_array);
 void						swap(char **a, char **b);
+int							path_helper(int error_type, char *path,
+								t_main *main);
+void						too_many_args(t_main *main);
 
 //BUILTINS/HEREDOC
 void						get_hd_content(t_main *main, t_cmd *own_cmd);

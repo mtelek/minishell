@@ -1,40 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   export3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/16 17:07:42 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 14:16:51 by ibaranov         ###   ########.fr       */
+/*   Created: 2024/08/31 14:19:34 by ibaranov          #+#    #+#             */
+/*   Updated: 2024/08/31 14:22:04 by ibaranov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-void	ft_env(t_main *main)
+void	swap(char **a, char **b)
+{
+	char	*temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+void	bubble_sort_env(char **env_array)
 {
 	int	i;
+	int	j;
+	int	n;
 
+	n = 0;
+	while (env_array[n])
+		n++;
 	i = 0;
-	if (main->env_array == NULL)
+	while (i < n - 1)
 	{
-		ft_putstr_fd(ENV_NO_ACCES, STDERR_FILENO);
-		main->exit_code = 1;
-		return ;
-	}
-	bubble_sort_env(main->env_array);
-	while (main->env_array[i])
-	{
-		if (ft_strlen(main->env_array[i]) == 0)
+		j = 0;
+		while (j < n - i - 1)
 		{
-			ft_putstr_fd(EMPTY_ENV_VAR, STDOUT_FILENO);
-			main->exit_code = 1;
-			return ;
+			if (ft_strcmp(env_array[j], env_array[j + 1]) > 0)
+			{
+				swap(&env_array[j], &env_array[j + 1]);
+			}
+			j++;
 		}
-		ft_putstr_fd(main->env_array[i], STDOUT_FILENO);
-		ft_putstr_fd("\n", STDOUT_FILENO);
 		i++;
 	}
-	main->exit_code = 0;
 }

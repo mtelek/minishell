@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 17:50:55 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 02:27:30 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 14:20:29 by ibaranov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,40 +58,6 @@ void	arranging_new_array(t_main *main, int i, int j, char **args)
 	main->env_array = new_env_array;
 }
 
-void	swap(char **a, char **b)
-{
-	char	*temp;
-
-	temp = *a;
-	*a = *b;
-	*b = temp;
-}
-
-void	bubble_sort_env(char **env_array)
-{
-	int	i;
-	int	j;
-	int	n;
-
-	n = 0;
-	while (env_array[n])
-		n++;
-	i = 0;
-	while (i < n - 1)
-	{
-		j = 0;
-		while (j < n - i - 1)
-		{
-			if (ft_strcmp(env_array[j], env_array[j + 1]) > 0)
-			{
-				swap(&env_array[j], &env_array[j + 1]);
-			}
-			j++;
-		}
-		i++;
-	}
-}
-
 void	declare_x_export(t_main *main)
 {
 	int	i;
@@ -114,7 +80,7 @@ void	ft_export(t_main *main, char **args)
 	int	updated;
 
 	j = 0;
-	if (args[j] && !args[j+1])
+	if (args[j] && !args[j + 1])
 	{
 		declare_x_export(main);
 		return ;

@@ -3,34 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 20:11:18 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/30 20:48:19 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 14:40:30 by ibaranov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-char 	*expand(char *str, t_main *main)
+char	*expand(char *str, t_main *main)
 {
-    t_expand_node *expand;
-    t_expand_node *current;
+	t_expand_node	*expand;
+	t_expand_node	*current;
 	t_lexer lexer;
 	
-    expand = NULL;
+	expand = NULL;
 	lexer.str = str;
-    cutting_up_lexer_str(&expand, &lexer, main);
-    current = expand;
-    while (current != NULL)
-    {
-        current->to_expand = expander_check(current->str);
-        if (current->to_expand == true)
-            if (expander(current, main) == 1)
+	cutting_up_lexer_str(&expand, &lexer, main);
+	current = expand;
+	while (current != NULL)
+	{
+		current->to_expand = expander_check(current->str);
+		if (current->to_expand == true)
+			if (expander(current, main) == 1)
 				no_var_name_found(current, main);
-        current = current->next;
-    }
-    join_expand_node(expand, main, &lexer);
+		current = current->next;
+	}
+	join_expand_node(expand, main, &lexer);
 	return (lexer.str);
 }
 
@@ -54,7 +54,7 @@ int	echo_and_heredoc(char **delimiter, t_main *main, t_cmd *own_cmd)
 {
 	char	*line;
 	int		i;
-	char 	*count_line;
+	char	*count_line;
 
 	i = 0;
 	while (1)
@@ -63,7 +63,7 @@ int	echo_and_heredoc(char **delimiter, t_main *main, t_cmd *own_cmd)
 		main->count_hd_line += 1;
 		if (!line || ft_strcmp(line, delimiter[i]) == 0)
 		{
-			if (!line)
+		if (!line)
 			{
 				main->count_hd_line -= 1;
 				count_line = ft_itoa(main->count_line);
