@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 17:50:55 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 15:07:21 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 15:29:45 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ void	ft_export(t_main *main, char **args)
 	int	updated;
 
 	j = 0;
-	if (args[j] && !args[j + 1])
 	if (args[j] && !args[j + 1])
 	{
 		declare_x_export(main);

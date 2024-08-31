@@ -69,7 +69,8 @@ bool	syntax_doubles_diff(t_lexer *lexer)
 			return (ft_putstr_fd(ERROR_M_GREATER, 2), false);
 		if (lexer->next && lexer->type == HEREDOC && lexer->next->type == PIPE)
 			return (ft_putstr_fd(ERROR_M_PIPE, 2), false);
-		if (lexer->next && lexer->type == HEREDOC && lexer->next->type == APPEND_OUT)
+		if (lexer->next && lexer->type == HEREDOC
+			&& lexer->next->type == APPEND_OUT)
 			return (ft_putstr_fd(ERROR_M_GREATERP, 2), false);
 		lexer = lexer->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 18:26:03 by ibaranov          #+#    #+#             */
-/*   Updated: 2024/08/31 15:24:50 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 19:00:51 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void	change_dir(t_main *main, const char *path)
 void	ft_cd(t_main *main, int argc)
 {
 	char	*path;
+
 
 	if (argc < 3)
 	{

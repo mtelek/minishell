@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:46:49 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 14:35:40 by ibaranov         ###   ########.fr       */
+/*   Updated: 2024/08/31 20:09:17 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,5 @@ void	cutting_up_lexer_str(t_expand_node **head, t_lexer *lexer, t_main *main)
 		&& find_character(lexer->str, 39) == -1)
 		split_up_by_dollar(head, lexer, main);
 	else
-		split_up_by_quotes(head, lexer, main);
+		split_up_by_quotes(head, lexer, main); //could do something if its nothing
 }
