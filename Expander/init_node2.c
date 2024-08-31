@@ -12,93 +12,92 @@
 
 #include "../Headers/minishell.h"
 
-void	handle_quote(t_expand_node **head, t_lexer *lexer, t_main *main, int *i,
-		int *start, bool *in_quotes, char *quote_char)
+void	handle_quote(t_expand_node **head, t_lexer *lexer, t_main *main,
+			t_init_ex_node *state)
 {
 	char	*substr;
 
-	if (*in_quotes && lexer->str[*i] == *quote_char)
+	if (state->in_quotes && lexer->str[state->i] == state->quote_char)
 	{
-		*in_quotes = false;
-		substr = strndup(lexer->str + *start, *i - *start + 1);
+		state->in_quotes = false;
+		substr = strndup(lexer->str + state->start,
+				state->i - state->start + 1);
 		add_node(head, substr, main);
-		*start = *i + 1;
+		state->start = state->i + 1;
 	}
-	else if (!*in_quotes)
+	else if (!state->in_quotes)
 	{
-		if (*i > *start)
+		if (state->i > state->start)
 		{
-			substr = strndup(lexer->str + *start, *i - *start);
+			substr = strndup(lexer->str + state->start,
+					state->i - state->start);
 			add_node(head, substr, main);
 		}
-		*in_quotes = true;
-		*quote_char = lexer->str[*i];
-		*start = *i;
+		state->in_quotes = true;
+		state->quote_char = lexer->str[state->i];
+		state->start = state->i;
 	}
 }
 
 void	handle_special_char(t_expand_node **head, t_lexer *lexer, t_main *main,
-		int *i, int *start)
+			t_init_ex_node *state)
 {
 	char	*substr;
 
-	if (*i > *start)
+	if (state->i > state->start)
 	{
-		substr = strndup(lexer->str + *start, *i - *start);
+		substr = strndup(lexer->str + state->start, state->i - state->start);
 		add_node(head, substr, main);
 	}
-	*start = *i;
+	state->start = state->i;
 }
 
-void	handle_space(t_expand_node **head, t_lexer *lexer, t_main *main, int *i,
-		int *start)
+void	handle_space(t_expand_node **head, t_lexer *lexer, t_main *main,
+			t_init_ex_node *state)
 {
 	char	*substr;
 
-	if (*i > *start)
+	if (state->i > state->start)
 	{
-		substr = strndup(lexer->str + *start, *i - *start);
+		substr = strndup(lexer->str + state->start, state->i - state->start);
 		add_node(head, substr, main);
 	}
-	*start = *i + 1;
+	state->start = state->i + 1;
 }
 
 void	add_remaining_substring(t_expand_node **head, t_lexer *lexer,
-		t_main *main, int i, int start)
+		t_main *main, t_init_ex_node *state)
 {
 	char	*substr;
 
-	if (i > start)
+	if (state->i > state->start)
 	{
-		substr = strndup(lexer->str + start, i - start);
+		substr = strndup(lexer->str + state->start, state->i - state->start);
 		add_node(head, substr, main);
 	}
 }
 
 void	split_up_by_quotes(t_expand_node **head, t_lexer *lexer, t_main *main)
 {
-	int		i;
-	int		start;
-	bool	in_quotes;
-	char	quote_char;
+	t_init_ex_node	state;
 
-	i = -1;
-	start = 0;
-	in_quotes = false;
-	quote_char = '\0';
-	while (lexer->str[++i])
+	state.i = 0;
+	state.start = 0;
+	state.in_quotes = false;
+	state.quote_char = '\0';
+	while (lexer->str[state.i])
 	{
-		if (lexer->str[i] == '"' || lexer->str[i] == '\'')
+		if (lexer->str[state.i] == '"' || lexer->str[state.i] == '\'')
 		{
-			handle_quote(head, lexer, main, &i, &start, &in_quotes,
-				&quote_char);
+			handle_quote(head, lexer, main, &state);
 		}
-		else if (lexer->str[i] == '$' && !in_quotes)
+		else if (lexer->str[state.i] == '$' && !state.in_quotes)
 		{
-			handle_special_char(head, lexer, main, &i, &start);
+			handle_special_char(head, lexer, main, &state);
 		}
-		else if (lexer->str[i] == ' ' && !in_quotes)
-			handle_space(head, lexer, main, &i, &start);
+		else if (lexer->str[state.i] == ' ' && !state.in_quotes)
+			handle_space(head, lexer, main, &state);
+		state.i = state.i +1;
 	}
-	add_remaining_substring(head, lexer, main, i, start);
+	add_remaining_substring(head, lexer, main, &state);
 }

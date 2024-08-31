@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibaranov <ibaranov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 17:50:55 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 14:20:29 by ibaranov         ###   ########.fr       */
+/*   Updated: 2024/08/31 15:07:21 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ int	export_error(char **args, t_main *main)
 	{
 		j = 0;
 		if (!ft_isalpha(args[i][j]) && args[i][j] != '_')
-			return (ft_putstrs_fd(NOT_VAILD_ID_1, args[i],
-					NOT_VALID_ID_2, 2), main->exit_code = 1, 1);
+			return (ft_putstrs_fd(NOT_VAILD_ID_1, args[i], NOT_VALID_ID_2, 2),
+				main->exit_code = 1, 1);
 		while (args[i][j] && args[i][j] != '=')
 		{
 			if (!ft_isalnum(args[i][j]) && args[i][j] != '_')
-				return (ft_putstrs_fd(NOT_VAILD_ID_1, args[i],
-						NOT_VALID_ID_2, 2), main->exit_code = 1, 1);
+				return (ft_putstrs_fd(NOT_VAILD_ID_1, args[i], NOT_VALID_ID_2,
+						2), main->exit_code = 1, 1);
 			j++;
 		}
 		i++;
@@ -73,6 +73,20 @@ void	declare_x_export(t_main *main)
 	}
 }
 
+int	update_array(t_main *main, char **args, int i, int j)
+{
+	if (ft_strncmp(main->env_array[i], args[j], ft_strchr(args[j], '=')
+			- args[j]) == 0)
+	{
+		free(main->env_array[i]);
+		main->env_array[i] = ft_strdup(args[j]);
+		if (!main->env_array[i])
+			error_function(-1, main);
+		return (1);
+	}
+	return (0);
+}
+
 void	ft_export(t_main *main, char **args)
 {
 	int	i;
@@ -80,6 +94,7 @@ void	ft_export(t_main *main, char **args)
 	int	updated;
 
 	j = 0;
+	if (args[j] && !args[j + 1])
 	if (args[j] && !args[j + 1])
 	{
 		declare_x_export(main);
@@ -91,13 +106,8 @@ void	ft_export(t_main *main, char **args)
 		updated = 0;
 		while (main->env_array[++i])
 		{
-			if (ft_strncmp(main->env_array[i],
-					args[j], ft_strchr(args[j], '=') - args[j]) == 0)
+			if (update_array(main, args, i, j) == 1)
 			{
-				free(main->env_array[i]);
-				main->env_array[i] = ft_strdup(args[j]);
-				if (!main->env_array[i])
-					error_function(-1, main);
 				updated = 1;
 				break ;
 			}

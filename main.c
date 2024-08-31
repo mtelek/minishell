@@ -128,6 +128,8 @@ int	main(int argc, char **argv, char **envp)
 // export t=" -l"  -> ls$t does expand but not run the expanded version ls -l
 //Yes, in many shells, including those that follow the POSIX standard or are similar to bash, variable expansion typically requires that the character
 // following $ be a letter or underscore. This rule helps distinguish environment variables from other tokens and prevent ambiguity.
+// add ? as var delimiter in expander:
+
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);

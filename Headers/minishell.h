@@ -35,6 +35,14 @@
 
 # define BUF_SIZE 4096
 
+typedef struct s_init_ex_node
+{
+    int			i;
+    int			start;
+    bool		in_quotes;
+    char		quote_char;
+} 				t_init_ex_node;
+
 typedef struct s_expand_node
 {
 	char					*str;
