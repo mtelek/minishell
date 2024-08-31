@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   creating_cmd_table2.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 20:24:38 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/30 16:19:04 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 02:06:42 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-void	handle_redirections(t_lexer **temp_lex, t_cmd **temp_cmd, int i, t_main *main)
+void	handle_redirections(t_lexer **temp_lex, t_cmd **temp_cmd,
+			int i, t_main *main)
 {
 	if ((i == 0 && (*temp_lex)->type != 6 && (*temp_lex)->next)
 		|| ((*temp_lex)->prev && (*temp_lex)->prev->type == 1
 			&& (*temp_lex)->type != 6 && (*temp_lex)->next))
 	{
-		(*temp_cmd)->args[i] = ft_strdup((*temp_lex)->str); // removed ft_strdup here
+		(*temp_cmd)->args[i] = ft_strdup((*temp_lex)->str);
 		if (!(*temp_cmd)->args[i])
 			error_function(-1, main);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:16:28 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/30 22:58:46 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 01:18:06 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	handle_fds(t_main *main, t_cmd *current, int i)
 t_cmd	*process_command(t_main *main, t_cmd *current, int *i, int *j)
 {
 	current->pid = fork1(main);
-	main->last_pid = current->pid;
 	if (current->pid == 0)
 	{
 		handle_fds(main, current, *i);

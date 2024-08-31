@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:42 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/30 22:27:13 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 00:47:49 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void ft_env(t_main *main)
         main->exit_code = 1;
         return ;
     }
+    bubble_sort_env(main->env_array);
     while (main->env_array[i])
     {
         if (ft_strlen(main->env_array[i]) == 0)

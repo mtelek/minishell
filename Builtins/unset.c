@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:40 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 19:04:15 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 02:21:24 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,32 +44,32 @@ void	init_values(int *i, int *j, int *env_count)
 	*env_count = 0;
 }
 
-void remove_env_var_from_array(t_main *main, int k, char **args)
+void	remove_env_var_from_array(t_main *main, int k, char **args)
 {
-    int i;;
-    int j;
-    int var_len;
-    int env_count;
-    char **new_env_array;
+	int		i;
+	int		j;
+	int		var_len;
+	int		env_count;
+	char	**new_env_array;
 
-	init_values(&i, &j,  &env_count);
-    var_len = ft_strlen(args[k]);
-    while (main->env_array[env_count] != NULL)
-        env_count++;
-    new_env_array = (char **)malloc(sizeof(char *) * env_count);
-    if (!new_env_array)
-        error_function(10, main);
-    while (main->env_array[++i] != NULL)
-    {
-        if (!(ft_strncmp(main->env_array[i], args[k], var_len) == 0
-			&& main->env_array[i][var_len] == '='))
-            new_env_array[j++] = main->env_array[i];
-        else
-            free(main->env_array[i]);
-    }
-    new_env_array[j] = NULL;
-    free(main->env_array);
-    main->env_array = new_env_array;
+	init_values(&i, &j, &env_count);
+	var_len = ft_strlen(args[k]);
+	while (main->env_array[env_count] != NULL)
+		env_count++;
+	new_env_array = (char **)malloc(sizeof(char *) * env_count);
+	if (!new_env_array)
+		error_function(10, main);
+	while (main->env_array[++i] != NULL)
+	{
+		if (!(ft_strncmp(main->env_array[i], args[k], var_len) == 0
+				&& main->env_array[i][var_len] == '='))
+			new_env_array[j++] = main->env_array[i];
+		else
+			free(main->env_array[i]);
+	}
+	new_env_array[j] = NULL;
+	free(main->env_array);
+	main->env_array = new_env_array;
 }
 
 void	ft_unset(t_main *main, char **args)

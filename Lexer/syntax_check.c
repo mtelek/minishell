@@ -60,9 +60,12 @@ bool	syntax_doubles_diff(t_lexer *lexer)
 				return (false);
 		if (lexer->type < 6 && !lexer->next)
 			return (ft_putstr_fd(ERROR_M_NEWLINE, 2), false);
-		if (lexer->prev && lexer->type == HEREDOC && (lexer->prev->type == OUTPUT_RED || lexer->prev->type == APPEND_OUT))
+		if (lexer->prev && lexer->type == HEREDOC
+			&& (lexer->prev->type == OUTPUT_RED
+				|| lexer->prev->type == APPEND_OUT))
 			return (ft_putstr_fd(ERROR_M_LESSERP, 2), false);
-		if (lexer->prev && lexer->type == OUTPUT_RED && lexer->prev->type == HEREDOC)
+		if (lexer->prev && lexer->type == OUTPUT_RED
+			&& lexer->prev->type == HEREDOC)
 			return (ft_putstr_fd(ERROR_M_GREATER, 2), false);
 		lexer = lexer->next;
 	}

@@ -106,7 +106,6 @@ typedef struct s_main
 	int						count_line;
 	int						count_hd_line;
 	bool					quotes_removed;
-	__pid_t 				last_pid;
 	t_lexer					*lexer;
 	t_operator				*operators;
 	t_cmd					*cmd;
@@ -176,7 +175,7 @@ void						alloc_parser(t_main *main);
 void						alloc_exec(t_main *main);
 void						alloc_builtin(t_main *main);
 void						calling_redirects(t_main *main, t_cmd *own_cmd);
-void						wait_for_children(t_main *main, int last_pid);
+void						wait_for_children(t_main *main);
 void						find_hd_indicator(t_main *main, t_cmd *cmd);
 void						get_hd_content(t_main *main, t_cmd *own_cmd);
 void						parser_helper(t_main *main);
@@ -229,12 +228,15 @@ void						ft_pwd(t_main *main);
 void						ft_env(t_main *main);
 int							unset_error(char **args, t_main *main);
 char						*get_env_path(char **env_array, char *env);
+void						bubble_sort_env(char **env_array);
+void						swap(char **a, char **b);
 
 //BUILTINS/HEREDOC
 void						get_hd_content(t_main *main, t_cmd *own_cmd);
-char						*no_echo_but_heredoc(char **delimiter, char *content,
-								t_main *main, t_cmd *own_cmd);
-int							echo_and_heredoc(char **delimiter, t_main *main, t_cmd *own_cmd);
+char						*no_echo_but_heredoc(char **delimiter,
+								char *content, t_main *main, t_cmd *own_cmd);
+int							echo_and_heredoc(char **delimiter, t_main *main,
+								t_cmd *own_cmd);
 void						find_hd_indicator(t_main *main, t_cmd *cmd);
 
 //EXPANDER/INIT
@@ -254,7 +256,8 @@ void						decide_to_expand(t_lexer *lexer, t_main *main);
 bool						expander_check(char *str);
 int							expander(t_expand_node *expand, t_main *main);
 char						*find_var_name(char *str, t_main *main);
-char						*find_env_row(char **env_array, char *var, t_main *main);
+char						*find_env_row(char **env_array, char *var,
+								t_main *main);
 int							find_character(char *str, char c);
 void						remove_dollar_sign(t_expand_node *expand,
 								t_main *main);
@@ -270,7 +273,7 @@ void						split_up_by_quotes(t_expand_node **head,
 void						no_var_name_found(t_expand_node *current,
 								t_main *main);
 int							check_for_another_heredoc(t_lexer *temp_lex);
-void 						delimiter_check(char *delimiter, t_cmd *own_cmd);
+void						delimiter_check(char *delimiter, t_cmd *own_cmd);
 
 // ERRORS
 void						error_function(int error_type, t_main *main);

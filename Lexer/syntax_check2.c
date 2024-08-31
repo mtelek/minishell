@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 19:16:55 by ibaranov          #+#    #+#             */
-/*   Updated: 2024/08/29 16:56:07 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 02:14:51 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,22 @@
 
 bool	dot_check(t_lexer *lexer, t_main *main)
 {
-	if (lexer->str[0] == '.' && lexer->str[1] == '\0' && lexer->next == NULL)
+	if ((lexer->str[0] == '.' && lexer->str[1] == '\0' && lexer->next == NULL)
+		|| (lexer->str[0] == 34 && lexer->str[1] == '.'
+			&& lexer->str[2] == 34 && lexer->str[3] == '\0')
+		|| (lexer->str[0] == 39 && lexer->str[1] == '.'
+			&& lexer->str[2] == 39 && lexer->str[3] == '\0'))
 	{
 		ft_putstr_fd("bash: .: filename argument required\n", 2);
 		ft_putstr_fd(".: usage: . filename [arguments]\n", 2);
 		return (false);
 	}
-	if (lexer->str[0] == '.' && lexer->str[1] == '.'
-		&& lexer->str[2] == '\0' && lexer->next == NULL)
+	if ((lexer->str[0] == '.' && lexer->str[1] == '.'
+			&& lexer->str[2] == '\0' && lexer->next == NULL)
+		|| (lexer->str[0] == 34 && lexer->str[1] == '.' && lexer->str[2] == '.'
+			&& lexer->str[3] == 34 && lexer->str[4] == '\0')
+		|| (lexer->str[0] == 39 && lexer->str[1] == '.' && lexer->str[2] == '.'
+			&& lexer->str[3] == 39 && lexer->str[4] == '\0'))
 	{
 		ft_putstr_fd("..: command not found\n", 2);
 		main->exit_code = 127;
@@ -32,7 +40,7 @@ bool	dot_check(t_lexer *lexer, t_main *main)
 
 int	find_next_character(char *str, int i, char c)
 {
-	if (str[i+1])
+	if (str[i + 1])
 		i++;
 	else
 		return (-1);
@@ -47,39 +55,39 @@ int	find_next_character(char *str, int i, char c)
 
 int	inside_quote_check(t_lexer *lexer, int i, char c)
 {
-	int next_quote;
-	
+	int	next_quote;
+
 	next_quote = find_next_character(lexer->str, i, c);
-    if (next_quote == -1)
-    {
+	if (next_quote == -1)
+	{
 		if (c == 34)
-       		ft_putstr_fd(ERR_QUOTE2, 2);
+			ft_putstr_fd(ERR_QUOTE2, 2);
 		else if (c == 39)
 			ft_putstr_fd(ERR_QUOTE1, 2);
-        return (-1);
-    }
-    i = next_quote;
+		return (-1);
+	}
+	i = next_quote;
 	return (i);
 }
 
-bool quote_check(t_lexer *lexer)
+bool	quote_check(t_lexer *lexer)
 {
-    int i;
+	int	i;
 
-    while (lexer != NULL)
-    {
-        i = 0;
-        while (lexer->str[i])
-        {
-            if (lexer->str[i] == 39)
+	while (lexer != NULL)
+	{
+		i = 0;
+		while (lexer->str[i])
+		{
+			if (lexer->str[i] == 39)
 				i = inside_quote_check(lexer, i, 39);
-            else if (lexer->str[i] == 34)
+			else if (lexer->str[i] == 34)
 				i = inside_quote_check(lexer, i, 34);
 			if (i == -1)
 				return (false);
-            i++;
-        }
-        lexer = lexer->next;
-    }
-    return (true);
+			i++;
+		}
+		lexer = lexer->next;
+	}
+	return (true);
 }

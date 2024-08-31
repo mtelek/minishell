@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:50 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/30 23:16:12 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 02:18:26 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*check_and_construct_path(char *bin, char *command,
 		if (!path)
 			error_function(20, main);
 		if (temp)
-			free(temp); //made changes
+			free(temp);
 		return (path);
 	}
 	return (NULL);
@@ -81,14 +81,15 @@ char	*find_path(t_main *main, t_cmd *own_cmd, char *dir)
 	while (main->env_array[i] && ft_strncmp(main->env_array[i], dir,
 			len_dir) != 0)
 		i++;
-	if (main->env_array[i] == NULL || ft_strlen(main->env_array[i] + len_dir + 1) == 0)
+	if (main->env_array[i] == NULL
+		|| ft_strlen(main->env_array[i] + len_dir + 1) == 0)
 		exec(main, own_cmd, own_cmd->cmd);
 	bin = ft_split(main->env_array[i] + len_dir + 1, ':');
 	if (!bin[0] && !own_cmd->cmd)
 		exec(main, own_cmd, own_cmd->cmd);
 	path = find_dir(bin[0], own_cmd->cmd, main);
 	i = 1;
-	while (bin[i] && bin[i+1] && path == NULL)
+	while (bin[i] && bin[i + 1] && path == NULL)
 		path = find_dir(bin[i++], own_cmd->cmd, main);
 	free_array(bin);
 	return (path);

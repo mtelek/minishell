@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_removal.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:04:41 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 12:09:54 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/08/31 01:59:38 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,24 +55,38 @@ void	delete_qoutes(t_expand_node *current)
 		remove_quotes(current->str, start, end);
 }
 
-int check_for_another_heredoc(t_lexer *temp_lex)
+int	check_for_another_heredoc(t_lexer *temp_lex)
 {
-    if (temp_lex && temp_lex->next)
-        temp_lex = temp_lex->next;
-    while (temp_lex != NULL && temp_lex->type != PIPE)
-    {
-        if (temp_lex->type == HEREDOC)
-            return (1);
-        temp_lex = temp_lex->next;
-    }
-    return (0);
+	if (temp_lex && temp_lex->next)
+		temp_lex = temp_lex->next;
+	while (temp_lex != NULL && temp_lex->type != PIPE)
+	{
+		if (temp_lex->type == HEREDOC)
+			return (1);
+		temp_lex = temp_lex->next;
+	}
+	return (0);
+}
+
+int	not_alphabetical_check(t_lexer *lexer, int *flag)
+{
+	if (lexer->str[0] == '$' && lexer->str[1] && !ft_isalpha(lexer->str[1]))
+	{
+		*flag = 1;
+		return (1);
+	}
+	return (0);
 }
 
 void	quotes_and_expander(t_lexer *lexer, t_main *main)
 {
+	int	flag;
+
 	while (lexer != NULL)
 	{
-		if (lexer->prev && lexer->prev->type == HEREDOC && !check_for_another_heredoc(lexer))
+		flag = 0;
+		if (lexer->prev && lexer->prev->type == HEREDOC
+			&& !check_for_another_heredoc(lexer))
 		{
 			if (lexer->next)
 				lexer = lexer->next;
@@ -82,7 +96,12 @@ void	quotes_and_expander(t_lexer *lexer, t_main *main)
 		if (ft_strcmp(lexer->str, "echo") == 0 && lexer->next
 			&& ft_strcmp(lexer->next->str, "$?") == 0)
 			return ;
-		decide_to_expand(lexer, main);
-		lexer = lexer->next;
+		if (not_alphabetical_check(lexer, &flag) == 1)
+			lexer = lexer->next;
+		if (!flag)
+		{
+			decide_to_expand(lexer, main);
+			lexer = lexer->next;
+		}
 	}
 }

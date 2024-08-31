@@ -1,0 +1,8 @@
+// "." also error message missing for this, or the implemtation rather
+// export should print env with declare -x
+// export a="asd" b="de" o= c="hellomi" X
+// mtelek@c3r9p8:~/CommonCore/minishell$ echo $=
+// $=
+// mtelek@c3r9p8:~/CommonCore/minishell$ echo $?
+// 0
+// mtelek@c3r9p8:~/CommonCore/minishell$   if after $ not alphabetical it just prints
