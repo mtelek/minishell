@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 15:22:12 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 15:35:18 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/01 22:51:31 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,15 @@ bool	quote_check(t_lexer *lexer)
 		}
 		lexer = lexer->next;
 	}
+	return (true);
+}
+
+bool	checking_combinaton(t_lexer *lexer)
+{
+	if ((lexer->type == 3 && lexer->next->type == 2))
+		return (ft_putstr_fd(ERROR_M_LESSER, 2), false);
+	else if ((lexer->type == 2 && lexer->next->type == 1)
+		|| (lexer->type == 3 && lexer->next->type == 1))
+		return (ft_putstr_fd(ERROR_M_PIPE, 2), false);
 	return (true);
 }

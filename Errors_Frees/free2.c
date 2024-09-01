@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 22:45:40 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 01:30:28 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/01 22:17:29 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	free_cmd(t_cmd *cmd)
 		cmd = cmd->next;
 		if (temp_cmd->hd_content)
 		{
-			free(temp_cmd->hd_content);	
+			free(temp_cmd->hd_content);
 			temp_cmd->hd_content = NULL;
 		}
 		if (temp_cmd->true_command == true)

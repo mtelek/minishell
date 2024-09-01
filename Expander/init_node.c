@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_node.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 10:50:14 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 00:11:18 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/01 22:11:46 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,7 @@ void	split_up_by_dollar(t_expand_node **head, t_lexer *lexer, t_main *main)
 		{
 			if (i > start)
 			{
-				substr = ft_strndup(lexer->str + start, i - start);
-				if (!substr)
-					error_function(-1, main);
+				substr = create_substr(lexer, i, start, main);
 				add_node(head, substr, main);
 			}
 			start = i;
@@ -122,9 +120,7 @@ void	split_up_by_dollar(t_expand_node **head, t_lexer *lexer, t_main *main)
 	}
 	if (i > start)
 	{
-		substr = ft_strndup(lexer->str + start, i - start);
-		if (!substr)
-			error_function(-1, main);
+		substr = create_substr(lexer, i, start, main);
 		add_node(head, substr, main);
 	}
 }

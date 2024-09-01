@@ -12,11 +12,12 @@
 
 #include "../Headers/minishell.h"
 
-char	*empty_content_fill(t_main *main, t_cmd *own_cmd, char *content, char *line)
+char	*empty_content_fill(t_main *main, t_cmd *own_cmd,
+				char *content, char *line)
 {
-	char 	*expanded_str;
+	char	*expanded_str;
 	char	*temp;
-	
+
 	if (own_cmd->expander_decider == true)
 		expanded_str = expand(line, main);
 	else
@@ -30,14 +31,15 @@ char	*empty_content_fill(t_main *main, t_cmd *own_cmd, char *content, char *line
 	return (content);
 }
 
-char	*full_content_fill(t_main *main, t_cmd *own_cmd, char *content, char *line)
+char	*full_content_fill(t_main *main, t_cmd *own_cmd,
+			char *content, char *line)
 {
-	char *expanded_str;
+	char	*expanded_str;
 
 	if (own_cmd->expander_decider == true)
 		expanded_str = expand(line, main);
 	else
-	expanded_str = line;
+		expanded_str = line;
 	content = ft_strdup(expanded_str);
 	if (!content)
 		error_function(-1, main);

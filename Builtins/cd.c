@@ -2,11 +2,11 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+        
+/*                                                    +:+ +:+
 	+:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+      
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+
 	+#+        */
-/*                                                +#+#+#+#+#+  
+/*                                                +#+#+#+#+#+
 	+#+           */
 /*   Created: 2024/08/28 18:26:03 by ibaranov          #+#    #+#             */
 /*   Updated: 2024/08/31 19:00:51 by mtelek           ###   ########.fr       */
@@ -85,33 +85,33 @@ void	set_oldpwd_export(t_main *main, const char *oldpwd, t_cd *cd)
 	free(cd->argv);
 }
 
-void change_dir(t_main *main, const char *path)
+void	change_dir(t_main *main, const char *path)
 {
-    char cwd[BUF_SIZE];
-    char oldpwd[BUF_SIZE];
-    t_cd *cd;
+	char	cwd[BUF_SIZE];
+	char	oldpwd[BUF_SIZE];
+	t_cd	*cd;
 
-    cd = malloc(sizeof(t_cd));
-    if (!cd)
-        error_function(28, main);
-    if (!getcwd(oldpwd, BUF_SIZE))
-    {
-        free(cd);
-        return ;
-    }
-    if (chdir(path) != 0)
-    {
-        free(cd);
-        return ;
-    }
-    if (!getcwd(cwd, BUF_SIZE))
-    {
-        free(cd);
-        return ;
-    }
-    set_oldpwd_export(main, oldpwd, cd);
-    set_pwd_export(main, cwd, cd);
-    free(cd);
+	cd = malloc(sizeof(t_cd));
+	if (!cd)
+		error_function(28, main);
+	if (!getcwd(oldpwd, BUF_SIZE))
+	{
+		free(cd);
+		return ;
+	}
+	if (chdir(path) != 0)
+	{
+		free(cd);
+		return ;
+	}
+	if (!getcwd(cwd, BUF_SIZE))
+	{
+		free(cd);
+		return ;
+	}
+	set_oldpwd_export(main, oldpwd, cd);
+	set_pwd_export(main, cwd, cd);
+	free(cd);
 }
 
 void	ft_cd(t_main *main, int argc)

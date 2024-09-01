@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 19:23:05 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/01 22:21:56 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,74 +45,6 @@ void	echo_helper(t_cmd *own_cmd, t_main *main)
 		else
 			ft_echo(own_cmd);
 		main->exit_code = 0;
-	}
-}
-
-void	env_helper(t_cmd *own_cmd, t_main *main)
-{
-	if (own_cmd->pid == 0)
-	{
-		if (own_cmd->n_append || own_cmd->n_out || main->parser->n_pipes)
-			ft_env(own_cmd, main);
-		main->exit_code = 0;
-	}
-	if (own_cmd->pid != 0)
-	{
-		if (!own_cmd->n_append && !own_cmd->n_out && !main->parser->n_pipes)
-			ft_env(own_cmd, main);
-		main->exit_code = 0;
-	}
-}
-
-void	export_helper(t_cmd *own_cmd, t_main *main)
-{
-	if (own_cmd->pid == 0)
-	{
-		if (own_cmd->n_append || own_cmd->n_out || main->parser->n_pipes)
-		{
-			if (!export_error(own_cmd->args, main))
-			{
-				ft_export(own_cmd, main, own_cmd->args);
-				main->exit_code = 0;
-			}
-		}
-	}
-	if (own_cmd->pid != 0)
-	{
-		if (!own_cmd->n_append && !own_cmd->n_out && !main->parser->n_pipes)
-		{
-			if (!export_error(own_cmd->args, main))
-			{
-				ft_export(own_cmd, main, own_cmd->args);
-				main->exit_code = 0;
-			}
-		}
-	}
-}
-
-void	unset_helper(t_cmd *own_cmd, t_main *main)
-{
-	if (own_cmd->pid == 0)
-	{
-		if (own_cmd->n_append || own_cmd->n_out || main->parser->n_pipes)
-		{
-			if (!unset_error(own_cmd->args, main))
-			{
-				ft_unset(own_cmd, main, own_cmd->args);
-				main->exit_code = 0;
-			}
-		}
-	}
-	if (own_cmd->pid != 0)
-	{
-		if (!own_cmd->n_append && !own_cmd->n_out && !main->parser->n_pipes)
-		{
-			if (!unset_error(own_cmd->args, main))
-			{
-				ft_unset(own_cmd, main, own_cmd->args);
-				main->exit_code = 0;
-			}
-		}
 	}
 }
 
@@ -159,7 +91,8 @@ void	parser(t_main *main)
 		own_cmd = main->cmd;
 		calling_redirects(main, own_cmd);
 	}
-	if (!echo_ex_env_check(main, own_cmd) && own_cmd->pid == 0 && ft_strcmp(own_cmd->cmd, "cd"))
+	if (!echo_ex_env_check(main, own_cmd) && own_cmd->pid == 0
+		&& ft_strcmp(own_cmd->cmd, "cd"))
 		executor(main, own_cmd);
 	if (own_cmd->pid == 0)
 	{
@@ -167,5 +100,4 @@ void	parser(t_main *main)
 		exit(main->exit_code);
 	}
 	wait_for_children(main);
-	setup_parent_signal_handlers();
 }

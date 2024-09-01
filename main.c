@@ -53,7 +53,7 @@ void	print_lexer(t_lexer *lexer)
 
 void	print_expand(t_expand_node *expand)
 {
-	t_expand_node *temp_expand;
+	t_expand_node	*temp_expand;
 
 	temp_expand = expand;
 	printf("EXPAND\n");
@@ -109,6 +109,7 @@ void	minishell(char *input, t_main *main)
 	}
 	quotes_and_expander(main->lexer, main);
 	parser(main);
+	setup_parent_signal_handlers();
 	main->heredoc_flag = 0;
 	ok_free_function(main);
 	return ;
@@ -122,11 +123,17 @@ int	main(int argc, char **argv, char **envp)
 	int		m_exit_code;
 
 // export t=" -l"  -> ls$t does expand but not run the expanded version ls -l
-//Yes, in many shells, including those that follow the POSIX standard or are similar to bash, variable expansion typically requires that the character
-// following $ be a letter or underscore. This rule helps distinguish environment variables from other tokens and prevent ambiguity.
-//syntax check with tester, go through
-//put the lines after declare -x
-//unset error check
+//put the lines after declare -x also hidden array implementation
+// minishell> expr $? + $?
+// expr: non-integer argument
+// minishell> cat << hi
+// > fsdh
+// > dfgh
+// > haha
+// > hi
+// dfgh
+// haha
+// minishell> 
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);

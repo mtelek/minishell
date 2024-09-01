@@ -12,7 +12,7 @@
 
 #include "../Headers/minishell.h"
 
-void bash_warning(t_main *main, char **delimiter, int i)
+void	bash_warning(t_main *main, char **delimiter, int i)
 {
 	char	*count_line;
 
@@ -51,7 +51,7 @@ int	echo_and_heredoc(char **delimiter, t_main *main, t_cmd *own_cmd)
 
 int	check_line(t_main *main, char *line, char **delimiter, int *i)
 {
-	int flag;
+	int	flag;
 
 	flag = 0;
 	if (!line)
@@ -74,7 +74,8 @@ char	*content_maker(t_main *main, t_cmd *own_cmd, char *content, char *line)
 	return (content);
 }
 
-char	*no_echo_but_heredoc(char **delimiter, char *content, t_main *main, t_cmd *own_cmd)
+char	*no_echo_but_heredoc(char **delimiter, char *content,
+			t_main *main, t_cmd *own_cmd)
 {
 	char	*line;
 	int		i;
@@ -94,7 +95,7 @@ char	*no_echo_but_heredoc(char **delimiter, char *content, t_main *main, t_cmd *
 			content = content_maker(main, own_cmd, content, line);
 		flag = 0;
 		if (i == own_cmd->n_heredoc)
-				break;
+			break ;
 	}
 	update_count(main, line);
 	return (content);

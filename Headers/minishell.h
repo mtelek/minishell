@@ -35,7 +35,7 @@
 
 # define BUF_SIZE 4096
 
-typedef struct s_main t_main;
+typedef struct s_main	t_main;
 
 typedef struct s_cd
 {
@@ -44,11 +44,11 @@ typedef struct s_cd
 
 typedef struct s_init_ex_node
 {
-    int			i;
-    int			start;
-    bool		in_quotes;
-    char		quote_char;
-} 				t_init_ex_node;
+	int			i;
+	int			start;
+	bool		in_quotes;
+	char		quote_char;
+}				t_init_ex_node;
 
 typedef struct s_expand_node
 {
@@ -192,6 +192,9 @@ void						wait_for_children(t_main *main);
 void						find_hd_indicator(t_main *main, t_cmd *cmd);
 void						get_hd_content(t_main *main, t_cmd *own_cmd);
 void						parser_helper(t_main *main);
+void						env_helper(t_cmd *own_cmd, t_main *main);
+void						export_helper(t_cmd *own_cmd, t_main *main);
+void						unset_helper(t_cmd *own_cmd, t_main *main);
 
 // PARSER/CMD_TABLE
 int							count_cmds(t_lexer *lexer);
@@ -233,23 +236,27 @@ char						**export_cmd(t_main *main, t_cd *cd);
 void						ft_echo(t_cmd *own_cmd);
 void						ft_cd(t_main *main, int argc);
 void						ft_exit(t_cmd *own_cmd, t_main *main);
-void						ft_export(t_cmd *own_cmd, t_main *main, char **args);
+void						ft_export(t_cmd *own_cmd, t_main *main,
+								char **args);
 char						**ft_cpy_environ(char **env_array, int add);
 int							export_error(char **argv, t_main *main);
 void						ft_unset(t_cmd *own_cmd, t_main *main, char **args);
 void						ft_pwd(t_main *main);
 void						ft_env(t_cmd *own_cmd, t_main *main);
 int							unset_error(char **args, t_main *main);
-char						*get_env_path(char **env_array, char *env, t_main *main, int i);
+char						*get_env_path(char **env_array, char *env,
+								t_main *main, int i);
 void						bubble_sort_env(char **env_array);
 void						swap(char **a, char **b);
-int							path_helper(int error_type, char *path, t_main *main);
+int							path_helper(int error_type, char *path,
+								t_main *main);
 void						too_many_args(t_main *main);
-char 						*get_env_key(t_main *main, char *env);
+char						*get_env_key(t_main *main, char *env);
 char						*to_home(t_main *main, int i);
-char 						*to_print_pwd(t_main *main, int i);
+char						*to_print_pwd(t_main *main, int i);
+int							is_env_var_set(const char *env_var);
 
-//BUILTINS/HEREDOC
+//HEREDOC
 void						get_hd_content(t_main *main, t_cmd *own_cmd);
 char						*no_echo_but_heredoc(char **delimiter,
 								char *content, t_main *main, t_cmd *own_cmd);
@@ -261,8 +268,12 @@ void						update_count(t_main *main, char *line);
 char						*join_empty_and_full(t_main *main, char *content);
 char						*full_content_fill(t_main *main, t_cmd *own_cmd,
 								char *content, char *line);
-char						*empty_content_fill(t_main *main, t_cmd *own_cmd, char *content,
-								char *line);
+char						*empty_content_fill(t_main *main, t_cmd *own_cmd,
+								char *content, char *line);
+void						remove_surrounding_quotes(t_cmd *own_cmd, int i);
+void						helper_three(t_cmd *own_cmd, int i);
+void						helper_two(t_cmd *own_cmd, int i);
+void						helper_one(t_cmd *own_cmd, int i);
 
 //EXPANDER/INIT
 void						cutting_up_lexer_str(t_expand_node **head,
@@ -274,6 +285,10 @@ char						*join_list(t_expand_node *expand,
 								t_main *main);
 void						add_node(t_expand_node **head, char *str,
 								t_main *main);
+void						no_quotes(t_expand_node **head, t_lexer *lexer,
+								t_main *main, t_init_ex_node *state);
+char						*create_substr(t_lexer *lexer, int i,
+								int start, t_main *main);
 
 //EXPANDER
 void						quotes_and_expander(t_lexer *lexer, t_main *main);

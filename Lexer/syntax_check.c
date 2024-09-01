@@ -41,23 +41,16 @@ bool	checking_lex(char *str)
 	return (true);
 }
 
-bool	checking_combinaton(t_lexer *lexer)
-{
-	if ((lexer->type == 3 && lexer->next->type == 2))
-		return (ft_putstr_fd(ERROR_M_LESSER, 2), false);
-	else if ((lexer->type == 2 && lexer->next->type == 1)
-		|| (lexer->type == 3 && lexer->next->type == 1))
-		return (ft_putstr_fd(ERROR_M_PIPE, 2), false);
-	return (true);
-}
-
 bool	syntax_check_part2(t_lexer *lexer)
 {
-	if (lexer->next && (lexer->type == HEREDOC || lexer->type == APPEND_OUT) && lexer->next->type == PIPE)
+	if (lexer->next && (lexer->type == HEREDOC
+			|| lexer->type == APPEND_OUT) && lexer->next->type == PIPE)
 		return (ft_putstr_fd(ERROR_M_PIPE, 2), false);
-	if (lexer->next && lexer->type == INPUT_RED && lexer->next->type == OUTPUT_RED)
+	if (lexer->next && lexer->type == INPUT_RED
+		&& lexer->next->type == OUTPUT_RED)
 		return (ft_putstr_fd(ERROR_M_LESSER, 2), false);
-	if (lexer->next && lexer->type == OUTPUT_RED && lexer->next->type == OUTPUT_RED)
+	if (lexer->next && lexer->type == OUTPUT_RED
+		&& lexer->next->type == OUTPUT_RED)
 		return (ft_putstr_fd(ERROR_M_GREATER, 2), false);
 	return (true);
 }

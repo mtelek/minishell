@@ -29,14 +29,7 @@ void	handle_quote(t_expand_node **head, t_lexer *lexer, t_main *main,
 	}
 	else if (!state->in_quotes)
 	{
-		if (state->i > state->start)
-		{
-			substr = ft_strndup(lexer->str + state->start,
-					state->i - state->start);
-			if (!substr)
-					error_function(-1, main);
-			add_node(head, substr, main);
-		}
+		no_quotes(head, lexer, main, state);
 		state->in_quotes = true;
 		state->quote_char = lexer->str[state->i];
 		state->start = state->i;

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 17:18:26 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/01 22:47:42 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 {
 	(void)cmd;
 	temp->true_command = false;
-	if (temp->args[0] && !is_operator(temp->args[0][0], temp->args[0][1], main->operators, main))
+	if (temp->args[0] && !is_operator(temp->args[0][0],
+		temp->args[0][1], main->operators, main))
 	{
 		temp->cmd = temp->args[0];
 		if (!temp->cmd)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_removal.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:04:41 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 00:10:43 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/01 22:18:29 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	quotes_and_expander(t_lexer *lexer, t_main *main)
 				return ;
 		}
 		if (ft_strcmp(lexer->str, "echo") == 0 && lexer->next
-			&& ft_strcmp(lexer->next->str, "$?") == 0)
+			&& ft_strcmp(lexer->next->str, "$?") == 0 && !lexer->next->next)
 			return ;
 		if (not_alphabetical_check(lexer, &flag) == 1)
 			lexer = lexer->next;

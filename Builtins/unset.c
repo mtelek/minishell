@@ -6,18 +6,11 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:40 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 19:42:10 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/01 22:15:43 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
-
-int	is_env_var_set(const char *env_var)
-{
-	if (ft_strchr(env_var, '=') != NULL)
-		return (1);
-	return (0);
-}
 
 int	unset_error(char **args, t_main *main)
 {
@@ -51,7 +44,8 @@ void	init_values(int *i, int *j, int *env_count)
 	*env_count = 0;
 }
 
-void	remove_env_var_from_array(t_cmd *own_cmd, t_main *main, int k, char **args)
+void	remove_env_var_from_array(t_cmd *own_cmd, t_main *main,
+				int k, char **args)
 {
 	int		i;
 	int		j;

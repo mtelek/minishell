@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:38 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 13:23:16 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/01 22:13:12 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static char	**update_env(t_main *main, int i, int j, t_cd *cd)
 char	**export_cmd(t_main *main, t_cd *cd)
 {
 	int	i;
-	int j;
+	int	j;
 
 	i = -1;
 	j = 1;
