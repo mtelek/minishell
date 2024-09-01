@@ -35,6 +35,11 @@
 
 # define BUF_SIZE 4096
 
+typedef struct s_cd
+{
+	char	**argv;
+}			t_cd;
+
 typedef struct s_init_ex_node
 {
     int			i;
@@ -221,7 +226,7 @@ void						free_bin(char **bin);
 //BUILTINS
 int							count_arg(char **args);
 void						free_array(char **array);
-char						**export_cmd(t_main *main, int j);
+char						**export_cmd(t_main *main, t_cd *cd);
 void						ft_echo(t_cmd *own_cmd);
 void						ft_cd(t_main *main, int argc);
 void						ft_exit(t_cmd *own_cmd, t_main *main);
@@ -232,11 +237,14 @@ void						ft_unset(t_main *main, char **args);
 void						ft_pwd(t_main *main);
 void						ft_env(t_main *main);
 int							unset_error(char **args, t_main *main);
-char						*get_env_path(char **env_array, char *env);
+char						*get_env_path(char **env_array, char *env, t_main *main, int i);
 void						bubble_sort_env(char **env_array);
 void						swap(char **a, char **b);
 int							path_helper(int error_type, char *path, t_main *main);
 void						too_many_args(t_main *main);
+char 						*get_env_key(t_main *main, char *env);
+char						*to_home(t_main *main, int i);
+char 						*to_print_pwd(t_main *main, int i);
 
 //BUILTINS/HEREDOC
 void						get_hd_content(t_main *main, t_cmd *own_cmd);

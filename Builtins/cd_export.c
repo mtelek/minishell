@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   cd_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:38 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/29 17:20:49 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/01 13:23:16 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,14 @@ char	**ft_cpy_environ(char **env_array, int add)
 	return (cpy);
 }
 
-static char	**extend_env(t_main *main, int i, int j)
+static char	**extend_env(t_main *main, int i, int j, t_cd *cd)
 {
 	char	**cpy;
 
 	cpy = ft_cpy_environ(main->env_array, 1);
 	if (!cpy)
 		return (NULL);
-	cpy[i] = ft_strdup(main->cmd->args[j]);
+	cpy[i] = ft_strdup(cd->argv[j]);
 	if (!cpy[i])
 	{
 		free_array(cpy);
@@ -56,11 +56,11 @@ static char	**extend_env(t_main *main, int i, int j)
 	return (cpy);
 }
 
-static char	**update_env(t_main *main, int i, int j)
+static char	**update_env(t_main *main, int i, int j, t_cd *cd)
 {
 	char	*new_entry;
 
-	new_entry = ft_strdup(main->cmd->args[j]);
+	new_entry = ft_strdup(cd->argv[j]);
 	if (!new_entry)
 	{
 		free_array(main->env_array);
@@ -71,11 +71,13 @@ static char	**update_env(t_main *main, int i, int j)
 	return (main->env_array);
 }
 
-char	**export_cmd(t_main *main, int j)
+char	**export_cmd(t_main *main, t_cd *cd)
 {
 	int	i;
+	int j;
 
 	i = -1;
+	j = 1;
 	if (!main->env_array)
 	{
 		main->env_array = ft_cpy_environ(NULL, 1);
@@ -84,9 +86,9 @@ char	**export_cmd(t_main *main, int j)
 	}
 	while (main->env_array[++i])
 	{
-		if (!ft_memcmp(main->env_array[i], main->cmd->args[j],
-				ft_strlen(main->cmd->args[j])))
-			return (update_env(main, i, j));
+		if (!ft_memcmp(main->env_array[i], cd->argv[j],
+				ft_strlen(cd->argv[j])))
+			return (update_env(main, i, j, cd));
 	}
-	return (extend_env(main, i, j));
+	return (extend_env(main, i, j, cd));
 }
