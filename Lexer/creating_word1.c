@@ -33,6 +33,8 @@ int	calculating_end(char *input, int i, t_operator *operators, t_main *main)
 	int	temp_i;
 
 	temp_i = 0;
+	// if (input[i] == '\0')
+	// 	return (i);
 	while (input[i] != '\0' && !ft_isspace(input[i]) && !is_operator(input[i],
 			input[i + 1], operators, main))
 	{

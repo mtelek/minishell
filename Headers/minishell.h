@@ -35,6 +35,8 @@
 
 # define BUF_SIZE 4096
 
+typedef struct s_main t_main;
+
 typedef struct s_cd
 {
 	char	**argv;
@@ -93,6 +95,7 @@ typedef struct s_cmd
 	char					*hd_content;
 	bool					expander_decider;
 	bool					true_command;
+	t_main					*main;
 }							t_cmd;
 
 typedef struct s_operator
@@ -230,12 +233,12 @@ char						**export_cmd(t_main *main, t_cd *cd);
 void						ft_echo(t_cmd *own_cmd);
 void						ft_cd(t_main *main, int argc);
 void						ft_exit(t_cmd *own_cmd, t_main *main);
-void						ft_export(t_main *main, char **args);
+void						ft_export(t_cmd *own_cmd, t_main *main, char **args);
 char						**ft_cpy_environ(char **env_array, int add);
 int							export_error(char **argv, t_main *main);
-void						ft_unset(t_main *main, char **args);
+void						ft_unset(t_cmd *own_cmd, t_main *main, char **args);
 void						ft_pwd(t_main *main);
-void						ft_env(t_main *main);
+void						ft_env(t_cmd *own_cmd, t_main *main);
 int							unset_error(char **args, t_main *main);
 char						*get_env_path(char **env_array, char *env, t_main *main, int i);
 void						bubble_sort_env(char **env_array);

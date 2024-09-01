@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 22:53:00 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/01 19:23:05 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,8 @@ bool	builtin_check(t_main *main)
 	int	argc;
 
 	argc = count_arg(main->cmd->args);
-	if (ft_strcmp(main->cmd->cmd, "cd") == 0)
+	if (ft_strcmp(main->cmd->cmd, "cd") == 0 && !main->parser->n_pipes)
 		return (ft_cd(main, argc), true);
-	else if (ft_strcmp(main->cmd->cmd, "unset") == 0)
-	{
-		if (!unset_error(main->cmd->args, main))
-			ft_unset(main, main->cmd->args);
-		return (true);
-	}
 	else if (ft_strcmp(main->cmd->cmd, "pwd") == 0)
 		return (ft_pwd(main), true);
 	else if (ft_strcmp(main->cmd->cmd, "exit") == 0 && main->cmd->next == NULL)
@@ -58,8 +52,67 @@ void	env_helper(t_cmd *own_cmd, t_main *main)
 {
 	if (own_cmd->pid == 0)
 	{
-		ft_env(main);
+		if (own_cmd->n_append || own_cmd->n_out || main->parser->n_pipes)
+			ft_env(own_cmd, main);
 		main->exit_code = 0;
+	}
+	if (own_cmd->pid != 0)
+	{
+		if (!own_cmd->n_append && !own_cmd->n_out && !main->parser->n_pipes)
+			ft_env(own_cmd, main);
+		main->exit_code = 0;
+	}
+}
+
+void	export_helper(t_cmd *own_cmd, t_main *main)
+{
+	if (own_cmd->pid == 0)
+	{
+		if (own_cmd->n_append || own_cmd->n_out || main->parser->n_pipes)
+		{
+			if (!export_error(own_cmd->args, main))
+			{
+				ft_export(own_cmd, main, own_cmd->args);
+				main->exit_code = 0;
+			}
+		}
+	}
+	if (own_cmd->pid != 0)
+	{
+		if (!own_cmd->n_append && !own_cmd->n_out && !main->parser->n_pipes)
+		{
+			if (!export_error(own_cmd->args, main))
+			{
+				ft_export(own_cmd, main, own_cmd->args);
+				main->exit_code = 0;
+			}
+		}
+	}
+}
+
+void	unset_helper(t_cmd *own_cmd, t_main *main)
+{
+	if (own_cmd->pid == 0)
+	{
+		if (own_cmd->n_append || own_cmd->n_out || main->parser->n_pipes)
+		{
+			if (!unset_error(own_cmd->args, main))
+			{
+				ft_unset(own_cmd, main, own_cmd->args);
+				main->exit_code = 0;
+			}
+		}
+	}
+	if (own_cmd->pid != 0)
+	{
+		if (!own_cmd->n_append && !own_cmd->n_out && !main->parser->n_pipes)
+		{
+			if (!unset_error(own_cmd->args, main))
+			{
+				ft_unset(own_cmd, main, own_cmd->args);
+				main->exit_code = 0;
+			}
+		}
 	}
 }
 
@@ -77,11 +130,12 @@ int	echo_ex_env_check(t_main *main, t_cmd *own_cmd)
 		return (env_helper(own_cmd, main), 1);
 	else if (ft_strcmp(own_cmd->cmd, "export") == 0)
 	{
-		if (own_cmd->pid == 0 && !export_error(own_cmd->args, main))
-		{
-			ft_export(main, own_cmd->args);
-			main->exit_code = 0;
-		}
+		export_helper(own_cmd, main);
+		return (1);
+	}
+	else if (ft_strcmp(main->cmd->cmd, "unset") == 0)
+	{
+		unset_helper(own_cmd, main);
 		return (1);
 	}
 	return (0);
@@ -105,7 +159,7 @@ void	parser(t_main *main)
 		own_cmd = main->cmd;
 		calling_redirects(main, own_cmd);
 	}
-	if (!echo_ex_env_check(main, own_cmd) && own_cmd->pid == 0)
+	if (!echo_ex_env_check(main, own_cmd) && own_cmd->pid == 0 && ft_strcmp(own_cmd->cmd, "cd"))
 		executor(main, own_cmd);
 	if (own_cmd->pid == 0)
 	{

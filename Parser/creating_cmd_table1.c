@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 15:07:59 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/01 17:18:26 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)
 		temp->args[j++] = NULL;
 	temp->next = NULL;
 	temp->hd_indicator = 0;
+	temp->main = main;
 	args_maker(temp, n_cmds, n_args, main);
 	init_cmd_fd(main, temp, cmd);
 	temp->prev = *prev_node;

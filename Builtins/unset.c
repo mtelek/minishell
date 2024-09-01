@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:40 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 02:21:24 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/01 19:42:10 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
+
+int	is_env_var_set(const char *env_var)
+{
+	if (ft_strchr(env_var, '=') != NULL)
+		return (1);
+	return (0);
+}
 
 int	unset_error(char **args, t_main *main)
 {
@@ -44,7 +51,7 @@ void	init_values(int *i, int *j, int *env_count)
 	*env_count = 0;
 }
 
-void	remove_env_var_from_array(t_main *main, int k, char **args)
+void	remove_env_var_from_array(t_cmd *own_cmd, t_main *main, int k, char **args)
 {
 	int		i;
 	int		j;
@@ -54,32 +61,60 @@ void	remove_env_var_from_array(t_main *main, int k, char **args)
 
 	init_values(&i, &j, &env_count);
 	var_len = ft_strlen(args[k]);
-	while (main->env_array[env_count] != NULL)
+	while (own_cmd->main->env_array[env_count] != NULL)
 		env_count++;
 	new_env_array = (char **)malloc(sizeof(char *) * env_count);
 	if (!new_env_array)
 		error_function(10, main);
-	while (main->env_array[++i] != NULL)
+	while (own_cmd->main->env_array[++i] != NULL)
 	{
-		if (!(ft_strncmp(main->env_array[i], args[k], var_len) == 0
-				&& main->env_array[i][var_len] == '='))
-			new_env_array[j++] = main->env_array[i];
-		else
-			free(main->env_array[i]);
+		if (!(ft_strncmp(own_cmd->main->env_array[i], args[k], var_len) == 0
+				&& own_cmd->main->env_array[i][var_len] == '=')
+				&& is_env_var_set(own_cmd->main->env_array[i]))
+			new_env_array[j++] = own_cmd->main->env_array[i];
+		else if (is_env_var_set(own_cmd->main->env_array[i]))
+			free(own_cmd->main->env_array[i]);
 	}
 	new_env_array[j] = NULL;
-	free(main->env_array);
-	main->env_array = new_env_array;
+	free(own_cmd->main->env_array);
+	own_cmd->main->env_array = new_env_array;
 }
 
-void	ft_unset(t_main *main, char **args)
+int	first_check(t_cmd *own_cmd, char **args)
+{
+	int	found;
+	int	var_len;
+	int	i;
+
+	found = 0;
+	var_len = ft_strlen(args[1]);
+	i = 0;
+	if (args[1] && !args[2])
+	{
+		while (own_cmd->main->env_array[i] != NULL)
+		{
+			if (ft_strncmp(own_cmd->main->env_array[i], args[1], var_len) == 0
+				&& own_cmd->main->env_array[i][var_len] == '=')
+				return (1);
+			i++;
+		}
+		return (own_cmd->main->exit_code = 1, 0);
+	}
+	return (0);
+}
+
+void	ft_unset(t_cmd *own_cmd, t_main *main, char **args)
 {
 	int	k;
 
 	k = 1;
+	if (!args[1])
+		return ;
+	if (!first_check(own_cmd, args))
+		return ;
 	while (args[k] != NULL)
 	{
-		remove_env_var_from_array(main, k, args);
+		remove_env_var_from_array(own_cmd, main, k, args);
 		k++;
 	}
 }

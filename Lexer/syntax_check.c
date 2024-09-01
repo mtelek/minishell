@@ -51,6 +51,17 @@ bool	checking_combinaton(t_lexer *lexer)
 	return (true);
 }
 
+bool	syntax_check_part2(t_lexer *lexer)
+{
+	if (lexer->next && (lexer->type == HEREDOC || lexer->type == APPEND_OUT) && lexer->next->type == PIPE)
+		return (ft_putstr_fd(ERROR_M_PIPE, 2), false);
+	if (lexer->next && lexer->type == INPUT_RED && lexer->next->type == OUTPUT_RED)
+		return (ft_putstr_fd(ERROR_M_LESSER, 2), false);
+	if (lexer->next && lexer->type == OUTPUT_RED && lexer->next->type == OUTPUT_RED)
+		return (ft_putstr_fd(ERROR_M_GREATER, 2), false);
+	return (true);
+}
+
 bool	syntax_doubles_diff(t_lexer *lexer)
 {
 	while (lexer != NULL)
@@ -72,6 +83,8 @@ bool	syntax_doubles_diff(t_lexer *lexer)
 		if (lexer->next && lexer->type == HEREDOC
 			&& lexer->next->type == APPEND_OUT)
 			return (ft_putstr_fd(ERROR_M_GREATERP, 2), false);
+		if (syntax_check_part2(lexer) == false)
+			return (false);
 		lexer = lexer->next;
 	}
 	return (true);
