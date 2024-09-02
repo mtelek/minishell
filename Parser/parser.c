@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 22:21:56 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/02 00:30:01 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,9 @@ bool	builtin_check(t_main *main)
 
 void	echo_helper(t_cmd *own_cmd, t_main *main)
 {
-	char	*trimmed_str;
-
-	trimmed_str = NULL;
 	if (own_cmd->pid == 0)
 	{
-		if (own_cmd->args[1] && ft_strncmp(own_cmd->args[1], "$?", 2) == 0)
-		{
-			trimmed_str = ft_strtrim(own_cmd->args[1], "$?");
-			if (!trimmed_str)
-				error_function(21, main);
-			ft_putnbr_fd(main->exit_code, 1);
-			ft_putstrs_fd(trimmed_str, "\n", NULL, 1);
-			free(trimmed_str);
-		}
-		else
-			ft_echo(own_cmd);
+		ft_echo(own_cmd);
 		main->exit_code = 0;
 	}
 }

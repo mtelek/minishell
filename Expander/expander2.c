@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:46:49 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 22:38:19 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/02 02:25:54 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	find_character(char *str, char c)
 	return (-1);
 }
 
-bool	expander_check(char *str)
+bool	expander_check(char *str, t_expand_node *current)
 {
 	int	dollar_sign;
 
@@ -55,6 +55,13 @@ bool	expander_check(char *str)
 		return (false);
 	if (!ft_strcmp(str, "$"))
 		return (false);
+	if (!ft_strcmp(str, "$?"))
+		return (false);
+	if (str[0] == 34 && str[1] == 39)
+	{
+		current->single_flag = 1;
+		return (true);
+	}
 	if (str[0] == 39)
 		return (false);
 	if (str[0 == 34])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_removal.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:04:41 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 22:18:29 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/02 02:16:48 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,41 @@ int	check_for_another_heredoc(t_lexer *temp_lex)
 
 int	not_alphabetical_check(t_lexer *lexer, int *flag)
 {
-	if (lexer->str[0] == '$' && lexer->str[1] && !ft_isalpha(lexer->str[1]))
-	{
-		*flag = 1;
-		return (1);
-	}
-	return (0);
+    int i;
+    int dollar_count;
+	char quote;
+
+	quote = '\0';
+	dollar_count = 0;
+	i = 0;
+    while (lexer->str[i])
+    {
+        if (lexer->str[i] == '"' || lexer->str[i] == '\'')
+        {
+            quote = lexer->str[i];
+            i++;
+            while (lexer->str[i] && lexer->str[i] != quote)
+                i++;
+            if (lexer->str[i] && lexer->str[i + 1])
+                i++;
+        }
+        if (lexer->str[i] == '$')
+        {
+            dollar_count++;
+            if (dollar_count <= 3 && lexer->str[i + 1] && !ft_isalpha(lexer->str[i + 1]))
+            {
+                if (lexer->str[i+1] && (lexer->str[i + 1] == '"' || lexer->str[i + 1] == '\'' || lexer->str[i+1] == '?'))
+                    i++;
+				else
+				{
+					 *flag = 1;
+                	return (1);
+				}
+            }
+        }
+       	i++;
+    }
+    return (0);
 }
 
 void	quotes_and_expander(t_lexer *lexer, t_main *main)
@@ -93,9 +122,6 @@ void	quotes_and_expander(t_lexer *lexer, t_main *main)
 			else
 				return ;
 		}
-		if (ft_strcmp(lexer->str, "echo") == 0 && lexer->next
-			&& ft_strcmp(lexer->next->str, "$?") == 0 && !lexer->next->next)
-			return ;
 		if (not_alphabetical_check(lexer, &flag) == 1)
 			lexer = lexer->next;
 		if (!flag)

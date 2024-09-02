@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:40 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 22:15:43 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/01 23:29:02 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,9 @@ void	remove_env_var_from_array(t_cmd *own_cmd, t_main *main,
 
 int	first_check(t_cmd *own_cmd, char **args)
 {
-	int	found;
 	int	var_len;
 	int	i;
 
-	found = 0;
 	var_len = ft_strlen(args[1]);
 	i = 0;
 	if (args[1] && !args[2])

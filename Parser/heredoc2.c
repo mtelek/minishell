@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 20:11:18 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 22:47:21 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/02 02:30:55 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*expand(char *str, t_main *main)
 	current = expand;
 	while (current != NULL)
 	{
-		current->to_expand = expander_check(current->str);
+		current->to_expand = expander_check(current->str, current);
 		if (current->to_expand == true)
 			if (expander(current, main) == 1)
 				no_var_name_found(current, main);

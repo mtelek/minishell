@@ -35,6 +35,8 @@
 
 # define BUF_SIZE 4096
 
+extern int parent_exit;
+
 typedef struct s_main	t_main;
 
 typedef struct s_cd
@@ -54,6 +56,7 @@ typedef struct s_expand_node
 {
 	char					*str;
 	bool					to_expand;
+	int						single_flag;
 	struct s_expand_node	*next;
 }							t_expand_node;
 
@@ -178,7 +181,6 @@ bool						syntax_check(t_lexer *lexer, t_main *main);
 bool						syntax_doubles_same(t_lexer *temp_lex);
 bool						syntax_doubles_diff(t_lexer *lexer);
 bool						checking_combinaton(t_lexer *lexer);
-bool						checking_lex(char *str);
 bool						dot_check(t_lexer *lexer, t_main *main);
 bool						quote_check(t_lexer *lexer);
 
@@ -195,6 +197,8 @@ void						parser_helper(t_main *main);
 void						env_helper(t_cmd *own_cmd, t_main *main);
 void						export_helper(t_cmd *own_cmd, t_main *main);
 void						unset_helper(t_cmd *own_cmd, t_main *main);
+void						 split_and_insert_lexer_nodes(t_lexer *lexer, t_main *main);
+t_lexer 					*create_lexer_node(char *str, t_lexer *prev, t_lexer *next);
 
 // PARSER/CMD_TABLE
 int							count_cmds(t_lexer *lexer);
@@ -293,7 +297,7 @@ char						*create_substr(t_lexer *lexer, int i,
 //EXPANDER
 void						quotes_and_expander(t_lexer *lexer, t_main *main);
 void						decide_to_expand(t_lexer *lexer, t_main *main);
-bool						expander_check(char *str);
+bool						expander_check(char *str, t_expand_node *current);
 int							expander(t_expand_node *expand, t_main *main);
 char						*find_var_name(char *str, t_main *main);
 char						*find_env_row(char **env_array, char *var,
@@ -314,6 +318,9 @@ void						no_var_name_found(t_expand_node *current,
 								t_main *main);
 int							check_for_another_heredoc(t_lexer *temp_lex);
 void						delimiter_check(char *delimiter, t_cmd *own_cmd);
+void						expand_exit_code(t_expand_node *current, t_main *main);
+void						init_current(t_lexer *lexer, t_main *main,
+								t_expand_node **expand, t_expand_node **current);
 
 // ERRORS
 void						error_function(int error_type, t_main *main);
@@ -380,6 +387,7 @@ char						*ft_strncpy(char *dest, char *src, unsigned int n);
 char						*ft_strldup(char *str, int len);
 char						*ft_strtrim(char const *s1, char const *set);
 char						*ft_strndup(const char *s, size_t n);
+char   						*ft_strcpy(char *s1, char *s2);
 
 // SIG
 void						child_signal_handler(int sig);

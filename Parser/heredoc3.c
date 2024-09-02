@@ -84,7 +84,10 @@ char	*no_echo_but_heredoc(char **delimiter, char *content,
 
 	i = 0;
 	flag = 0;
-	k = 0;
+	if (own_cmd->n_heredoc == 1)
+		k = 1;
+	else
+		k = 0;
 	while (1)
 	{
 		line = readline("> ");

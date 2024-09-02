@@ -15,6 +15,8 @@
 
 #include "Headers/minishell.h"
 
+int parent_exit = 0;
+
 void	print_cmd_table(t_cmd *cmd)
 {
 	int			j;
@@ -108,6 +110,7 @@ void	minishell(char *input, t_main *main)
 		return ;
 	}
 	quotes_and_expander(main->lexer, main);
+	split_and_insert_lexer_nodes(main->lexer, main);
 	parser(main);
 	setup_parent_signal_handlers();
 	main->heredoc_flag = 0;
@@ -122,18 +125,6 @@ int	main(int argc, char **argv, char **envp)
 	char	*history_file;
 	int		m_exit_code;
 
-// export t=" -l"  -> ls$t does expand but not run the expanded version ls -l
-//put the lines after declare -x also hidden array implementation
-// minishell> expr $? + $?
-// expr: non-integer argument
-// minishell> cat << hi
-// > fsdh
-// > dfgh
-// > haha
-// > hi
-// dfgh
-// haha
-// minishell> 
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);
@@ -146,6 +137,8 @@ int	main(int argc, char **argv, char **envp)
 		if (!main.heredoc_flag)
 		{
 			input = readline("minishell> ");
+			if (parent_exit)
+				main.exit_code = parent_exit;
 			if (input)
 			{
 				main.count_line += 1;

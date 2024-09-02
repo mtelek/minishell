@@ -80,27 +80,23 @@ void	add_remaining_substring(t_expand_node **head, t_lexer *lexer,
 	}
 }
 
-void	split_up_by_quotes(t_expand_node **head, t_lexer *lexer, t_main *main)
-{
-	t_init_ex_node	state;
+void split_up_by_quotes(t_expand_node **head, t_lexer *lexer, t_main *main) {
+    t_init_ex_node state;
 
-	state.i = 0;
-	state.start = 0;
-	state.in_quotes = false;
-	state.quote_char = '\0';
-	while (lexer->str[state.i])
-	{
-		if (lexer->str[state.i] == '"' || lexer->str[state.i] == '\'')
-		{
-			handle_quote(head, lexer, main, &state);
-		}
-		else if (lexer->str[state.i] == '$' && !state.in_quotes)
-		{
-			handle_special_char(head, lexer, main, &state);
-		}
-		else if (lexer->str[state.i] == ' ' && !state.in_quotes)
-			handle_space(head, lexer, main, &state);
-		state.i = state.i +1;
-	}
-	add_remaining_substring(head, lexer, main, &state);
+    state.i = 0;
+    state.start = 0;
+    state.in_quotes = false;
+    state.quote_char = '\0';
+    while (lexer->str[state.i]) {
+        if (lexer->str[state.i] == '"' || lexer->str[state.i] == '\'') {
+            handle_quote(head, lexer, main, &state);
+        } else if (lexer->str[state.i] == '$' && !state.in_quotes) {
+            handle_special_char(head, lexer, main, &state);
+        } else if (lexer->str[state.i] == ' ' && !state.in_quotes) {
+            handle_space(head, lexer, main, &state);
+        }
+        state.i = state.i +1;
+    }
+    add_remaining_substring(head, lexer, main, &state);
 }
+

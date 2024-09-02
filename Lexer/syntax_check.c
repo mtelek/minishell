@@ -12,35 +12,6 @@
 
 #include "../Headers/minishell.h"
 
-bool	checking_lex(char *str)
-{
-	int	i;
-	int	temp_i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == 34)
-		{
-			temp_i = qoutes_checker(str, 34, i);
-			if (temp_i != -1)
-				i = temp_i;
-			if (temp_i == -1)
-				return (ft_putstr_fd(ERR_QUOTE2, 2), false);
-		}
-		else if (str[i] == 39)
-		{
-			temp_i = qoutes_checker(str, 39, i);
-			if (temp_i != -1)
-				i = temp_i;
-			if (temp_i == -1)
-				return (ft_putstr_fd(ERR_QUOTE1, 2), false);
-		}
-		i++;
-	}
-	return (true);
-}
-
 bool	syntax_check_part2(t_lexer *lexer)
 {
 	if (lexer->next && (lexer->type == HEREDOC
@@ -91,8 +62,6 @@ bool	syntax_doubles_same(t_lexer *lexer)
 			return (ft_putstr_fd(ERROR_M_PIPE, 2), false);
 		if (lexer->type < 6 && lexer->next == NULL)
 			return (ft_putstr_fd(ERROR_M_NEWLINE, 2), false);
-		if (checking_lex(lexer->str) == false)
-			return (false);
 		lexer = lexer->next;
 	}
 	return (true);
