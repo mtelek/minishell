@@ -35,22 +35,22 @@
 
 # define BUF_SIZE 4096
 
-extern int parent_exit;
+extern int					g_parent_exit;
 
-typedef struct s_main	t_main;
+typedef struct s_main		t_main;
 
 typedef struct s_cd
 {
-	char	**argv;
-}			t_cd;
+	char					**argv;
+}							t_cd;
 
 typedef struct s_init_ex_node
 {
-	int			i;
-	int			start;
-	bool		in_quotes;
-	char		quote_char;
-}				t_init_ex_node;
+	int						i;
+	int						start;
+	bool					in_quotes;
+	char					quote_char;
+}							t_init_ex_node;
 
 typedef struct s_expand_node
 {
@@ -175,6 +175,7 @@ char						*creating_string(int start, int end, char *input);
 int							getting_word_i_start(char *input, int i);
 int							null_terminator_check(char *input, int i,
 								t_main *main);
+int							i_check(char *input, int i);
 
 // SYNTAX_CHECK
 bool						syntax_check(t_lexer *lexer, t_main *main);
@@ -197,8 +198,10 @@ void						parser_helper(t_main *main);
 void						env_helper(t_cmd *own_cmd, t_main *main);
 void						export_helper(t_cmd *own_cmd, t_main *main);
 void						unset_helper(t_cmd *own_cmd, t_main *main);
-void						 split_and_insert_lexer_nodes(t_lexer *lexer, t_main *main);
-t_lexer 					*create_lexer_node(char *str, t_lexer *prev, t_lexer *next);
+void						split_and_insert_lexer_nodes(t_lexer *lexer,
+								t_main *main);
+t_lexer						*create_lexer_node(char *str, t_lexer *prev,
+								t_lexer *next);
 
 // PARSER/CMD_TABLE
 int							count_cmds(t_lexer *lexer);
@@ -259,6 +262,8 @@ char						*get_env_key(t_main *main, char *env);
 char						*to_home(t_main *main, int i);
 char						*to_print_pwd(t_main *main, int i);
 int							is_env_var_set(const char *env_var);
+int							check_declare_x(t_cmd *own_cmd, char **args);
+void						declare_x_export(t_cmd *own_cmd);
 
 //HEREDOC
 void						get_hd_content(t_main *main, t_cmd *own_cmd);
@@ -318,9 +323,13 @@ void						no_var_name_found(t_expand_node *current,
 								t_main *main);
 int							check_for_another_heredoc(t_lexer *temp_lex);
 void						delimiter_check(char *delimiter, t_cmd *own_cmd);
-void						expand_exit_code(t_expand_node *current, t_main *main);
+void						expand_exit_code(t_expand_node *current,
+								t_main *main);
 void						init_current(t_lexer *lexer, t_main *main,
-								t_expand_node **expand, t_expand_node **current);
+								t_expand_node **expand,
+								t_expand_node **current);
+void						add_singles(t_expand_node *expand, t_main *main);
+void						str_check(t_expand_node *expand, t_main *main);
 
 // ERRORS
 void						error_function(int error_type, t_main *main);
@@ -387,7 +396,9 @@ char						*ft_strncpy(char *dest, char *src, unsigned int n);
 char						*ft_strldup(char *str, int len);
 char						*ft_strtrim(char const *s1, char const *set);
 char						*ft_strndup(const char *s, size_t n);
-char   						*ft_strcpy(char *s1, char *s2);
+char						*ft_strcpy(char *s1, char *s2);
+int							is_only_spaces(const char *str);
+void						update_global(t_main *main);
 
 // SIG
 void						child_signal_handler(int sig);

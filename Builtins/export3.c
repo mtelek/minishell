@@ -6,11 +6,24 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 13:26:13 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 15:07:57 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/02 15:02:59 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
+
+int	check_declare_x(t_cmd *own_cmd, char **args)
+{
+	int	j;
+
+	j = 0;
+	if (args[j] && !args[j + 1])
+	{
+		declare_x_export(own_cmd);
+		return (1);
+	}
+	return (0);
+}
 
 void	swap(char **a, char **b)
 {

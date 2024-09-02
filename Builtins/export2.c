@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 17:50:55 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/02 01:01:40 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/02 15:20:45 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	declare_x_export(t_cmd *own_cmd)
 
 	i = 0;
 	bubble_sort_env(own_cmd->main->env_array);
-	while (own_cmd->main->env_array[i+1])
+	while (own_cmd->main->env_array[i + 1])
 	{
 		ft_putstr_fd("declare -x ", 1);
 		ft_putstr_fd(own_cmd->main->env_array[i], 1);
@@ -94,11 +94,8 @@ void	ft_export(t_cmd *own_cmd, t_main *main, char **args)
 	int	updated;
 
 	j = 0;
-	if (args[j] && !args[j + 1])
-	{
-		declare_x_export(own_cmd);
+	if (check_declare_x(own_cmd, args))
 		return ;
-	}
 	while (args[++j])
 	{
 		i = -1;
@@ -112,6 +109,9 @@ void	ft_export(t_cmd *own_cmd, t_main *main, char **args)
 			}
 		}
 		if (!updated)
-			arranging_new_array(own_cmd, i, j, args);
+		{
+			if (find_character(args[j], '=') != -1)
+				arranging_new_array(own_cmd, i, j, args);
+		}
 	}
 }

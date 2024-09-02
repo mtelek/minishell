@@ -12,6 +12,13 @@
 
 #include "../Headers/minishell.h"
 
+int	i_check(char *input, int i)
+{
+	if (!input[i])
+		i = 0;
+	return (i);
+}
+
 int	checking_last_word(char *input, int i, t_main *main)
 {
 	(void)main;

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:50 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 20:05:12 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/02 13:28:24 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,4 +107,5 @@ void	executor(t_main *main, t_cmd *own_cmd)
 		else
 			exec(main, own_cmd, own_cmd->cmd);
 	}
+	main->exit_code = 0;
 }

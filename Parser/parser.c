@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:54:26 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/02 00:30:01 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/02 13:23:21 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	parser(t_main *main)
 		own_cmd = main->cmd;
 		calling_redirects(main, own_cmd);
 	}
-	if (!echo_ex_env_check(main, own_cmd) && own_cmd->pid == 0
+	if (!echo_ex_env_check(main, own_cmd)
 		&& ft_strcmp(own_cmd->cmd, "cd"))
 		executor(main, own_cmd);
 	if (own_cmd->pid == 0)

@@ -90,6 +90,7 @@ char	*getting_word(char *input, t_main *main)
 	char		*word;
 
 	word = NULL;
+	i = i_check(input, i);
 	i = getting_word_i_start(input, i);
 	if (is_operator(input[i], input[i + 1], main->operators, main))
 	{

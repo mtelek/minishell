@@ -67,23 +67,6 @@ char	*find_var_name(char *str, t_main *main)
 	return (var_name);
 }
 
-void	add_singles(t_expand_node *expand, t_main *main)
-{
-	char	*new_str;
-	int		len;
-
-	len = ft_strlen(expand->str);
-	new_str = malloc(len + 3);
-	if (!new_str)
-		error_function(-1, main);
-	new_str[0] = '\'';
-	ft_strcpy(new_str + 1, expand->str);
-	new_str[len + 1] = '\'';
-	new_str[len + 2] = '\0';
-	free(expand->str);
-	expand->str = new_str;
-}
-
 int	expander(t_expand_node *expand, t_main *main)
 {
 	char	*value;
@@ -107,8 +90,7 @@ int	expander(t_expand_node *expand, t_main *main)
 		return (free(var_name), 1);
 	free(expand->str);
 	expand->str = ft_strdup(value);
-	if (!expand->str)
-		error_function(-1, main);
+	str_check(expand, main);
 	if (expand->single_flag == 1)
 		add_singles(expand, main);
 	return (free(value), free(var_name), 0);

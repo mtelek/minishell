@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   outfile.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:44:10 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 22:57:14 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/02 12:13:03 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ void	set_outfile_fd(int *output_fd, t_main *main, t_cmd *own_cmd)
 	file_name = get_txt_name(main, OUTPUT_RED, own_cmd->n_out);
 	*output_fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (*output_fd == -1)
+	{
+		free(main->parser->output_fd);
 		open_failed(main, file_name);
+	}
 }
 
 void	alloc_output_f(t_main *main, t_cmd *own_cmd)

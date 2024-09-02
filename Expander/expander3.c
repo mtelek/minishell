@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 21:52:05 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/02 02:16:46 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/02 14:51:28 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,22 @@
 
 void	expand_exit_code(t_expand_node *current, t_main *main)
 {
-	free(current->str);
-	current->str = ft_strdup(ft_itoa(main->exit_code));
-	if (!current->str)
+	char	*new_str;
+
+	new_str = ft_itoa(main->exit_code);
+	if (!new_str)
 		error_function(-1, main);
+	free(current->str);
+	current->str = new_str;
 }
 
-void	init_current(t_lexer *lexer, t_main *main,
-			t_expand_node **expand, t_expand_node **current)
+void	init_current(t_lexer *lexer, t_main *main, t_expand_node **expand,
+		t_expand_node **current)
 {
 	*expand = NULL;
 	cutting_up_lexer_str(expand, lexer, main);
+	(*expand)->single_flag = 0;
 	*current = *expand;
-	(*current)->single_flag = 0;
 }
 
 int	count_character(char *str, char c)

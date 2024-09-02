@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sig.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 18:45:16 by ibaranov          #+#    #+#             */
-/*   Updated: 2024/09/02 00:29:23 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/02 15:13:18 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	parent_signal_handler(int sig)
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
-		parent_exit = 130;
+		g_parent_exit = 130;
 	}
 	else if (sig == SIGQUIT)
 	{

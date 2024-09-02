@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_removal.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:04:41 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/02 02:16:48 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/02 11:47:24 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,52 +68,10 @@ int	check_for_another_heredoc(t_lexer *temp_lex)
 	return (0);
 }
 
-int	not_alphabetical_check(t_lexer *lexer, int *flag)
-{
-    int i;
-    int dollar_count;
-	char quote;
-
-	quote = '\0';
-	dollar_count = 0;
-	i = 0;
-    while (lexer->str[i])
-    {
-        if (lexer->str[i] == '"' || lexer->str[i] == '\'')
-        {
-            quote = lexer->str[i];
-            i++;
-            while (lexer->str[i] && lexer->str[i] != quote)
-                i++;
-            if (lexer->str[i] && lexer->str[i + 1])
-                i++;
-        }
-        if (lexer->str[i] == '$')
-        {
-            dollar_count++;
-            if (dollar_count <= 3 && lexer->str[i + 1] && !ft_isalpha(lexer->str[i + 1]))
-            {
-                if (lexer->str[i+1] && (lexer->str[i + 1] == '"' || lexer->str[i + 1] == '\'' || lexer->str[i+1] == '?'))
-                    i++;
-				else
-				{
-					 *flag = 1;
-                	return (1);
-				}
-            }
-        }
-       	i++;
-    }
-    return (0);
-}
-
 void	quotes_and_expander(t_lexer *lexer, t_main *main)
 {
-	int	flag;
-
 	while (lexer != NULL)
 	{
-		flag = 0;
 		if (lexer->prev && lexer->prev->type == HEREDOC
 			&& !check_for_another_heredoc(lexer))
 		{
@@ -122,12 +80,7 @@ void	quotes_and_expander(t_lexer *lexer, t_main *main)
 			else
 				return ;
 		}
-		if (not_alphabetical_check(lexer, &flag) == 1)
-			lexer = lexer->next;
-		if (!flag)
-		{
-			decide_to_expand(lexer, main);
-			lexer = lexer->next;
-		}
+		decide_to_expand(lexer, main);
+		lexer = lexer->next;
 	}
 }

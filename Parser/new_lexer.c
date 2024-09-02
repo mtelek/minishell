@@ -2,9 +2,12 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   new_lexer.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+        
+	+:+     */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+      
+	+#+        */
+/*                                                +#+#+#+#+#+  
+	+#+           */
 /*   Created: 2024/09/02 01:08:26 by mtelek            #+#    #+#             */
 /*   Updated: 2024/09/02 01:08:26 by mtelek           ###   ########.fr       */
 /*                                                                            */
@@ -12,37 +15,36 @@
 
 #include "../Headers/minishell.h"
 
-
-t_lexer *create_lexer_node(char *str, t_lexer *prev, t_lexer *next)
+t_lexer	*create_lexer_node(char *str, t_lexer *prev, t_lexer *next)
 {
-    t_lexer *new_node;
+	t_lexer	*new_node;
 
-    new_node = malloc(sizeof(t_lexer));
-    if (!new_node)
-        return (NULL);
-    new_node->str = ft_strdup(str);
-    if (!new_node->str)
-    {
-        free(new_node);
-        return (NULL);
-    }
-    new_node->type = get_type(new_node->str);
-    new_node->next = next;
-    new_node->prev = prev;
-    return (new_node);
+	new_node = malloc(sizeof(t_lexer));
+	if (!new_node)
+		return (NULL);
+	new_node->str = ft_strdup(str);
+	if (!new_node->str)
+	{
+		free(new_node);
+		return (NULL);
+	}
+	new_node->type = get_type(new_node->str);
+	new_node->next = next;
+	new_node->prev = prev;
+	return (new_node);
 }
 
 void	free_words(char **words)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (words[i])
-        free(words[i++]);
-    free(words);
+		free(words[i++]);
+	free(words);
 }
 
-void split_and_insert_lexer_nodes(t_lexer *lexer, t_main *main)
+void	split_and_insert_lexer_nodes(t_lexer *lexer, t_main *main)
 {
 	char	**words;
 	t_lexer	*current;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   append_out.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 23:04:24 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 22:56:30 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/02 15:45:52 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ void	set_append_out_fd(int *append_out_fd, t_main *main, t_cmd *own_cmd)
 	file_name = get_txt_name(main, APPEND_OUT, own_cmd->n_append);
 	*append_out_fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (*append_out_fd == -1)
+	{
+		free(main->parser->append_out_fd);
 		open_failed(main, file_name);
+	}
 }
 
 void	alloc_append_out_f(t_main *main, t_cmd *own_cmd)

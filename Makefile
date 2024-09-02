@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lreadline
 SRCDIR = .
 OBJDIR = .objs
@@ -20,7 +20,7 @@ SRCS = main.c Utils/checker.c Utils/libft_utils1.c Utils/libft_utils2.c Utils/ft
 		Builtins/cd.c Builtins/echo.c Builtins/exit.c Builtins/cd_export.c Builtins/export2.c Builtins/unset.c \
 		Builtins/pwd.c Builtins/env.c Builtins/export3.c Builtins/unset2.c \
 		Expander/expander.c Expander/expander2.c Expander/expander3.c Expander/init_node.c Expander/init_node2.c \
-		Expander/init_node3.c \
+		Expander/init_node3.c Expander/expander4.c \
 		Lexer/syntax_check2.c Builtins/cd2.c Builtins/cd3.c \
 
 

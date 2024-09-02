@@ -72,11 +72,10 @@ int	number_of_words(char *input, t_main *main)
 
 	n_words = 0;
 	i = 0;
-	if (n_words == 0 && input[0] != '\0')
-		n_words++;
-	while (input[i] == '\t' || input[i] == '\n' || input[i] == '\v'
-		|| input[i] == '\f' || input[i] == '\r' || input[i] == ' ')
+	while (input[i] && ft_isspace(input[i]))
 		i++;
+	if (n_words == 0 && input[i] != '\0')
+		n_words++;
 	while (input[i] != '\0')
 	{
 		if (input[i] == 34 || input[i] == 39)

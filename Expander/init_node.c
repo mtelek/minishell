@@ -23,6 +23,7 @@ void	add_node(t_expand_node **head, char *str, t_main *main)
 	new_node->str = str;
 	new_node->next = NULL;
 	new_node->to_expand = false;
+	new_node->single_flag = 0;
 	if (*head == NULL)
 		*head = new_node;
 	else
