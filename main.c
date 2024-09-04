@@ -38,9 +38,9 @@ void	check_for_spaces(t_main *main, t_lexer *lexer)
 	t_lexer	*temp;
 
 	temp = lexer;
-	while (lexer != NULL)
+	while (lexer != NULL) // just if its expanded
 	{
-		if ((lexer == temp || (lexer->prev && lexer->prev->type == PIPE))
+		if (((lexer == temp) || (lexer->prev && lexer->prev->type == PIPE))
 			&& find_character(lexer->str, ' ') != -1
 			&& !is_only_spaces(lexer->str))
 		{
@@ -101,7 +101,7 @@ int	main(int argc, char **argv, char **envp)
 		if (!main.heredoc_flag)
 		{
 			input = readline("minishell> ");
-			if (g_parent_exit)
+			if (g_parent_exit == 130)
 				update_global(&main);
 			if (input)
 				input_set_up(&main, input, &m_exit_code);

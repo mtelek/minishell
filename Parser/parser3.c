@@ -16,7 +16,6 @@ void	calling_redirects(t_main *main, t_cmd *own_cmd)
 {
 	if (own_cmd->pid == 0)
 	{
-		find_hd_indicator(main, main->cmd);
 		if (own_cmd->n_in)
 			init_infile(main, own_cmd);
 		if (own_cmd->n_out)

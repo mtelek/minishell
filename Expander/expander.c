@@ -106,8 +106,10 @@ void	decide_to_expand(t_lexer *lexer, t_main *main)
 	{
 		current->to_expand = expander_check(current->str, current);
 		if (current->to_expand == true)
+		{
 			if (expander(current, main) == 1)
 				no_var_name_found(current, main);
+		}
 		if (current->to_expand == false)
 		{
 			if (!ft_strcmp(current->str, "$?"))

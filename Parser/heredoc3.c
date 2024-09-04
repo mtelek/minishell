@@ -34,6 +34,12 @@ int	echo_and_heredoc(char **delimiter, t_main *main, t_cmd *own_cmd)
 	while (1)
 	{
 		line = readline("> ");
+		if (g_parent_exit == 130)
+		{
+			if (line)
+				free(line);
+			break ;
+		}
 		main->count_hd_line += 1;
 		if (!line || ft_strcmp(line, delimiter[i]) == 0)
 		{
@@ -91,6 +97,8 @@ char	*no_echo_but_heredoc(char **delimiter, char *content,
 	while (1)
 	{
 		line = readline("> ");
+		if (g_parent_exit == 130)
+			break ;
 		main->count_hd_line += 1;
 		if (!line || ft_strcmp(line, delimiter[i]) == 0)
 			flag = check_line(main, line, delimiter, &i);

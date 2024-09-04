@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   sig2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 00:20:29 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 14:42:20 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/04 16:15:15 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-void	heredoc_signal_handler(int sig)
+void heredoc_signal_handler(int sig)
 {
-	if (sig == SIGINT)
-	{
-		exit(130);
-	}
-	else if (sig == SIGQUIT)
-	{
-		(void)sig;
-	}
+    if (sig == SIGINT)
+    {
+        write(1, "\n", 1);
+        rl_replace_line("", 0);
+		rl_on_new_line();
+        rl_done = 1;
+        g_parent_exit = 130;
+    }
 }
 
 void	setup_heredoc_signal_handlers(void)

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 20:11:18 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/02 02:30:55 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/04 20:35:03 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ void	find_hd_indicator(t_main *main, t_cmd *cmd)
 	{
 		if (temp_cmd->hd_indicator == 1)
 		{
+			setup_heredoc_signal_handlers();
 			get_hd_content(main, temp_cmd);
-			break ;
 		}
 		temp_cmd = temp_cmd->next;
 	}
@@ -74,24 +74,16 @@ void	delimiter_check(char *delimiter, t_cmd *own_cmd)
 	}
 }
 
-void	init_delimiter(t_main *main, t_cmd *own_cmd)
+void	init_delimiter(t_cmd *own_cmd)
 {
 	int		i;
 
 	i = -1;
-	own_cmd->delimiter = malloc(sizeof(char *) * (own_cmd->n_heredoc + 1));
-	if (!own_cmd->delimiter)
-		error_function(26, main);
 	while (++i < own_cmd->n_heredoc)
 	{
-		own_cmd->delimiter[i] = ft_strdup(get_txt_name(main, HEREDOC,
-					own_cmd->n_heredoc));
-		if (!own_cmd->delimiter[i])
-			error_function(-1, main);
 		delimiter_check(own_cmd->delimiter[i], own_cmd);
 		remove_surrounding_quotes(own_cmd, i);
 	}
-	own_cmd->delimiter[i] = NULL;
 }
 
 void	get_hd_content(t_main *main, t_cmd *own_cmd)
@@ -99,8 +91,7 @@ void	get_hd_content(t_main *main, t_cmd *own_cmd)
 	char	*content;
 
 	content = NULL;
-	init_delimiter(main, own_cmd);
-	setup_heredoc_signal_handlers();
+	init_delimiter(own_cmd);
 	if (ft_strcmp(own_cmd->cmd, "echo") == 0)
 	{
 		if (echo_and_heredoc(own_cmd->delimiter, main, own_cmd))

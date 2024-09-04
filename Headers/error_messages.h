@@ -53,6 +53,7 @@
 # define MF_DELIMITER "Error, malloc for creating delimiters failed\n"
 # define MF_CD_ARGV "Error, malloc for creating arguments in cd failed\n"
 # define MF_T_CD "Error, malloc for creating cd struct failed\n"
+# define MF_REALLOC "Error, reallocing memory failed\n"
 
 //ERRORS FOR FAILURES
 # define E_LIMIT_INSUF "Error: System process limit reached\n"

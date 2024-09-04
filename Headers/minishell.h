@@ -58,6 +58,7 @@ typedef struct s_expand_node
 	bool					to_expand;
 	int						single_flag;
 	struct s_expand_node	*next;
+	struct s_expand_node    *prev;
 }							t_expand_node;
 
 typedef struct s_builtin
@@ -90,8 +91,11 @@ typedef struct s_cmd
 	struct s_cmd			*next;
 	struct s_cmd			*prev;
 	int						n_in;
+	char					**in;
 	int						n_out;
+	char					**out;
 	int						n_append;
+	char					**append;
 	int						n_heredoc;
 	int						hd_indicator;
 	char					**delimiter;
@@ -105,6 +109,7 @@ typedef struct s_operator
 {
 	char					*operator;
 	int						type;
+	bool					is_expanded; //added this
 	struct s_operator		*next;
 	struct s_operator		*prev;
 }							t_operator;
@@ -132,12 +137,6 @@ typedef struct s_main
 	t_exec					*exec;
 	t_builtin				*builtin;
 }							t_main;
-
-//HELPER/PRINTING
-void						print_cmd_table(t_cmd *cmd);
-void						print_lexer(t_lexer *lexer);
-void						print_env(char **envp);
-void						print_expand(t_expand_node *expand);
 
 // ENV
 int							creating_env_array(t_main *main, char **envp);
@@ -211,6 +210,9 @@ void						args_maker(t_cmd *cmd, int n_cmds,
 void						creating_cmd_table(t_main *main);
 int							setting_args(t_lexer **temp_lex, t_cmd **temp_cmd,
 								int n_args, t_main *main);
+void						init_variables(t_cmd **temp);
+void						handle_redirections(t_lexer **temp_lex,
+								t_cmd **temp_cmd, int i, t_main *main);
 
 //PARSER/PIPES
 t_cmd						*init_pipes(t_main *main);
@@ -223,7 +225,6 @@ void						init_infile(t_main *main, t_cmd *own_cmd);
 void						init_outfile(t_main *main, t_cmd *own_cmd);
 void						init_append_out(t_main *main, t_cmd *own_cmd);
 void						init_heredoc(t_main *main, t_cmd *own_cmd);
-char						*get_txt_name(t_main *main, int type, int limit);
 
 //PARSER/QUOTES
 void						delete_qoutes(t_expand_node *current);
@@ -399,6 +400,7 @@ char						*ft_strndup(const char *s, size_t n);
 char						*ft_strcpy(char *s1, char *s2);
 int							is_only_spaces(const char *str);
 void						update_global(t_main *main);
+void 						*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 
 // SIG
 void						child_signal_handler(int sig);

@@ -6,40 +6,11 @@
 /*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 20:24:38 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/31 23:34:34 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/04 23:32:04 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
-
-void	handle_redirections(t_lexer **temp_lex, t_cmd **temp_cmd,
-			int i, t_main *main)
-{
-	if ((i == 0 && (*temp_lex)->type != 6 && (*temp_lex)->next)
-		|| ((*temp_lex)->prev && (*temp_lex)->prev->type == 1
-			&& (*temp_lex)->type != 6 && (*temp_lex)->next))
-	{
-		if ((*temp_lex)->type == 6)
-		{
-			(*temp_cmd)->args[i] = ft_strdup((*temp_lex)->str);
-			if (!(*temp_cmd)->args[i])
-				error_function(-1, main);
-		}
-	}
-	if ((*temp_lex)->type == INPUT_RED)
-		(*temp_cmd)->n_in++;
-	else if ((*temp_lex)->type == OUTPUT_RED)
-		(*temp_cmd)->n_out++;
-	else if ((*temp_lex)->type == APPEND_OUT)
-		(*temp_cmd)->n_append++;
-	else if ((*temp_lex)->type == HEREDOC)
-	{
-		(*temp_cmd)->n_heredoc++;
-		(*temp_cmd)->hd_indicator = 1;
-	}
-	if (i != 0)
-		*temp_lex = (*temp_lex)->next;
-}
 
 void	assign_argument(t_lexer **temp_lex, t_cmd **temp_cmd, int i)
 {
@@ -65,6 +36,7 @@ int	setting_args(t_lexer **temp_lex, t_cmd **temp_cmd, int n_args, t_main *main)
 	int	i;
 
 	i = 0;
+	init_variables(temp_cmd);
 	while ((*temp_lex) != NULL && (*temp_lex)->type != PIPE)
 	{
 		if (i < n_args)

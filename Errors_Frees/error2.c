@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:03:45 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 13:53:20 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/05 00:23:31 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,27 +89,29 @@ void	error_type20(int error_type)
 void	error_type30(int error_type)
 {
 	if (error_type == 16)
-		ft_putstr_fd(MF_APPEND_OUT, STDERR_FILENO);
+		ft_putstr_fd(MF_APPEND_OUT, 2);
 	else if (error_type == 18)
-		ft_putstr_fd(MF_ENV_ARRAY, STDERR_FILENO);
+		ft_putstr_fd(MF_ENV_ARRAY, 2);
 	else if (error_type == 19)
-		ft_putstr_fd(ERROR_STRDUP, STDERR_FILENO);
+		ft_putstr_fd(ERROR_STRDUP, 2);
 	else if (error_type == 20)
-		ft_putstr_fd(MF_STRJOIN, STDERR_FILENO);
+		ft_putstr_fd(MF_STRJOIN, 2);
 	else if (error_type == 21)
-		ft_putstr_fd(MF_STRTRIM, STDERR_FILENO);
+		ft_putstr_fd(MF_STRTRIM, 2);
 	else if (error_type == 22)
-		ft_putstr_fd(MF_SUBSTR, STDERR_FILENO);
+		ft_putstr_fd(MF_SUBSTR, 2);
 	else if (error_type == 23)
-		ft_putstr_fd(MF_STRING, STDERR_FILENO);
+		ft_putstr_fd(MF_STRING, 2);
 	else if (error_type == 24)
-		ft_putstr_fd(MF_NEW_STR, STDERR_FILENO);
+		ft_putstr_fd(MF_NEW_STR, 2);
 	else if (error_type == 25)
-		ft_putstr_fd(MF_EXPNAD_NODE, STDERR_FILENO);
+		ft_putstr_fd(MF_EXPNAD_NODE, 2);
 	else if (error_type == 26)
-		ft_putstr_fd(MF_DELIMITER, STDERR_FILENO);
+		ft_putstr_fd(MF_DELIMITER, 2);
 	else if (error_type == 27)
 		ft_putstr_fd(MF_CD_ARGV, 2);
 	else if (error_type == 28)
 		ft_putstr_fd(MF_T_CD, 2);
+	else if (error_type == 29)
+		ft_putstr_fd(MF_REALLOC, 2);
 }

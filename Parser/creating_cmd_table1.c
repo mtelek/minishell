@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   creating_cmd_table1.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 22:47:42 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/04 23:13:36 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,14 @@ void	args_maker(t_cmd *cmd, int n_cmds, int n_args, t_main *main)
 	}
 }
 
+void	init_variables(t_cmd **temp)
+{
+	(*temp)->in = NULL;
+	(*temp)->out = NULL;
+	(*temp)->append = NULL;
+	(*temp)->delimiter = NULL;
+}
+
 void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 {
 	(void)cmd;
@@ -62,7 +70,6 @@ void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 	temp->in_fd = STDIN_FILENO;
 	temp->out_fd = STDOUT_FILENO;
 	temp->pid = -1;
-	temp->delimiter = NULL;
 	temp->hd_content = NULL;
 	temp->expander_decider = true;
 }
