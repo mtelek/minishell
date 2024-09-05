@@ -100,13 +100,18 @@ void	decide_to_expand(t_lexer *lexer, t_main *main)
 {
 	t_expand_node	*expand;
 	t_expand_node	*current;
+	t_lexer			*temp_lex;
 
+	temp_lex = lexer;
 	init_current(lexer, main, &expand, &current);
 	while (current != NULL)
 	{
 		current->to_expand = expander_check(current->str, current);
+		expand->to_expand = current->to_expand;
 		if (current->to_expand == true)
 		{
+			if (temp_lex != NULL)
+				temp_lex->to_expand = true;
 			if (expander(current, main) == 1)
 				no_var_name_found(current, main);
 		}
@@ -123,6 +128,8 @@ void	decide_to_expand(t_lexer *lexer, t_main *main)
 			delete_qoutes(current);
 		}
 		current = current->next;
+		if (temp_lex != NULL)
+			temp_lex = temp_lex->next;
 	}
 	join_expand_node(expand, main, lexer);
 }

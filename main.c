@@ -35,12 +35,9 @@ void	init_main(t_main *main)
 
 void	check_for_spaces(t_main *main, t_lexer *lexer)
 {
-	t_lexer	*temp;
-
-	temp = lexer;
-	while (lexer != NULL) // just if its expanded
+	while (lexer != NULL)
 	{
-		if (((lexer == temp) || (lexer->prev && lexer->prev->type == PIPE))
+		if (lexer->str != NULL && lexer->to_expand == true
 			&& find_character(lexer->str, ' ') != -1
 			&& !is_only_spaces(lexer->str))
 		{

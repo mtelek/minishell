@@ -109,7 +109,6 @@ typedef struct s_operator
 {
 	char					*operator;
 	int						type;
-	bool					is_expanded; //added this
 	struct s_operator		*next;
 	struct s_operator		*prev;
 }							t_operator;
@@ -118,6 +117,7 @@ typedef struct s_lexer
 {
 	char					*str;
 	int						type;
+	bool					to_expand;
 	struct s_lexer			*next;
 	struct s_lexer			*prev;
 }							t_lexer;
@@ -331,6 +331,7 @@ void						init_current(t_lexer *lexer, t_main *main,
 								t_expand_node **current);
 void						add_singles(t_expand_node *expand, t_main *main);
 void						str_check(t_expand_node *expand, t_main *main);
+void						check_for_spaces(t_main *main, t_lexer *lexer);
 
 // ERRORS
 void						error_function(int error_type, t_main *main);

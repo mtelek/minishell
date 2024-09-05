@@ -90,6 +90,8 @@ void	join_expand_node(t_expand_node *expand, t_main *main, t_lexer *lexer)
 	}
 	free(lexer->str);
 	lexer->str = join_list(expand, main);
+	if (expand->to_expand == true)
+		lexer->to_expand = true;
 	free_list(expand);
 	if (!lexer->str)
 	{
