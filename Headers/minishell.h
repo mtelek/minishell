@@ -26,6 +26,7 @@
 # include <fcntl.h>
 # include <dirent.h>
 # include <errno.h>
+#include <sys/ioctl.h>
 
 # define PIPE 1
 # define INPUT_RED 2

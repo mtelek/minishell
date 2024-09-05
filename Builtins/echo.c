@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 18:26:21 by ibaranov          #+#    #+#             */
-/*   Updated: 2024/09/01 17:14:32 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/05 18:48:37 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,54 +22,43 @@ int	count_arg(char **args)
 	return (i);
 }
 
-void	echo_no_new_line(t_cmd *own_cmd, int argc)
+int	is_n_flag(const char *arg)
 {
-	int	i;
 	int	j;
-	int	flag;
 
-	i = 1;
+	if (arg[0] != '-' || arg[1] != 'n')
+		return (0);
 	j = 2;
-	flag = 0;
-	while ((int)ft_strlen(own_cmd->args[1]) > j)
+	while (arg[j])
 	{
-		if (own_cmd->args[1][j] != 'n')
-		{
-			flag = 1;
-			i = 0;
-			break ;
-		}
+		if (arg[j] != 'n')
+			return (0);
 		j++;
 	}
-	while (++i < argc)
-	{
-		ft_putstr_fd(own_cmd->args[i], 1);
-		if (i < argc - 1 && ft_strlen(own_cmd->args[i + 1]))
-			write(1, " ", 1);
-	}
-	if (argc > 1 && flag)
-		write(1, "\n", 1);
+	return (1);
 }
 
 void	ft_echo(t_cmd *own_cmd)
 {
 	int	i;
 	int	argc;
+	int	no_newline;
 
-	i = 0;
+	i = 1;
+	no_newline = 0;
 	argc = count_arg(own_cmd->args);
-	if (argc > 1 && own_cmd->args[1][0] == '-'
-		&& own_cmd->args[1][1] == 'n')
+	while (i < argc && is_n_flag(own_cmd->args[i]))
 	{
-		echo_no_new_line(own_cmd, argc);
-		return ;
+		no_newline = 1;
+		i++;
 	}
-	while (++i < argc)
+	while (i < argc)
 	{
 		ft_putstr_fd(own_cmd->args[i], 1);
-		if (i < argc - 1 && ft_strlen(own_cmd->args[i + 1]))
+		if (i < argc - 1)
 			write(1, " ", 1);
+		i++;
 	}
-	if (argc > 1)
+	if (!no_newline)
 		write(1, "\n", 1);
 }
