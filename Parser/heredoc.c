@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 18:49:08 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/05 15:16:51 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/05 23:17:00 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	init_heredoc(t_main *main, t_cmd *own_cmd)
 {
 	int	pipe_fd[2];
-	int	j;
+	//int	j;
 
-	j = 0;
+	//j = 0;
 	if (pipe(pipe_fd) == -1)
 		pipe_failed(main);
 	if (own_cmd->hd_content)
