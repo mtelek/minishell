@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   append_out.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 23:04:24 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/05 00:29:41 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/05 13:21:48 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-void	set_append_out_fd(int *append_out_fd, t_main *main, t_cmd *own_cmd, int i)
+void	set_append_out_fd(int *append_out_fd, t_main *main,
+			t_cmd *own_cmd, int i)
 {
 	char	*file_name;
 

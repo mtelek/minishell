@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 22:45:40 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/05 00:10:39 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/05 14:59:04 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,6 @@ void	free_array(char **array)
 	free(array);
 }
 
-void	free_file_names(t_cmd *temp_cmd)
-{
-	if (temp_cmd->append)
-		free(temp_cmd->append);
-	if (temp_cmd->in)
-		free(temp_cmd->in);
-	if (temp_cmd->out)
-		free(temp_cmd->out);
-	if (temp_cmd->delimiter)
-		free(temp_cmd->delimiter);
-}
-
 void	free_cmd(t_cmd *cmd)
 {
 	t_cmd	*temp_cmd;
@@ -67,6 +55,7 @@ void	free_cmd(t_cmd *cmd)
 	{
 		temp_cmd = cmd;
 		cmd = cmd->next;
+		free_file_names(temp_cmd);
 		if (temp_cmd->hd_content)
 		{
 			free(temp_cmd->hd_content);
@@ -77,7 +66,6 @@ void	free_cmd(t_cmd *cmd)
 			free(temp_cmd->cmd);
 			temp_cmd->cmd = NULL;
 		}
-		free_file_names(temp_cmd);
 		free(temp_cmd->args);
 		temp_cmd->args = NULL;
 		free(temp_cmd);

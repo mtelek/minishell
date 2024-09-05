@@ -6,11 +6,21 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:55:47 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/02 14:56:12 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/05 13:18:43 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
+
+char	*get_value(char *env, char *var_equal, t_main *main)
+{
+	char	*value;
+
+	value = ft_substr(env, ft_strlen(var_equal), ft_strlen(env));
+	if (!value)
+		error_function(22, main);
+	return (value);
+}
 
 void	add_singles(t_expand_node *expand, t_main *main)
 {

@@ -12,16 +12,6 @@
 
 #include "../Headers/minishell.h"
 
-char	*get_value(char *env, char *var_equal, t_main *main)
-{
-	char	*value;
-
-	value = ft_substr(env, ft_strlen(var_equal), ft_strlen(env));
-	if (!value)
-		error_function(22, main);
-	return (value);
-}
-
 char	*find_env_row(char **env_array, char *var, t_main *main)
 {
 	int		i;
@@ -96,25 +86,24 @@ int	expander(t_expand_node *expand, t_main *main)
 	return (free(value), free(var_name), 0);
 }
 
+void	expa(t_expand_node *current, t_main *main)
+{
+	if (expander(current, main) == 1)
+		no_var_name_found(current, main);
+}
+
 void	decide_to_expand(t_lexer *lexer, t_main *main)
 {
 	t_expand_node	*expand;
 	t_expand_node	*current;
-	t_lexer			*temp_lex;
 
-	temp_lex = lexer;
 	init_current(lexer, main, &expand, &current);
 	while (current != NULL)
 	{
 		current->to_expand = expander_check(current->str, current);
 		expand->to_expand = current->to_expand;
 		if (current->to_expand == true)
-		{
-			if (temp_lex != NULL)
-				temp_lex->to_expand = true;
-			if (expander(current, main) == 1)
-				no_var_name_found(current, main);
-		}
+			expa(current, main);
 		if (current->to_expand == false)
 		{
 			if (!ft_strcmp(current->str, "$?"))
@@ -128,8 +117,6 @@ void	decide_to_expand(t_lexer *lexer, t_main *main)
 			delete_qoutes(current);
 		}
 		current = current->next;
-		if (temp_lex != NULL)
-			temp_lex = temp_lex->next;
 	}
 	join_expand_node(expand, main, lexer);
 }

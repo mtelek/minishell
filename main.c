@@ -88,6 +88,7 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 	int		m_exit_code;
 
+	//not freeing line correctly if cat << hi << haha
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);

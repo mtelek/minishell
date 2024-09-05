@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   infile.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:44:13 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/05 00:29:36 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/05 14:07:55 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-void	set_infile_fd(int *input_fd, t_main *main, t_cmd *own_cmd, int i) // cat < existest < non existent
+void	set_infile_fd(int *input_fd, t_main *main, t_cmd *own_cmd, int i)
 {
 	char	*file_name;
 

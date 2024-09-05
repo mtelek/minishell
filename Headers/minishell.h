@@ -58,7 +58,7 @@ typedef struct s_expand_node
 	bool					to_expand;
 	int						single_flag;
 	struct s_expand_node	*next;
-	struct s_expand_node    *prev;
+	struct s_expand_node	*prev;
 }							t_expand_node;
 
 typedef struct s_builtin
@@ -284,6 +284,7 @@ void						remove_surrounding_quotes(t_cmd *own_cmd, int i);
 void						helper_three(t_cmd *own_cmd, int i);
 void						helper_two(t_cmd *own_cmd, int i);
 void						helper_one(t_cmd *own_cmd, int i);
+int							set_k(t_cmd *own_cmd);
 
 //EXPANDER/INIT
 void						cutting_up_lexer_str(t_expand_node **head,
@@ -332,6 +333,8 @@ void						init_current(t_lexer *lexer, t_main *main,
 void						add_singles(t_expand_node *expand, t_main *main);
 void						str_check(t_expand_node *expand, t_main *main);
 void						check_for_spaces(t_main *main, t_lexer *lexer);
+char						*get_value(char *env, char *var_equal,
+								t_main *main);
 
 // ERRORS
 void						error_function(int error_type, t_main *main);
@@ -361,6 +364,7 @@ void						free_structs(t_main *main);
 void						syntax_free(t_main *main);
 void						free_main(t_main *main);
 void						free_builtin(t_builtin *builtin);
+void						free_file_names(t_cmd *temp_cmd);
 
 // CHECKERS
 void						argc_checker(int argc, char **argv);
@@ -401,7 +405,8 @@ char						*ft_strndup(const char *s, size_t n);
 char						*ft_strcpy(char *s1, char *s2);
 int							is_only_spaces(const char *str);
 void						update_global(t_main *main);
-void 						*ft_realloc(void *ptr, size_t old_size, size_t new_size);
+void						*ft_realloc(void *ptr, size_t old_size,
+								size_t new_size);
 
 // SIG
 void						child_signal_handler(int sig);

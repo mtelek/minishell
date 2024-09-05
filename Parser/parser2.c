@@ -60,6 +60,6 @@ void	parser_helper(t_main *main)
 	creating_cmd_table(main);
 	alloc_parser(main);
 	alloc_exec(main);
-	alloc_builtin(main);	
-	find_hd_indicator(main, main->cmd);  //cat << hi | cat << haha check this as well, should modify the get.txt name or rather create a new one for heredocs
+	alloc_builtin(main);
+	find_hd_indicator(main, main->cmd);
 }

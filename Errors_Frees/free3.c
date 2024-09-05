@@ -1,31 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sig2.c                                             :+:      :+:    :+:   */
+/*   free3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/24 00:20:29 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/05 14:07:39 by mtelek           ###   ########.fr       */
+/*   Created: 2024/09/05 13:02:18 by mtelek            #+#    #+#             */
+/*   Updated: 2024/09/05 14:37:47 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-void	heredoc_signal_handler(int sig)
+void	free_file_names(t_cmd *temp_cmd)
 {
-	if (sig == SIGINT)
+	if (temp_cmd->append)
 	{
-		write(1, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_done = 1;
-		g_parent_exit = 130;
+		free(temp_cmd->append);
+		temp_cmd->append = NULL;
 	}
-}
-
-void	setup_heredoc_signal_handlers(void)
-{
-	signal(SIGINT, heredoc_signal_handler);
-	signal(SIGQUIT, SIG_IGN);
+	if (temp_cmd->in)
+	{
+		free(temp_cmd->in);
+		temp_cmd->in = NULL;
+	}
+	if (temp_cmd->out)
+	{
+		free(temp_cmd->out);
+		temp_cmd->out = NULL;
+	}
+	if (temp_cmd->delimiter)
+	{
+		free(temp_cmd->delimiter);
+		temp_cmd->delimiter = NULL;
+	}
 }

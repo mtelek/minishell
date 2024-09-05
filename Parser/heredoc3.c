@@ -48,7 +48,6 @@ int	echo_and_heredoc(char **delimiter, t_main *main, t_cmd *own_cmd)
 			i++;
 		}
 		free(line);
-		line = NULL;
 		if (i == own_cmd->n_heredoc)
 			return (1);
 	}
@@ -90,10 +89,7 @@ char	*no_echo_but_heredoc(char **delimiter, char *content,
 
 	i = 0;
 	flag = 0;
-	if (own_cmd->n_heredoc == 1)
-		k = 1;
-	else
-		k = 0;
+	k = set_k(own_cmd);
 	while (1)
 	{
 		line = readline("> ");

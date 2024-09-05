@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sig2.c                                             :+:      :+:    :+:   */
+/*   heredoc6.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/24 00:20:29 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/05 14:07:39 by mtelek           ###   ########.fr       */
+/*   Created: 2024/09/05 13:29:18 by mtelek            #+#    #+#             */
+/*   Updated: 2024/09/05 14:07:23 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
 
-void	heredoc_signal_handler(int sig)
+int	set_k(t_cmd *own_cmd)
 {
-	if (sig == SIGINT)
-	{
-		write(1, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_done = 1;
-		g_parent_exit = 130;
-	}
-}
+	int	k;
 
-void	setup_heredoc_signal_handlers(void)
-{
-	signal(SIGINT, heredoc_signal_handler);
-	signal(SIGQUIT, SIG_IGN);
+	if (own_cmd->n_heredoc == 1)
+		k = 1;
+	else
+		k = 0;
+	return (k);
 }

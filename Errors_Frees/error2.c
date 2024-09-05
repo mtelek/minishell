@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:03:45 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/05 00:23:31 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/05 13:12:06 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,6 @@ void	error_type20(int error_type)
 		ft_putstr_fd(MF_EXEC, 2);
 	else if (error_type == 15)
 		ft_putstr_fd(MF_OUPUT_FD, STDERR_FILENO);
-}
-
-void	error_type30(int error_type)
-{
 	if (error_type == 16)
 		ft_putstr_fd(MF_APPEND_OUT, 2);
 	else if (error_type == 18)
@@ -96,7 +92,11 @@ void	error_type30(int error_type)
 		ft_putstr_fd(ERROR_STRDUP, 2);
 	else if (error_type == 20)
 		ft_putstr_fd(MF_STRJOIN, 2);
-	else if (error_type == 21)
+}
+
+void	error_type30(int error_type)
+{
+	if (error_type == 21)
 		ft_putstr_fd(MF_STRTRIM, 2);
 	else if (error_type == 22)
 		ft_putstr_fd(MF_SUBSTR, 2);

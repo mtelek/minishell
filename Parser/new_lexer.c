@@ -31,6 +31,7 @@ t_lexer	*create_lexer_node(char *str, t_lexer *prev, t_lexer *next)
 	new_node->type = get_type(new_node->str);
 	new_node->next = next;
 	new_node->prev = prev;
+	new_node->to_expand = false;
 	return (new_node);
 }
 
