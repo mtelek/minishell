@@ -85,7 +85,7 @@ void	set_oldpwd_export(t_main *main, const char *oldpwd, t_cd *cd)
 	free(cd->argv);
 }
 
-void	change_dir(t_main *main, const char *path)
+void	change_dir(t_main *main, char *path)
 {
 	char	cwd[BUF_SIZE];
 	char	oldpwd[BUF_SIZE];
@@ -101,6 +101,9 @@ void	change_dir(t_main *main, const char *path)
 	}
 	if (chdir(path) != 0)
 	{
+		ft_putstrs_fd("bash: cd: ", path , ": ", 2);
+		ft_putstrs_fd(strerror(errno), "\n", NULL, 2);
+		main->exit_code = 1;
 		free(cd);
 		return ;
 	}

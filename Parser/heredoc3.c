@@ -33,13 +33,13 @@ int	echo_and_heredoc(char **delimiter, t_main *main, t_cmd *own_cmd)
 	i = 0;
 	while (1)
 	{
-		line = readline("> ");
 		if (g_parent_exit == 130)
 		{
 			if (line)
 				free(line);
 			break ;
 		}
+		line = readline("> ");
 		main->count_hd_line += 1;
 		if (!line || ft_strcmp(line, delimiter[i]) == 0)
 		{
@@ -57,10 +57,7 @@ int	echo_and_heredoc(char **delimiter, t_main *main, t_cmd *own_cmd)
 void	check_line(t_main *main, char *line, char **delimiter, int *i)
 {
 	if (!line)
-	{
 		bash_warning(main, delimiter, (*i));
-		free(line);
-	}
 	(*i)++;
 }
 
@@ -74,6 +71,12 @@ char	*content_maker(t_main *main, t_cmd *own_cmd, char *content, char *line)
 	return (content);
 }
 
+void	free_line(char *line)
+{
+	free(line);
+	line = NULL;
+}
+
 char	*no_echo_but_heredoc(char **delimiter, char *content,
 			t_main *main, t_cmd *own_cmd)
 {
@@ -85,17 +88,19 @@ char	*no_echo_but_heredoc(char **delimiter, char *content,
 	k = set_k(own_cmd);
 	while (1)
 	{
-		line = readline("> ");
 		if (g_parent_exit == 130)
 			break ;
+		line = readline("> ");
 		main->count_hd_line += 1;
 		if (!line || ft_strcmp(line, delimiter[i]) == 0)
 			check_line(main, line, delimiter, &i);
 		if (i == own_cmd->n_heredoc - 1 && k++)
 			content = content_maker(main, own_cmd, content, line);
+		if (line)
+			free_line(line);
 		if (i == own_cmd->n_heredoc)
 			break ;
 	}
-	update_count(main, line);
+	update_count(main);
 	return (content);
 }

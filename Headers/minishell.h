@@ -275,7 +275,7 @@ int							echo_and_heredoc(char **delimiter, t_main *main,
 								t_cmd *own_cmd);
 void						find_hd_indicator(t_main *main, t_cmd *cmd);
 char						*expand(char *str, t_main *main);
-void						update_count(t_main *main, char *line);
+void						update_count(t_main *main);
 char						*join_empty_and_full(t_main *main, char *content);
 char						*full_content_fill(t_main *main, t_cmd *own_cmd,
 								char *content, char *line);

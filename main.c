@@ -88,7 +88,6 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 	int		m_exit_code;
 
-	//not freeing line correctly if cat << hi << haha
 	m_exit_code = 0;
 	init_main(&main);
 	creating_env_array(&main, envp);
@@ -98,9 +97,9 @@ int	main(int argc, char **argv, char **envp)
 	{
 		if (!main.heredoc_flag)
 		{
-			input = readline("minishell> ");
 			if (g_parent_exit == 130)
 				update_global(&main);
+			input = readline("minishell> ");
 			if (input)
 				input_set_up(&main, input, &m_exit_code);
 			else if (input == NULL)

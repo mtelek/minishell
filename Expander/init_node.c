@@ -72,9 +72,16 @@ void	free_list(t_expand_node *expand)
 	{
 		temp = expand;
 		expand = expand->next;
-		free(temp->str);
+		if (temp->str)
+		{
+			free(temp->str);
+			temp->str = NULL;
+		}
 		if (temp)
+		{
 			free(temp);
+			temp = NULL;
+		}
 	}
 }
 
@@ -82,13 +89,21 @@ void	join_expand_node(t_expand_node *expand, t_main *main, t_lexer *lexer)
 {
 	if (expand == NULL)
 	{
-		free(lexer->str);
+		if (lexer->str)
+		{
+			free(lexer->str);
+			lexer->str = NULL;
+		}
 		lexer->str = ft_strdup("");
 		if (!lexer->str)
 			error_function(-1, main);
 		return ;
 	}
-	free(lexer->str);
+	if (lexer->str)
+	{
+		free(lexer->str);
+		lexer->str = NULL;
+	}
 	lexer->str = join_list(expand, main);
 	if (expand->to_expand == true)
 		lexer->to_expand = true;
