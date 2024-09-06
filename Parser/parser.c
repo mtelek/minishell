@@ -19,10 +19,14 @@ bool	builtin_check(t_main *main)
 	argc = count_arg(main->cmd->args);
 	if (ft_strcmp(main->cmd->cmd, "cd") == 0 && !main->parser->n_pipes)
 		return (ft_cd(main, argc), true);
-	else if (ft_strcmp(main->cmd->cmd, "pwd") == 0)
-		return (ft_pwd(main), true);
-	else if (ft_strcmp(main->cmd->cmd, "exit") == 0 && main->cmd->next == NULL)
+	else if (ft_strcmp(main->cmd->cmd, "exit") == 0 && (main->cmd->next == NULL
+		&& !((main->cmd->args[2]) && ft_isnumeric_str(main->cmd->args[1]))))
 		return (ft_exit(main->cmd, main), true);
+	else if (ft_strcmp(main->cmd->cmd, "unset") == 0 && main->cmd->next == NULL)
+	{
+		unset_helper(main->cmd, main);
+		return (true);
+	}
 	return (false);
 }
 
@@ -52,11 +56,16 @@ int	echo_ex_env_check(t_main *main, t_cmd *own_cmd)
 		export_helper(own_cmd, main);
 		return (1);
 	}
-	else if (ft_strcmp(main->cmd->cmd, "unset") == 0)
+	else if (ft_strcmp(own_cmd->cmd, "pwd") == 0)
 	{
-		unset_helper(own_cmd, main);
+		if (own_cmd->pid == 0)
+			ft_pwd(main);
 		return (1);
 	}
+	else if (ft_strcmp(own_cmd->cmd, "unset") == 0 && main->cmd->next)
+		return (1);
+	else if (ft_strcmp(own_cmd->cmd, "cd") == 0 && main->cmd->next)
+		return (1);
 	return (0);
 }
 

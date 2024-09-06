@@ -408,6 +408,7 @@ int							is_only_spaces(const char *str);
 void						update_global(t_main *main);
 void						*ft_realloc(void *ptr, size_t old_size,
 								size_t new_size);
+int							ft_isnumeric_str(const char *str);
 
 // SIG
 void						child_signal_handler(int sig);

@@ -54,19 +54,14 @@ int	echo_and_heredoc(char **delimiter, t_main *main, t_cmd *own_cmd)
 	return (0);
 }
 
-int	check_line(t_main *main, char *line, char **delimiter, int *i)
+void	check_line(t_main *main, char *line, char **delimiter, int *i)
 {
-	int	flag;
-
-	flag = 0;
 	if (!line)
 	{
 		bash_warning(main, delimiter, (*i));
 		free(line);
-		flag = 1;
 	}
 	(*i)++;
-	return (flag);
 }
 
 char	*content_maker(t_main *main, t_cmd *own_cmd, char *content, char *line)
@@ -84,11 +79,9 @@ char	*no_echo_but_heredoc(char **delimiter, char *content,
 {
 	char	*line;
 	int		i;
-	int		flag;
 	int		k;
 
 	i = 0;
-	flag = 0;
 	k = set_k(own_cmd);
 	while (1)
 	{
@@ -97,10 +90,9 @@ char	*no_echo_but_heredoc(char **delimiter, char *content,
 			break ;
 		main->count_hd_line += 1;
 		if (!line || ft_strcmp(line, delimiter[i]) == 0)
-			flag = check_line(main, line, delimiter, &i);
-		if (i == own_cmd->n_heredoc - 1 && !flag && k++)
+			check_line(main, line, delimiter, &i);
+		if (i == own_cmd->n_heredoc - 1 && k++)
 			content = content_maker(main, own_cmd, content, line);
-		flag = 0;
 		if (i == own_cmd->n_heredoc)
 			break ;
 	}
