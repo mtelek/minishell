@@ -64,7 +64,11 @@ int	echo_ex_env_check(t_main *main, t_cmd *own_cmd)
 	else if (ft_strcmp(own_cmd->cmd, "echo") == 0)
 		return (echo_helper(own_cmd, main), 1);
 	else if (ft_strcmp(own_cmd->cmd, "env") == 0)
-		return (env_helper(own_cmd, main), 1);
+	{
+		if (own_cmd->pid == 0)
+			env_helper(own_cmd, main);
+		return (1);
+	}
 	else if (ft_strcmp(own_cmd->cmd, "export") == 0)
 	{
 		if ((own_cmd->pid == 0 && main->cmd->next))

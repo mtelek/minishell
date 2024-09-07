@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:40 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 23:29:02 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/07 14:49:57 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	first_check(t_cmd *own_cmd, char **args)
 		}
 		return (own_cmd->main->exit_code = 1, 0);
 	}
-	return (0);
+	return (1);
 }
 
 void	ft_unset(t_cmd *own_cmd, t_main *main, char **args)
