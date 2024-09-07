@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 15:16:28 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/07 20:24:58 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/08 00:45:20 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	handle_fds(t_main *main, t_cmd *current, int i)
 			close_failed(main, main->parser->pipes[i][1]);
 	}
 }
- 
+
 t_cmd	*process_command(t_main *main, t_cmd *current, int *i, int *j)
 {
 	current->pid = fork1(main);

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 17:07:38 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 22:13:12 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/08 00:33:33 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ static char	**update_env(t_main *main, int i, int j, t_cd *cd)
 {
 	char	*new_entry;
 
+	j = 2;
 	new_entry = ft_strdup(cd->argv[j]);
 	if (!new_entry)
 	{
@@ -86,8 +87,8 @@ char	**export_cmd(t_main *main, t_cd *cd)
 	}
 	while (main->env_array[++i])
 	{
-		if (!ft_memcmp(main->env_array[i], cd->argv[j],
-				ft_strlen(cd->argv[j])))
+		if (!ft_strncmp(main->env_array[i], cd->argv[j],
+				ft_strlen(cd->argv[j]) - 1))
 			return (update_env(main, i, j, cd));
 	}
 	return (extend_env(main, i, j, cd));

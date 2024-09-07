@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 17:50:55 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/02 15:20:45 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/08 00:32:57 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,15 @@ void	declare_x_export(t_cmd *own_cmd)
 
 	i = 0;
 	bubble_sort_env(own_cmd->main->env_array);
-	while (own_cmd->main->env_array[i + 1])
+	while (own_cmd->main->env_array[i])
 	{
-		ft_putstr_fd("declare -x ", 1);
-		ft_putstr_fd(own_cmd->main->env_array[i], 1);
-		ft_putstr_fd("\n", 1);
+		if (ft_strcmp(own_cmd->main->env_array[i],
+				"_=/home/mtelek/CommonCore/minishell/./minishell"))
+		{
+			ft_putstr_fd("declare -x ", 1);
+			ft_putstr_fd(own_cmd->main->env_array[i], 1);
+			ft_putstr_fd("\n", 1);
+		}
 		i++;
 	}
 }

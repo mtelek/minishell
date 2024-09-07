@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   creating_cmd_table1.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/05 23:55:09 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/08 00:04:06 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,10 @@ void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 {
 	(void)cmd;
 	temp->true_command = false;
+	temp->hd_content = NULL;
+	temp->expander_decider = true;
+	if (temp->args == NULL || !temp->args[0][0])
+		return ;
 	if (temp->args[0] && !is_operator(temp->args[0][0],
 		temp->args[0][1], main->operators, main))
 	{
@@ -70,8 +74,6 @@ void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 	temp->in_fd = STDIN_FILENO;
 	temp->out_fd = STDOUT_FILENO;
 	temp->pid = -1;
-	temp->hd_content = NULL;
-	temp->expander_decider = true;
 }
 
 void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)

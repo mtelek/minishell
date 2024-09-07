@@ -50,6 +50,12 @@ int	cd_unset_check(t_main *main, t_cmd *own_cmd)
 		return (1);
 	else if (ft_strcmp(own_cmd->cmd, "cd") == 0 && main->cmd->next)
 		return (1);
+	else if (ft_strcmp(own_cmd->cmd, "pwd") == 0)
+	{
+		if (own_cmd->pid == 0)
+			ft_pwd(main);
+		return (1);
+	}
 	return (0);
 }
 
@@ -73,12 +79,6 @@ int	echo_ex_env_check(t_main *main, t_cmd *own_cmd)
 	{
 		if ((own_cmd->pid == 0 && main->cmd->next))
 			export_helper(own_cmd, main);
-		return (1);
-	}
-	else if (ft_strcmp(own_cmd->cmd, "pwd") == 0)
-	{
-		if (own_cmd->pid == 0)
-			ft_pwd(main);
 		return (1);
 	}
 	else if (cd_unset_check(main, own_cmd) == 1)

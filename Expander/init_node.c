@@ -107,6 +107,8 @@ void	join_expand_node(t_expand_node *expand, t_main *main, t_lexer *lexer)
 		ft_putstr_fd("\n", 1);
 		return ;
 	}
+	if (!ft_strcmp(lexer->str, ""))
+		free_lexer_str(lexer);
 }
 
 void	split_up_by_dollar(t_expand_node **head, t_lexer *lexer, t_main *main)
