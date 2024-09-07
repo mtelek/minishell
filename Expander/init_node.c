@@ -90,20 +90,14 @@ void	join_expand_node(t_expand_node *expand, t_main *main, t_lexer *lexer)
 	if (expand == NULL)
 	{
 		if (lexer->str)
-		{
-			free(lexer->str);
-			lexer->str = NULL;
-		}
+			free_lexer_str(lexer);
 		lexer->str = ft_strdup("");
 		if (!lexer->str)
 			error_function(-1, main);
 		return ;
 	}
 	if (lexer->str)
-	{
-		free(lexer->str);
-		lexer->str = NULL;
-	}
+		free_lexer_str(lexer);
 	lexer->str = join_list(expand, main);
 	if (expand->to_expand == true)
 		lexer->to_expand = true;

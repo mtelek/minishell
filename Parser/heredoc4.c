@@ -18,9 +18,9 @@
 char	*empty_content_fill(t_main *main, t_cmd *own_cmd, char *content,
 		char *line)
 {
-	char *expanded_str;
-	char *temp;
-	char *dup;
+	char	*expanded_str;
+	char	*temp;
+	char	*dup;
 
 	dup = ft_strdup(line);
 	if (own_cmd->expander_decider == true)
@@ -46,8 +46,8 @@ char	*empty_content_fill(t_main *main, t_cmd *own_cmd, char *content,
 char	*full_content_fill(t_main *main, t_cmd *own_cmd, char *content,
 		char *line)
 {
-	char *expanded_str;
-	char *dup;
+	char	*expanded_str;
+	char	*dup;
 
 	dup = ft_strdup(line);
 	if (own_cmd->expander_decider == true)
@@ -71,7 +71,7 @@ char	*full_content_fill(t_main *main, t_cmd *own_cmd, char *content,
 
 char	*join_empty_and_full(t_main *main, char *content)
 {
-	char *temp;
+	char	*temp;
 
 	temp = ft_strjoin(content, "\n");
 	if (!temp)
@@ -85,4 +85,10 @@ void	update_count(t_main *main)
 {
 	main->count_line += main->count_hd_line;
 	main->count_hd_line = 0;
+}
+
+void	free_line(char *line)
+{
+	free(line);
+	line = NULL;
 }

@@ -26,7 +26,7 @@
 # include <fcntl.h>
 # include <dirent.h>
 # include <errno.h>
-#include <sys/ioctl.h>
+# include <sys/ioctl.h>
 
 # define PIPE 1
 # define INPUT_RED 2
@@ -266,6 +266,13 @@ char						*to_print_pwd(t_main *main, int i);
 int							is_env_var_set(const char *env_var);
 int							check_declare_x(t_cmd *own_cmd, char **args);
 void						declare_x_export(t_cmd *own_cmd);
+void						free_at_exit(t_main *main);
+void						exit_many_args(t_main *main);
+void						is_numeric_error_message(t_main *main,
+								t_cmd *own_cmd);
+void						parent_error_message(t_main *main);
+void						wrong_folder_name(t_main *main, char *path,
+								t_cd *cd);
 
 //HEREDOC
 void						get_hd_content(t_main *main, t_cmd *own_cmd);
@@ -286,6 +293,7 @@ void						helper_three(t_cmd *own_cmd, int i);
 void						helper_two(t_cmd *own_cmd, int i);
 void						helper_one(t_cmd *own_cmd, int i);
 int							set_k(t_cmd *own_cmd);
+void						free_line(char *line);
 
 //EXPANDER/INIT
 void						cutting_up_lexer_str(t_expand_node **head,
@@ -301,6 +309,7 @@ void						no_quotes(t_expand_node **head, t_lexer *lexer,
 								t_main *main, t_init_ex_node *state);
 char						*create_substr(t_lexer *lexer, int i,
 								int start, t_main *main);
+void						free_lexer_str(t_lexer *lexer);
 
 //EXPANDER
 void						quotes_and_expander(t_lexer *lexer, t_main *main);

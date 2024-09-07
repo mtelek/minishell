@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   creating_cmd_table2.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 20:24:38 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/05 23:54:24 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/07 12:18:50 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,16 @@
 
 void	assign_argument(t_lexer **temp_lex, t_cmd **temp_cmd, int *cmd_assigned)
 {
-	if ((*temp_lex)->type == OUTPUT_RED || (*temp_lex)->type == HEREDOC ||
-		(*temp_lex)->type == APPEND_OUT || (*temp_lex)->type == INPUT_RED ||
-		((*temp_lex)->prev && ((*temp_lex)->prev->type == OUTPUT_RED ||
-			(*temp_lex)->prev->type == HEREDOC || (*temp_lex)->prev->type == APPEND_OUT ||
-			(*temp_lex)->prev->type == INPUT_RED)))
-		return;
+	int	i;
+
+	i = 0;
+	if ((*temp_lex)->type == OUTPUT_RED || (*temp_lex)->type == HEREDOC
+		|| (*temp_lex)->type == APPEND_OUT || (*temp_lex)->type == INPUT_RED
+		|| ((*temp_lex)->prev && ((*temp_lex)->prev->type == OUTPUT_RED
+				|| (*temp_lex)->prev->type == HEREDOC
+				|| (*temp_lex)->prev->type == APPEND_OUT
+				|| (*temp_lex)->prev->type == INPUT_RED)))
+		return ;
 	if (*cmd_assigned == 0 && (*temp_lex))
 	{
 		(*temp_cmd)->cmd = (*temp_lex)->str;
@@ -28,7 +32,6 @@ void	assign_argument(t_lexer **temp_lex, t_cmd **temp_cmd, int *cmd_assigned)
 	}
 	else if (*cmd_assigned == 1 && (*temp_lex))
 	{
-		int i = 0;
 		while ((*temp_cmd)->args[i] != NULL)
 			i++;
 		(*temp_cmd)->args[i] = (*temp_lex)->str;
@@ -47,7 +50,8 @@ int	setting_args(t_lexer **temp_lex, t_cmd **temp_cmd, int n_args, t_main *main)
 	{
 		if (i < n_args)
 		{
-			if ((*temp_lex)->type >= INPUT_RED && (*temp_lex)->type <= APPEND_OUT)
+			if ((*temp_lex)->type >= INPUT_RED
+				&& (*temp_lex)->type <= APPEND_OUT)
 				handle_redirections(temp_lex, temp_cmd, i, main);
 			else
 			{
@@ -60,7 +64,6 @@ int	setting_args(t_lexer **temp_lex, t_cmd **temp_cmd, int n_args, t_main *main)
 	}
 	return (i);
 }
-
 
 int	count_cmds(t_lexer *lexer)
 {

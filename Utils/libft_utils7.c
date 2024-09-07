@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:10:17 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/06 16:48:08 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/07 12:15:02 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_isnumeric_str(const char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str || !*str)

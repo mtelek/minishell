@@ -6,11 +6,17 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 21:57:12 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/01 22:12:15 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/07 12:28:07 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
+
+void	free_lexer_str(t_lexer *lexer)
+{
+	free(lexer->str);
+	lexer->str = NULL;
+}
 
 char	*create_substr(t_lexer *lexer, int i, int start, t_main *main)
 {

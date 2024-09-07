@@ -71,12 +71,6 @@ char	*content_maker(t_main *main, t_cmd *own_cmd, char *content, char *line)
 	return (content);
 }
 
-void	free_line(char *line)
-{
-	free(line);
-	line = NULL;
-}
-
 char	*no_echo_but_heredoc(char **delimiter, char *content,
 			t_main *main, t_cmd *own_cmd)
 {
