@@ -27,6 +27,11 @@ bool	builtin_check(t_main *main)
 		unset_helper(main->cmd, main);
 		return (true);
 	}
+	else if (ft_strcmp(main->cmd->cmd, "export") == 0 && !main->cmd->next)
+	{
+		export_helper(main->cmd, main);
+		return (true);
+	}
 	return (false);
 }
 
@@ -53,7 +58,8 @@ int	echo_ex_env_check(t_main *main, t_cmd *own_cmd)
 		return (env_helper(own_cmd, main), 1);
 	else if (ft_strcmp(own_cmd->cmd, "export") == 0)
 	{
-		export_helper(own_cmd, main);
+		if ((own_cmd->pid == 0 && main->cmd->next))
+			export_helper(own_cmd, main);
 		return (1);
 	}
 	else if (ft_strcmp(own_cmd->cmd, "pwd") == 0)
