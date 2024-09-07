@@ -12,3 +12,7 @@ export VAR1=value VAR2=value
 -fsanitize=address
 
 -fsanitize=address
+
+
+
+ valgrind --leak-check=full --track-origins=yes --track-fds=yes --trace-children=yes ./minishell

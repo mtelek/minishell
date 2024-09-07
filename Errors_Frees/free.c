@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 21:42:59 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/05 13:51:12 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/07 20:27:20 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,10 @@ void	free_parser(t_parser *parser)
 	{
 		if (parser->pipes[i])
 		{
+			if (parser->pipes[i][0] != -1)
+				close(parser->pipes[i][0]);
+			if (parser->pipes[i][1] != -1)
+				close(parser->pipes[i][1]);
 			free(parser->pipes[i]);
 			parser->pipes[i] = NULL;
 		}
@@ -59,6 +63,7 @@ void	free_parser(t_parser *parser)
 	free(parser);
 	parser = NULL;
 }
+
 
 void	ok_free_function(t_main *main)
 {

@@ -64,7 +64,7 @@
 # define E_TOO_MANY_FILES "Error: Too many open files in the system\n"
 # define E_PIPE_CREATION "Error creating pipe"
 # define E_PERMISSION_D "Error: Can't open directory - Permission denied\n"
-# define E_NO_DIR "Error: Directory not found '%s'\n"
+# define E_NO_DIR "Error: Directory not found \n"
 # define E_BIN_NO_DIR "Error: it is not a directory\n"
 # define E_OPEN_DIR "Error opening directory \n"
 # define E_INV_D_STREAM "Error: Invalid directory stream "
@@ -73,7 +73,7 @@
 # define E_INV_FD_CLOSE "Error: Invalid file descriptor \n"
 # define E_INT_SIG "Error: Close operation interrupted by signal\n"
 # define E_CLOSE_FD "Error closing file descriptor "
-# define E_INV_FD "Error: Invalid file descriptor" //
+# define E_INV_FD "Error: Invalid file descriptor"
 # define E_DUP_SIG "Error: Duplication interrupted"
 # define E_TOO_MANY_FD_O "Error: Too many open fds"
 # define E_DUP_FD "Error duplicating fd"

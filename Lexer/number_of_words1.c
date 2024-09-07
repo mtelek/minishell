@@ -57,10 +57,7 @@ int	handle_spaces_and_operators(char *input, int i, int *n_words, t_main *main)
 	{
 		i++;
 		if (input[i + 1] == '|' || input[i + 1] == '<' || input[i + 1] == '>')
-		{
-			(*n_words)++;
 			break ;
-		}
 	}
 	return (i);
 }
@@ -74,7 +71,7 @@ int	number_of_words(char *input, t_main *main)
 	i = 0;
 	while (input[i] && ft_isspace(input[i]))
 		i++;
-	if (n_words == 0 && input[i] != '\0')
+	if (input[i] != '\0')
 		n_words++;
 	while (input[i] != '\0')
 	{

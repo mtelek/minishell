@@ -103,8 +103,8 @@ int	main(int argc, char **argv, char **envp)
 			if (input)
 				input_set_up(&main, input, &m_exit_code);
 			else if (input == NULL)
-				return (clear_history(), free_main(&main),
-					free(input), m_exit_code);
+				return (m_exit_code = main.exit_code, clear_history(),
+					free_main(&main), free(input), m_exit_code);
 		}
 	}
 	return (m_exit_code);

@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:50 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/02 13:28:24 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/07 15:22:51 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ void	exec(t_main *main, t_cmd *own_cmd, char *path)
 	if (own_cmd->pid == 0)
 	{
 		if (execve(path, own_cmd->args, main->env_array) == -1)
+		{
 			exec_error_function(main, path);
+		}
 		exit (0);
 	}
 }
