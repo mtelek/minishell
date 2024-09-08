@@ -24,18 +24,12 @@ char	*empty_content_fill(t_main *main, t_cmd *own_cmd, char *content,
 
 	dup = ft_strdup(line);
 	if (own_cmd->expander_decider == true)
-	{
 		expanded_str = expand(dup, main);
-	}
 	else
-	{
 		expanded_str = ft_strdup(dup);
-	}
 	temp = ft_strjoin(content, expanded_str);
 	if (!temp)
-	{
 		error_function(20, main);
-	}
 	free(content);
 	free(expanded_str);
 	if (own_cmd->expander_decider == false)
@@ -51,18 +45,12 @@ char	*full_content_fill(t_main *main, t_cmd *own_cmd, char *content,
 
 	dup = ft_strdup(line);
 	if (own_cmd->expander_decider == true)
-	{
 		expanded_str = expand(dup, main);
-	}
 	else
-	{
 		expanded_str = ft_strdup(dup);
-	}
 	content = ft_strdup(expanded_str);
 	if (!content)
-	{
 		error_function(-1, main);
-	}
 	free(expanded_str);
 	if (own_cmd->expander_decider == false)
 		free(dup);

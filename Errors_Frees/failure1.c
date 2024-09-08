@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 21:08:22 by mtelek            #+#    #+#             */
-/*   Updated: 2024/08/27 15:32:54 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/08 10:05:32 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	fork_failed(t_main *main)
 	else if (errno == ENOMEM)
 		ft_putstr_fd(E_INSUF_MEM, 2);
 	else
-		ft_putstrs_fd(E_CREATING_PROCESS, strerror(errno), "\n", 2);
+		ft_putstrs_fd(E_CREATING_PROCESS, NULL, "\n", 2);
 	free_structs(main);
 	exit (EXIT_FAILURE);
 }
@@ -33,7 +33,7 @@ void	pipe_failed(t_main *main)
 	else if (errno == ENFILE)
 		ft_putstr_fd(E_TOO_MANY_FILES, 2);
 	else
-		ft_putstrs_fd(E_PIPE_CREATION, strerror(errno), "\n", 2);
+		ft_putstrs_fd(E_PIPE_CREATION, NULL, "\n", 2);
 	free_structs(main);
 	exit (EXIT_FAILURE);
 }
@@ -44,7 +44,7 @@ void	readdir_failed(t_main *main, DIR *dir)
 		ft_putstrs_fd(E_INV_D_STREAM, (void *)dir, "\n", 2);
 	else
 	{
-		ft_putstrs_fd(E_READ_DIR, (void *)dir, strerror(errno), 2);
+		ft_putstrs_fd(E_READ_DIR, (void *)dir, NULL, 2);
 		ft_putstr_fd("\n", 2);
 	}
 	free_structs(main);
@@ -57,7 +57,7 @@ void	closedir_failed(t_main *main, DIR *dir)
 		ft_putstrs_fd(E_INV_D_STREAM, (void *)dir, "\n", 2);
 	else
 	{
-		ft_putstrs_fd(E_CLOSE_DIR, (void *)dir, strerror(errno), 2);
+		ft_putstrs_fd(E_CLOSE_DIR, (void *)dir, NULL, 2);
 		ft_putstr_fd("\n", 2);
 	}
 	free_structs(main);

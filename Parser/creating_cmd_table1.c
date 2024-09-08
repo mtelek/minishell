@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:18:16 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/08 00:04:06 by mtelek           ###   ########.fr       */
+/*   Updated: 2024/09/08 09:53:57 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 	temp->true_command = false;
 	temp->hd_content = NULL;
 	temp->expander_decider = true;
-	if (temp->args == NULL || !temp->args[0][0])
+	temp->in_fd = STDIN_FILENO;
+	temp->out_fd = STDOUT_FILENO;
+	temp->pid = -1;
+	if (temp->args == NULL)
 		return ;
 	if (temp->args[0] && !is_operator(temp->args[0][0],
 		temp->args[0][1], main->operators, main))
@@ -71,9 +74,6 @@ void	init_cmd_fd(t_main *main, t_cmd *temp, t_cmd **cmd)
 			error_function(6, main);
 		temp->true_command = true;
 	}
-	temp->in_fd = STDIN_FILENO;
-	temp->out_fd = STDOUT_FILENO;
-	temp->pid = -1;
 }
 
 void	init_node(t_main *main, t_cmd **cmd, t_cmd **prev_node, int n_cmds)
