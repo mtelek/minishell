@@ -59,7 +59,7 @@ int	cd_unset_check(t_main *main, t_cmd *own_cmd)
 	return (0);
 }
 
-int	echo_ex_env_check(t_main *main, t_cmd *own_cmd)
+int	builtin_for_children_check(t_main *main, t_cmd *own_cmd)
 {
 	if (ft_strcmp(own_cmd->cmd, "exit") == 0)
 	{
@@ -104,7 +104,7 @@ void	parser(t_main *main)
 		own_cmd = main->cmd;
 		calling_redirects(main, own_cmd);
 	}
-	if (!echo_ex_env_check(main, own_cmd)
+	if (!builtin_for_children_check(main, own_cmd)
 		&& ft_strcmp(own_cmd->cmd, "cd"))
 		executor(main, own_cmd);
 	if (own_cmd->pid == 0)

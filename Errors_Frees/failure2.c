@@ -15,11 +15,11 @@
 void	close_failed(t_main *main, int fd)
 {
 	if (errno == EBADF)
-		ft_putstr_fd(E_INV_FD_CLOSE, fd);
+		ft_putstrs_fd(E_INV_FD_CLOSE, NULL, "\n", fd);
 	else if (errno == EINTR)
 		ft_putstr_fd(E_INT_SIG, fd);
 	else
-		ft_putstrs_fd(E_CLOSE_FD, "\n", NULL, fd);
+		ft_putstr_fd(E_CLOSE_FD, fd);
 	free_structs(main);
 	exit (EXIT_FAILURE);
 }
