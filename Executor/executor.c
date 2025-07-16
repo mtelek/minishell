@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:50 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/08 10:07:26 by mtelek           ###   ########.fr       */
+/*   Updated: 2025/07/17 01:28:39 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	*find_dir(char *bin, char *command, t_main *main)
 	if (entry == NULL && errno != 0)
 		readdir_failed(main, dir);
 	if (closedir(dir) == -1)
-		closedir_failed(main, dir);
+		closedir_failed(main, 0);
 	return (path);
 }
 
