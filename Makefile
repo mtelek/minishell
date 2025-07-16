@@ -1,7 +1,16 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
-LDFLAGS = -lreadline
+ifneq ($(CI),)
+    CFLAGS = -Wall -Wextra -Werror -g
+else
+    CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g
+endif
+
+ifneq ($(CI),)
+    LDFLAGS = -lreadline
+else
+    LDFLAGS = -lreadline -fsanitize=address
+endif
 SRCDIR = .
 OBJDIR = .objs
 SRCS = main.c Utils/checker.c Utils/libft_utils1.c Utils/libft_utils2.c Utils/ft_split.c Utils/libft_utils3.c \

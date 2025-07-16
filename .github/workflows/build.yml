@@ -1,19 +1,38 @@
 name: Minishell CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CI: "true"
+    
     steps:
-      - uses: actions/checkout@v3
-      
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y make gcc libreadline-dev
           
-      - name: Build
+      - name: Build project
         run: |
-          make
-          make clean
+          make re
+          
+      - name: Run basic tests
+        run: |
+          ./minishell <<< "echo hello" | grep -q "hello"
+          ./minishell <<< "pwd" | grep -q $(pwd)
+          
+      - name: Check for memory leaks (valgrind)
+        if: ${{ !cancelled() }}
+        run: |
+          sudo apt-get install -y valgrind
+          valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
+          --error-exitcode=1 ./minishell <<< "exit"
