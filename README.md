@@ -2,7 +2,7 @@
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/mtelek/minishell/build.yml?style=flat-square)](https://github.com/mtelek/minishell/actions)
 [![Code Size](https://img.shields.io/github/languages/code-size/mtelek/minishell?style=flat-square)](https://github.com/mtelek/minishell)
-[![42 Project Score](https://badge42.vercel.app/api/v2/mtelek/project/3080305)](https://github.com/mtelek/minishell)
+![Project Score](https://img.shields.io/badge/Minishell-93%25-brightgreen)
 
 ## Project Description ✨
 
