@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtelek <mtelek@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:03:45 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/05 13:12:06 by mtelek           ###   ########.fr       */
+/*   Updated: 2025/07/17 01:21:53 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,11 @@ void	execve_error(t_main *main, char *path)
 	else
 		error_message(126, NO_PERMISSION, path, main);
 	if (dir)
-		if (closedir(dir) == -1)
-			closedir_failed(main, dir);
+	{
+		int close_result = closedir(dir);
+		if (close_result == -1)
+    		closedir_failed(main, dir);
+	}
 	if (close(fd) == -1)
 		close_failed(main, fd);
 }
