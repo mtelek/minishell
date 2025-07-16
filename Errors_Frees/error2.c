@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:03:45 by mtelek            #+#    #+#             */
-/*   Updated: 2025/07/17 01:21:53 by mtelek           ###   ########.fr       */
+/*   Updated: 2025/07/17 01:24:45 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	execve_error(t_main *main, char *path)
 	{
 		int close_result = closedir(dir);
 		if (close_result == -1)
-    		closedir_failed(main, dir);
+    		closedir_failed(main, 0);
 	}
 	if (close(fd) == -1)
 		close_failed(main, fd);
