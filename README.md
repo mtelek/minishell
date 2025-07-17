@@ -1,6 +1,6 @@
 # Minishell
 
-[![Status](https://github.com/mtelek/minishell/actions/workflows/build.yml/badge.svg)](https://github.com/mtelek/minishell/actions/workflows/build.yml)
+[![Build Status](https://github.com/mtelek/minishell/actions/workflows/build.yml/badge.svg?cache_buster=1)](https://github.com/mtelek/minishell/actions)
 [![Code Size](https://img.shields.io/github/languages/code-size/mtelek/minishell?style=flat-square)](https://github.com/mtelek/minishell)
 ![Project Score](https://img.shields.io/badge/Minishell-93%25-brightgreen)
 
