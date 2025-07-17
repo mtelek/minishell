@@ -20,7 +20,7 @@ Key features include:
 ## Installation 🛠️
 
 ### Prerequisites
-- GCC compiler
+- C Compiler (`cc`/`gcc`/`clang`)
 - GNU Make
 - readline library (install with `brew install readline` on macOS or `sudo apt-get install libreadline-dev` on Ubuntu)
 
@@ -57,9 +57,7 @@ Here's how Minishell compares to Bash in various scenarios:
 | `echo "Hello $USER"` | `Hello username` | `Hello username` | ✅ |
 | `ls > file.txt` | Creates file | Creates file | ✅ |
 | `cat < file.txt` | File contents | File contents | ✅ |
-| `sleep 5 & Ctrl-C` | New prompt | New prompt | ✅ |
 | `echo -n "No newline"` | No newline | No newline | ✅ |
-| `cd /tmp && pwd` | `/tmp` | `/tmp` | ✅ |
 | `export TEST=value` | Sets variable | Sets variable | ✅ |
 | `unset TEST` | Removes variable | Removes variable | ✅ |
 | `exit 42` | Exits with 42 | Exits with 42 | ✅ |
