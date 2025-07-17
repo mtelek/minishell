@@ -6,7 +6,7 @@
 /*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 21:03:45 by mtelek            #+#    #+#             */
-/*   Updated: 2025/07/17 01:24:45 by mtelek           ###   ########.fr       */
+/*   Updated: 2025/07/17 15:28:56 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	execve_error(t_main *main, char *path)
 {
 	DIR		*dir;
 	int		fd;
+	int		close_result;
 
 	fd = open(path, O_WRONLY);
 	dir = opendir(path);
@@ -39,9 +40,9 @@ void	execve_error(t_main *main, char *path)
 		error_message(126, NO_PERMISSION, path, main);
 	if (dir)
 	{
-		int close_result = closedir(dir);
+		close_result = closedir(dir);
 		if (close_result == -1)
-    		closedir_failed(main, 0);
+			closedir_failed(main, 0);
 	}
 	if (close(fd) == -1)
 		close_failed(main, fd);

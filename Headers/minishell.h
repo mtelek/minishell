@@ -324,6 +324,7 @@ void						remove_dollar_sign(t_expand_node *expand,
 								t_main *main);
 void						remove_all_quotes(t_expand_node *expand,
 								t_main *main);
+void						remove_double_quotes(char *str);
 void						cross_out_quotes(t_expand_node *expand,
 								t_main *main, char c);
 int							count_character(char *str, char c);

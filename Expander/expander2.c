@@ -73,8 +73,10 @@ bool	expander_check(char *str, t_expand_node *current)
 
 void	cutting_up_lexer_str(t_expand_node **head, t_lexer *lexer, t_main *main)
 {
-	if (find_character(lexer->str, 34) == -1
-		&& find_character(lexer->str, 39) == -1)
+	if ((find_character(lexer->str, 34) == -1
+			&& find_character(lexer->str, 39) == -1)
+		|| (count_character(lexer->str, 36) >= 1
+			&& find_character(lexer->str, 39) == -1))
 		split_up_by_dollar(head, lexer, main);
 	else
 		split_up_by_quotes(head, lexer, main);

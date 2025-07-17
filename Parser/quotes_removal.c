@@ -6,11 +6,27 @@
 /*   By: mtelek <mtelek@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:04:41 by mtelek            #+#    #+#             */
-/*   Updated: 2024/09/05 01:00:58 by mtelek           ###   ########.fr       */
+/*   Updated: 2025/07/17 15:25:27 by mtelek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Headers/minishell.h"
+
+void	remove_double_quotes(char *str)
+{
+	char	*dest;
+
+	dest = str;
+	if (!str)
+		return ;
+	while (*str)
+	{
+		if (*str != '"')
+			*dest++ = *str;
+		str++;
+	}
+	*dest = '\0';
+}
 
 void	remove_quotes(char *str, int start, int end)
 {

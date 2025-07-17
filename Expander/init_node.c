@@ -109,6 +109,8 @@ void	join_expand_node(t_expand_node *expand, t_main *main, t_lexer *lexer)
 	}
 	if (!ft_strcmp(lexer->str, ""))
 		free_lexer_str(lexer);
+	if (lexer->to_expand == true)
+		remove_double_quotes(lexer->str);
 }
 
 void	split_up_by_dollar(t_expand_node **head, t_lexer *lexer, t_main *main)
