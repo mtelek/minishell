@@ -61,3 +61,6 @@ Makefile
 # 42 Specific
 *.grade
 *.cor
+
+# minishell tester
+minishell_tester/

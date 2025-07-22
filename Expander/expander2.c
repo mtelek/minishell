@@ -51,6 +51,8 @@ bool	expander_check(char *str, t_expand_node *current)
 	int	dollar_sign;
 
 	dollar_sign = find_character(str, '$');
+	if (str[dollar_sign + 1] == ' ')
+		return (false);
 	if (dollar_sign == -1)
 		return (false);
 	if (!ft_strcmp(str, "$"))
