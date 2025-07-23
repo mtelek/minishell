@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y make gcc libreadline-dev valgrind
+          sudo apt-get install -y make gcc libreadline-dev valgrind expect
 
       - name: Build project
         run: |
@@ -28,52 +28,68 @@ jobs:
 
       - name: Basic command tests
         run: |
-          # Test simple commands
-          ./minishell <<< "echo hello" | grep -q "hello" || (echo "FAIL: echo" && exit 1)
-          ./minishell <<< "pwd" | grep -q $(pwd) || (echo "FAIL: pwd" && exit 1)
-          ./minishell <<< "env" | grep -q "PATH=" || (echo "FAIL: env" && exit 1)
-          ./minishell <<< "cd .. && pwd" | grep -q $(dirname $(pwd)) || (echo "FAIL: cd" && exit 1)
+          # Test echo
+          echo 'echo hello' | ./minishell | grep -q "hello" || (echo "FAIL: echo" && exit 1)
+          
+          # Test pwd
+          echo 'pwd' | ./minishell | grep -q $(pwd) || (echo "FAIL: pwd" && exit 1)
+          
+          # Test env
+          echo 'env' | ./minishell | grep -q "PATH=" || (echo "FAIL: env" && exit 1)
+          
+          # Test cd (using expect for interactive testing)
+          echo 'spawn ./minishell
+                send "cd ..\r"
+                send "pwd\r"
+                expect {
+                  "$(dirname $(pwd))" { exit 0 }
+                  timeout { exit 1 }
+                }' > test_cd.exp
+          expect test_cd.exp || (echo "FAIL: cd" && exit 1)
 
       - name: Pipe and redirection tests
         run: |
           # Test pipes
-          ./minishell <<< "ls | head -n 3 | wc -l" | grep -q "3" || (echo "FAIL: pipes" && exit 1)
+          echo 'ls | head -n 3 | wc -l' | ./minishell | grep -q "3" || (echo "FAIL: pipes" && exit 1)
           
-          # Test redirections
-          ./minishell <<< "echo test > testfile && cat testfile" | grep -q "test" || (echo "FAIL: output redirection" && exit 1)
-          ./minishell <<< "cat < Makefile | grep minishell" | grep -q "minishell" || (echo "FAIL: input redirection" && exit 1)
+          # Test output redirection
+          echo 'echo test > testfile && cat testfile' | ./minishell | grep -q "test" || (echo "FAIL: output redirection" && exit 1)
+          
+          # Test input redirection
+          echo 'cat < Makefile | grep minishell' | ./minishell | grep -q "minishell" || (echo "FAIL: input redirection" && exit 1)
           rm -f testfile
 
       - name: Error handling tests
         run: |
           # Test invalid commands
-          ./minishell <<< "invalidcmd" 2>&1 | grep -q "command not found" || (echo "FAIL: invalid command" && exit 1)
+          echo 'invalidcmd' | ./minishell 2>&1 | grep -q "command not found" || (echo "FAIL: invalid command" && exit 1)
           
           # Test syntax errors
-          ./minishell <<< "echo |" 2>&1 | grep -q "syntax error" || (echo "FAIL: pipe syntax" && exit 1)
-          ./minishell <<< "echo >" 2>&1 | grep -q "syntax error" || (echo "FAIL: redirection syntax" && exit 1)
+          echo 'echo |' | ./minishell 2>&1 | grep -q "syntax error" || (echo "FAIL: pipe syntax" && exit 1)
+          echo 'echo >' | ./minishell 2>&1 | grep -q "syntax error" || (echo "FAIL: redirection syntax" && exit 1)
 
       - name: Builtin tests
         run: |
           # Test export
-          ./minishell <<< "export TEST_VAR=123 && env" | grep -q "TEST_VAR=123" || (echo "FAIL: export" && exit 1)
+          echo 'export TEST_VAR=123 && env' | ./minishell | grep -q "TEST_VAR=123" || (echo "FAIL: export" && exit 1)
           
           # Test unset
-          ./minishell <<< "export TEST_VAR=123 && unset TEST_VAR && env" | grep -qv "TEST_VAR" || (echo "FAIL: unset" && exit 1)
+          echo 'export TEST_VAR=123 && unset TEST_VAR && env' | ./minishell | grep -qv "TEST_VAR" || (echo "FAIL: unset" && exit 1)
           
           # Test exit
-          ./minishell <<< "exit 42" || [ $? -eq 42 ] || (echo "FAIL: exit code" && exit 1)
+          echo 'exit 42' | ./minishell
+          [ $? -eq 42 ] || (echo "FAIL: exit code" && exit 1)
 
       - name: Memory leak tests
         run: |
           mkdir -p logs
           # Test simple command
-          valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
-            --log-file=logs/valgrind_simple.log ./minishell <<< "echo hello"
-          
+          echo 'echo hello' | valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
+            --log-file=logs/valgrind_simple.log ./minishell
+            
           # Test pipe command
-          valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
-            --log-file=logs/valgrind_pipe.log ./minishell <<< "ls | head -n 3"
+          echo 'ls | head -n 3' | valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
+            --log-file=logs/valgrind_pipe.log ./minishell
             
           # Check for leaks
           ! grep -q "definitely lost" logs/valgrind_*.log || (echo "Memory leaks detected" && exit 1)
@@ -85,3 +101,4 @@ jobs:
           name: test-results
           path: logs/
           retention-days: 1
+          
