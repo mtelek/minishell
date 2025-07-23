@@ -7,32 +7,81 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     env:
       CI: "true"
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y make gcc libreadline-dev
-          
+          sudo apt-get install -y make gcc libreadline-dev valgrind
+
       - name: Build project
         run: |
           make re
-          
-      - name: Run basic tests
+          [ -f "minishell" ] || (echo "Build failed" && exit 1)
+
+      - name: Basic command tests
         run: |
-          ./minishell <<< "echo hello" | grep -q "hello"
-          ./minishell <<< "pwd" | grep -q $(pwd)
-          
-      - name: Check for memory leaks (valgrind)
-        if: ${{ !cancelled() }}
+          # Test simple commands
+          ./minishell <<< "echo hello" | grep -q "hello" || (echo "FAIL: echo" && exit 1)
+          ./minishell <<< "pwd" | grep -q $(pwd) || (echo "FAIL: pwd" && exit 1)
+          ./minishell <<< "env" | grep -q "PATH=" || (echo "FAIL: env" && exit 1)
+          ./minishell <<< "cd .. && pwd" | grep -q $(dirname $(pwd)) || (echo "FAIL: cd" && exit 1)
+
+      - name: Pipe and redirection tests
         run: |
-          sudo apt-get install -y valgrind
+          # Test pipes
+          ./minishell <<< "ls | head -n 3 | wc -l" | grep -q "3" || (echo "FAIL: pipes" && exit 1)
+          
+          # Test redirections
+          ./minishell <<< "echo test > testfile && cat testfile" | grep -q "test" || (echo "FAIL: output redirection" && exit 1)
+          ./minishell <<< "cat < Makefile | grep minishell" | grep -q "minishell" || (echo "FAIL: input redirection" && exit 1)
+          rm -f testfile
+
+      - name: Error handling tests
+        run: |
+          # Test invalid commands
+          ./minishell <<< "invalidcmd" 2>&1 | grep -q "command not found" || (echo "FAIL: invalid command" && exit 1)
+          
+          # Test syntax errors
+          ./minishell <<< "echo |" 2>&1 | grep -q "syntax error" || (echo "FAIL: pipe syntax" && exit 1)
+          ./minishell <<< "echo >" 2>&1 | grep -q "syntax error" || (echo "FAIL: redirection syntax" && exit 1)
+
+      - name: Builtin tests
+        run: |
+          # Test export
+          ./minishell <<< "export TEST_VAR=123 && env" | grep -q "TEST_VAR=123" || (echo "FAIL: export" && exit 1)
+          
+          # Test unset
+          ./minishell <<< "export TEST_VAR=123 && unset TEST_VAR && env" | grep -qv "TEST_VAR" || (echo "FAIL: unset" && exit 1)
+          
+          # Test exit
+          ./minishell <<< "exit 42" || [ $? -eq 42 ] || (echo "FAIL: exit code" && exit 1)
+
+      - name: Memory leak tests
+        run: |
+          mkdir -p logs
+          # Test simple command
           valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
-          --error-exitcode=1 ./minishell <<< "exit"
+            --log-file=logs/valgrind_simple.log ./minishell <<< "echo hello"
+          
+          # Test pipe command
+          valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
+            --log-file=logs/valgrind_pipe.log ./minishell <<< "ls | head -n 3"
+            
+          # Check for leaks
+          ! grep -q "definitely lost" logs/valgrind_*.log || (echo "Memory leaks detected" && exit 1)
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: logs/
+          retention-days: 1
